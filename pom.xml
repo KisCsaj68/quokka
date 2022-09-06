@@ -27,7 +27,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <description>Quokka Trader Platform</description>
     <properties>
-        <java.version>18</java.version>
+        <java.version>17</java.version>
     </properties>
     <dependencies>
         <dependency>
