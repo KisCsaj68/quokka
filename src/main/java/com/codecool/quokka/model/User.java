@@ -2,10 +2,7 @@ package com.codecool.quokka.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class User {
     private UUID id;
@@ -54,10 +51,10 @@ public class User {
         this.userName = userName;
     }
 
-    public List<String> getUserData() {
-        List<String> data = new ArrayList<>();
-        data.add(this.userName);
-        data.add(this.id.toString());
+    public Map<String, String> getUserData() {
+        Map<String, String> data = new HashMap<>();
+        data.put("userName", this.userName);
+        data.put("UserId",this.id.toString());
         return data;
     }
 

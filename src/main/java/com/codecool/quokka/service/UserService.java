@@ -18,7 +18,7 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public List<String> addUser(User user) {
+    public String addUser(User user) {
         return userDao.addUser(user);
     }
 }

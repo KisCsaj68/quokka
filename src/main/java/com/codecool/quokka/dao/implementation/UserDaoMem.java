@@ -2,6 +2,8 @@ package com.codecool.quokka.dao.implementation;
 
 import com.codecool.quokka.dao.UserDao;
 import com.codecool.quokka.model.User;
+import com.codecool.quokka.model.UserData;
+import com.google.gson.Gson;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -13,17 +15,18 @@ import java.util.Set;
 public class UserDaoMem implements UserDao {
 
     private static Set<User> DB = new HashSet<>();
-
+    private Gson gson = new Gson();
     @Override
-    public List<String> addUser(String name, String userName, String emailAddress, String passWord) {
+    public String addUser(String name, String userName, String emailAddress, String passWord) {
         User newUser = new User(name, emailAddress, userName, passWord);
         DB.add(newUser);
-        return newUser.getUserData();
+
+        return gson.toJson(new UserData(newUser.getUserName(), newUser.getId().toString()));
     }
 
     @Override
-    public List<String> addUser(User user) {
+    public String addUser(User user) {
         DB.add(user);
-        return user.getUserData();
+        return gson.toJson(new UserData(user.getUserName(), user.getId().toString()));
     }
 }
