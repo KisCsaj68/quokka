@@ -15,4 +15,6 @@ public interface UserDao {
      Set<UserDto> getAllUser();
 
      Optional<UserDto> getUser(UUID id);
+
+     void deleteUser(UUID id);
 }

@@ -43,4 +43,14 @@ public class UserDaoMem implements UserDao {
                 .map(e -> new UserDto(e.getUserName(),e.getId(), e.getFullName(), e.getEmailAddress()));
         return user;
     }
+
+    @Override
+    public void deleteUser(UUID id) {
+        Optional<User> user = DB.stream()
+                .filter(e -> e.getId().equals(id))
+                .findFirst();
+        if (user.isPresent()) {
+            DB.remove(user.get());
+        }
+    }
 }
