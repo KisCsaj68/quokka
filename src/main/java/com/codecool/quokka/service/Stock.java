@@ -8,15 +8,15 @@ public class Stock {
     private int id;
     private BigDecimal price;
 
-    public Stock(String symbol, BigDecimal price, int id) {
-        this.id = id;
+
+    public Stock(String symbol, String price) {
         this.symbol = symbol;
-        this.price = price;
+        this.price = new BigDecimal(price);
     }
 
-    public Stock(String symbol, BigDecimal price) {
-        this.symbol = symbol;
-        this.price = price;
+    @Override
+    public String toString() {
+        return "Stock{" + "symbol='" + symbol + '\'' + ", id=" + id + ", price=" + price + '}';
     }
 
     public int getId() {
@@ -45,11 +45,11 @@ public class Stock {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Stock stock = (Stock) o;
-        return this.id == stock.getId() && Objects.equals(this.symbol, stock.getSymbol());
+        return Objects.equals(this.symbol, stock.getSymbol());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.symbol, this.id);
+        return Objects.hash(this.symbol);
     }
 }
