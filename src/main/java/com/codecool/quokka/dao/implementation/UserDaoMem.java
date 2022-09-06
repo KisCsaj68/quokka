@@ -8,12 +8,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository("inMemoUserDao")
 public class UserDaoMem implements UserDao {
 
     private static Set<User> DB = new HashSet<>();
-    private Gson gson = new Gson();
     @Override
     public UserDto addUser(String name, String userName, String emailAddress, String passWord) {
         User newUser = new User(name, emailAddress, userName, passWord);
@@ -25,5 +25,12 @@ public class UserDaoMem implements UserDao {
     public UserDto addUser(User user) {
         DB.add(user);
         return new UserDto(user.getUserName(), user.getId());
+    }
+
+    @Override
+    public Set<UserDto> getAllUser() {
+        return this.DB.stream()
+                .map(e -> new UserDto(e.getUserName(), e.getId()))
+                .collect(Collectors.toSet());
     }
 }
