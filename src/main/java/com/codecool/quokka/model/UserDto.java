@@ -1,11 +1,13 @@
 package com.codecool.quokka.model;
 
-public class UserData {
+import java.util.UUID;
+
+public class UserDto {
 
     private String userName;
-    private String id;
+    private UUID id;
 
-    public UserData(String userName, String id) {
+    public UserDto(String userName, UUID id) {
         this.userName = userName;
         this.id = id;
     }
@@ -14,7 +16,7 @@ public class UserData {
         return userName;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 }
