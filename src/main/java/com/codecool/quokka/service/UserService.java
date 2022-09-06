@@ -2,11 +2,11 @@ package com.codecool.quokka.service;
 
 import com.codecool.quokka.dao.UserDao;
 import com.codecool.quokka.model.User;
+import com.codecool.quokka.model.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class UserService {
@@ -18,7 +18,7 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public String addUser(User user) {
+    public UserDto addUser(User user) {
         return userDao.addUser(user);
     }
 }

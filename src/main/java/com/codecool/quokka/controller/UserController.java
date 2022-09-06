@@ -1,14 +1,11 @@
 package com.codecool.quokka.controller;
 
 import com.codecool.quokka.model.User;
+import com.codecool.quokka.model.UserDto;
 import com.codecool.quokka.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/v1/user")
 @RestController
@@ -21,7 +18,8 @@ public class UserController {
     }
 
     @PostMapping
-    public String addUser(@RequestBody User user) {
+    public @ResponseBody UserDto addUser(@RequestBody User user) {
+        System.out.println(user);
         return userService.addUser(user);
     }
 }
