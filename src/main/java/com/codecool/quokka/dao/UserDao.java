@@ -3,8 +3,9 @@ package com.codecool.quokka.dao;
 import com.codecool.quokka.model.User;
 import com.codecool.quokka.model.UserDto;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 public interface UserDao {
 
@@ -12,4 +13,6 @@ public interface UserDao {
 
      UserDto addUser(User user);
      Set<UserDto> getAllUser();
+
+     Optional<UserDto> getUser(UUID id);
 }
