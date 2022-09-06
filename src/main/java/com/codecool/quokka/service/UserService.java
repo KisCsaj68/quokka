@@ -32,4 +32,8 @@ public class UserService {
     public Optional<UserDto> getUser(UUID id) {
         return userDao.getUser(id);
     }
+
+    public void deleteUser(UUID id) {
+        userDao.deleteUser(id);
+    }
 }

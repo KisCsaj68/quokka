@@ -25,14 +25,17 @@ public class UserController {
     }
 
     @GetMapping
-    public Set<UserDto> getAllUser(){
+    public Set<UserDto> getAllUser() {
         return userService.getAllUser();
     }
 
     @GetMapping(path = "{id}")
-    public UserDto getUserById(@PathVariable("id") UUID id){
+    public UserDto getUserById(@PathVariable("id") UUID id) {
         return userService.getUser(id).orElse(null);
-
     }
 
+    @DeleteMapping
+    public void deleteUserById(@RequestBody User user) {
+        userService.deleteUser(user.getId());
+    }
 }
