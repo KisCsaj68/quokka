@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
+import java.util.UUID;
 
 @RequestMapping("/api/v1/user")
 @RestController
@@ -19,8 +20,7 @@ public class UserController {
     }
 
     @PostMapping
-    public @ResponseBody UserDto addUser(@RequestBody User user) {
-        System.out.println(user);
+    public UserDto addUser(@RequestBody User user) {
         return userService.addUser(user);
     }
 
@@ -28,4 +28,11 @@ public class UserController {
     public Set<UserDto> getAllUser(){
         return userService.getAllUser();
     }
+
+    @GetMapping(path = "{id}")
+    public UserDto getUserById(@PathVariable("id") UUID id){
+        return userService.getUser(id).orElse(null);
+
+    }
+
 }
