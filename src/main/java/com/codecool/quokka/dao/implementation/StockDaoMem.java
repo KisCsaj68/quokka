@@ -5,6 +5,10 @@ import com.codecool.quokka.service.Stock;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Repository("stockDaoMem")
 public class StockDaoMem implements StockDao {
     private static StockDaoMem instance = null;
@@ -26,5 +30,10 @@ public class StockDaoMem implements StockDao {
         stock.setId(this.stockData.size() + 1);
         this.stockData.add(stock);
         return stock;
+    }
+    public Set<String> getAll() {
+        return this.stockData.stream()
+                .map(Stock::getSymbol)
+                .collect(Collectors.toSet());
     }
 }
