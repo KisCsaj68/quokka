@@ -11,8 +11,7 @@ public interface AssetDao {
     Set<String> getAllStock();
     Set<String> getAllCrypto();
 
-    Asset get(int id);
-
-    Asset get(String symbol);
+    Asset get(int id, String type);
+    Asset get(String symbol, String type);
 
 }

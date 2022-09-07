@@ -6,7 +6,6 @@ import com.codecool.quokka.service.Asset;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -51,13 +50,22 @@ public class AssetDaoMem implements AssetDao {
     }
 
     @Override
-    public Asset get(int id) {
-        return this.assetData.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
+    public Asset get(int id, String type) {
+        AssetType assetType = AssetType.valueOf(type.toUpperCase());
+        return this.assetData.stream()
+                .filter(t -> assetType.equals(t.getType()))
+                .filter(t -> t.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
-    public Asset get(String symbol) {
-        return this.assetData.stream().filter(t -> Objects.equals(t.getSymbol(), symbol)).findFirst().orElse(null);
-
+    public Asset get(String symbol, String type) {
+        AssetType assetType = AssetType.valueOf(type.toUpperCase());
+        return this.assetData.stream()
+                .filter(t -> assetType.equals(t.getType()))
+                .filter(t -> symbol.equals(t.getSymbol()))
+                .findFirst()
+                .orElse(null);
     }
 }

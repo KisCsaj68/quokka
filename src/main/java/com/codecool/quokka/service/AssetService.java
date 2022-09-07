@@ -48,4 +48,13 @@ public class AssetService {
     public Set<String> getAllCrypto() {
         return this.assetDao.getAllCrypto();
     }
+
+    public AssetDto getAssetById(int id, String type) {
+        Asset asset = this.assetDao.get(id, type);
+        return this.createDto(asset);
+    }
+    public AssetDto getAssetBySymbol(String symbol, String type) {
+        Asset asset = this.assetDao.get(symbol, type);
+        return this.createDto(asset);
+    }
 }
