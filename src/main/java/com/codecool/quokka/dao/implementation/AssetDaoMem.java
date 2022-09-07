@@ -1,7 +1,8 @@
 package com.codecool.quokka.dao.implementation;
 
-import com.codecool.quokka.dao.StockDao;
-import com.codecool.quokka.service.Stock;
+import com.codecool.quokka.dao.AssetDao;
+import com.codecool.quokka.model.AssetType;
+import com.codecool.quokka.service.Asset;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
@@ -10,41 +11,53 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Repository("stockDaoMem")
-public class StockDaoMem implements StockDao {
-    private static StockDaoMem instance = null;
-    private final HashSet<Stock> stockData;
+public class AssetDaoMem implements AssetDao {
+    private static AssetDaoMem instance = null;
+    private final HashSet<Asset> assetData;
 
-    private StockDaoMem() {
-        this.stockData = new HashSet<>();
+    private AssetDaoMem() {
+        this.assetData = new HashSet<>();
     }
 
-    private static StockDaoMem getInstance() {
+    private static AssetDaoMem getInstance() {
         if (instance == null) {
-            instance = new StockDaoMem();
+            instance = new AssetDaoMem();
         }
         return instance;
     }
 
     @Override
-    public Stock add(Stock stock) {
-        stock.setId(this.stockData.size() + 1);
-        this.stockData.add(stock);
-        return stock;
+    public Asset add(Asset asset) {
+        if (!this.assetData.contains(asset)) {
+            asset.setId(this.assetData.size() + 1);
+            this.assetData.add(asset);
+        }
+        return this.assetData.stream().filter(asset::equals).findFirst().orElse(null);
     }
 
     @Override
     public Set<String> getAll() {
-        return this.stockData.stream().map(Stock::getSymbol).collect(Collectors.toSet());
+        return this.assetData.stream().map(Asset::getSymbol).collect(Collectors.toSet());
     }
 
     @Override
-    public Stock get(int id) {
-        return this.stockData.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
+    public Set<String> getAllStock() {
+        return this.assetData.stream().filter(a -> a.getType() == AssetType.STOCK).map(Asset::getSymbol).collect(Collectors.toSet());
     }
 
     @Override
-    public Stock get(String symbol) {
-        return this.stockData.stream().filter(t -> Objects.equals(t.getSymbol(), symbol)).findFirst().orElse(null);
+    public Set<String> getAllCrypto() {
+        return this.assetData.stream().filter(a -> a.getType() == AssetType.CRYPTO).map(Asset::getSymbol).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Asset get(int id) {
+        return this.assetData.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
+    }
+
+    @Override
+    public Asset get(String symbol) {
+        return this.assetData.stream().filter(t -> Objects.equals(t.getSymbol(), symbol)).findFirst().orElse(null);
 
     }
 }
