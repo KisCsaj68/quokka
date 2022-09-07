@@ -3,6 +3,7 @@ package com.codecool.quokka.dao;
 import com.codecool.quokka.model.User;
 import com.codecool.quokka.model.UserDto;
 
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -17,4 +18,6 @@ public interface UserDao {
      Optional<UserDto> getUser(UUID id);
 
      void deleteUser(UUID id);
+
+     Optional<UserDto> updateUser(UUID id, HashMap<String, String> fields);
 }
