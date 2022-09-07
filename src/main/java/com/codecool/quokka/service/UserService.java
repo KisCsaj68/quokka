@@ -2,11 +2,19 @@ package com.codecool.quokka.service;
 
 import com.codecool.quokka.dao.UserDao;
 import com.codecool.quokka.model.User;
+
+import com.codecool.quokka.model.UserDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
 
 @Service
 public class UserService {
@@ -18,7 +26,25 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public String addUser(User user) {
+
+
+    public UserDto addUser(User user) {
         return userDao.addUser(user);
+    }
+
+    public Set<UserDto> getAllUser() {
+        return userDao.getAllUser();
+    }
+
+    public Optional<UserDto> getUser(UUID id) {
+        return userDao.getUser(id);
+    }
+
+    public void deleteUser(UUID id) {
+        userDao.deleteUser(id);
+    }
+
+    public Optional<UserDto> updateUser(UUID id, HashMap<String, String> fields) {
+        return userDao.updateUser(id, fields);
     }
 }
