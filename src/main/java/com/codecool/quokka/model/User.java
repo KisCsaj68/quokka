@@ -51,10 +51,6 @@ public class User {
         this.emailAddress = emailAddress;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     public void setPassWord(String passWord) {
         this.passWord = passWord;
     }
@@ -64,12 +60,12 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id.equals(user.id);
+        return id.equals(user.id) && userName.equals(user.userName) && emailAddress.equals(user.emailAddress);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, userName, emailAddress);
     }
 
     @Override
