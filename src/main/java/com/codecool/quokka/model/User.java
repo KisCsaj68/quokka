@@ -1,6 +1,5 @@
 package com.codecool.quokka.model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,36 +12,29 @@ public class User {
     private String userName;
     private String emailAddress;
 
-    private String password;
-
+    private String passWord;
 
     public User(@JsonProperty("fullName") String fullName,
                 @JsonProperty("emailAddress") String emailAddress,
                 @JsonProperty("userName") String userName,
-
-                @JsonProperty("passWord") String password) {
-
-    {
-
+                @JsonProperty("passWord") String passWord) {
         this.id = UUID.randomUUID();
         this.fullName = fullName;
         this.userName = userName;
         this.emailAddress = emailAddress;
-
-        this.passWord = password;
+        this.passWord = passWord;
     }
 
     public User(@JsonProperty("fullName") String fullName,
                 @JsonProperty("emailAddress") String emailAddress,
                 @JsonProperty("userName") String userName,
-                @JsonProperty("passWord") String password,
+                @JsonProperty("passWord") String passWord,
                 UUID id) {
         this.id = id;
         this.fullName = fullName;
         this.userName = userName;
         this.emailAddress = emailAddress;
-        this.passWord = password;
-
+        this.passWord = passWord;
     }
 
     public UUID getId() {
@@ -61,11 +53,9 @@ public class User {
         return emailAddress;
     }
 
-
     public String getPassWord() {
         return passWord;
     }
-
 
     public void setFullName(String name) {
         this.fullName = name;
@@ -75,20 +65,15 @@ public class User {
         this.emailAddress = emailAddress;
     }
 
-
     public void setPassWord(String passWord) {
         this.passWord = passWord;
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public Map<String, String> getUserData() {
         Map<String, String> data = new HashMap<>();
         data.put("userName", this.userName);
-        data.put("UserId",this.id.toString());
+        data.put("UserId", this.id.toString());
         return data;
-
     }
 
     @Override
@@ -96,14 +81,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-
         return id.equals(user.id) && userName.equals(user.userName) && emailAddress.equals(user.emailAddress);
-
     }
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, userName, emailAddress);
     }
 
@@ -111,7 +93,6 @@ public class User {
     public String toString() {
         return "User{" + "id=" + id + ", fullName='" + fullName + '\'' + ", userName='" + userName + '\'' + ", emailAddress='" + emailAddress + '\'' + ", passWord='" + passWord + '\'' + '}';
 
-        return Objects.hash(id);
-
     }
 }
+
