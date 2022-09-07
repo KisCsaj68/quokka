@@ -6,6 +6,7 @@ import com.codecool.quokka.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 
@@ -37,5 +38,11 @@ public class UserController {
     @DeleteMapping
     public void deleteUserById(@RequestBody User user) {
         userService.deleteUser(user.getId());
+    }
+
+    @PutMapping(path = "{id}")
+    public UserDto updateUser(@PathVariable("id") UUID id, @RequestBody HashMap<String, String> fields){
+        return userService.updateUser(id, fields).orElse(null);
+
     }
 }
