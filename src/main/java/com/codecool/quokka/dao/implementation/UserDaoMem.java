@@ -11,7 +11,10 @@ import java.util.stream.Collectors;
 @Repository("inMemoUserDao")
 public class UserDaoMem implements UserDao {
 
-    private static Set<User> DB = new HashSet<>();
+    private static Set<User> DB = new HashSet<>() {{
+        UUID id = UUID.fromString("b462290f-4006-4d71-8a39-e956e245ede8");
+        add(new User("Test User", "test@asd.com", "TestUser", "asd", id));
+    }};
 
     @Override
     public UserDto addUser(String name, String userName, String emailAddress, String passWord) {
@@ -71,7 +74,7 @@ public class UserDaoMem implements UserDao {
                 }
             }
             Optional<UserDto> actualDto = Optional.of(new UserDto(actualUser.getUserName(), actualUser.getId(),
-                                                        actualUser.getFullName(), actualUser.getEmailAddress()));
+                    actualUser.getFullName(), actualUser.getEmailAddress()));
             return actualDto;
         }
         return Optional.empty();

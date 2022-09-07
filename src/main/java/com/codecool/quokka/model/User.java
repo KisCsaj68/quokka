@@ -23,6 +23,18 @@ public class User {
         this.passWord = password;
     }
 
+    public User(@JsonProperty("fullName") String fullName,
+                @JsonProperty("emailAddress") String emailAddress,
+                @JsonProperty("userName") String userName,
+                @JsonProperty("passWord") String password,
+                UUID id) {
+        this.id = id;
+        this.fullName = fullName;
+        this.userName = userName;
+        this.emailAddress = emailAddress;
+        this.passWord = password;
+    }
+
     public UUID getId() {
         return id;
     }

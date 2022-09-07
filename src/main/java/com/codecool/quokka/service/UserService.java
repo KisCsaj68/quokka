@@ -22,6 +22,7 @@ public class UserService {
         this.userDao = userDao;
     }
 
+
     public UserDto addUser(User user) {
         return userDao.addUser(user);
     }
@@ -41,4 +42,5 @@ public class UserService {
     public Optional<UserDto> updateUser(UUID id, HashMap<String, String> fields) {
         return userDao.updateUser(id, fields);
     }
+
 }
