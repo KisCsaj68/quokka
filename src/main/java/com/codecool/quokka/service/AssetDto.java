@@ -1,14 +1,22 @@
 package com.codecool.quokka.service;
 
+import com.codecool.quokka.model.AssetType;
+
 import java.math.BigDecimal;
 
-public class StockDto {
+public class AssetDto {
     private final String symbol;
     private final float price;
+    private final String type;
 
-    public StockDto(String symbol, BigDecimal price) {
+    public AssetDto(String symbol, BigDecimal price, AssetType type) {
         this.symbol = symbol;
         this.price = price.floatValue();
+        this.type = type.name();
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getSymbol() {
