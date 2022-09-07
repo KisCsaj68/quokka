@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -35,5 +36,9 @@ public class UserService {
 
     public void deleteUser(UUID id) {
         userDao.deleteUser(id);
+    }
+
+    public Optional<UserDto> updateUser(UUID id, HashMap<String, String> fields) {
+        return userDao.updateUser(id, fields);
     }
 }
