@@ -21,7 +21,7 @@ name: Build and deploy JAR app to Azure Web App
 
 env:
   AZURE_WEBAPP_NAME: api-quokka       # set this to the name of your Azure Web App
-  JAVA_VERSION: '11'                  # set this to the Java version to use
+  JAVA_VERSION: '17'                  # set this to the Java version to use
   DISTRIBUTION: zulu                  # set this to the Java distribution
 
 on:
@@ -58,7 +58,7 @@ jobs:
   deploy:
     permissions:
       contents: none
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: build
     environment:
       name: 'Development'
