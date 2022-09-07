@@ -1,6 +1,7 @@
 package com.codecool.quokka.controller;
 
 import com.codecool.quokka.model.User;
+
 import com.codecool.quokka.model.UserDto;
 import com.codecool.quokka.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
+
+import com.codecool.quokka.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 
 @RequestMapping("/api/v1/user")
 @RestController

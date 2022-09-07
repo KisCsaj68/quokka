@@ -2,15 +2,19 @@ package com.codecool.quokka.service;
 
 import com.codecool.quokka.dao.UserDao;
 import com.codecool.quokka.model.User;
+
 import com.codecool.quokka.model.UserDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
 
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+
 
 @Service
 public class UserService {
@@ -21,6 +25,7 @@ public class UserService {
     public UserService(@Qualifier("inMemoUserDao") UserDao userDao) {
         this.userDao = userDao;
     }
+
 
 
     public UserDto addUser(User user) {
@@ -42,5 +47,4 @@ public class UserService {
     public Optional<UserDto> updateUser(UUID id, HashMap<String, String> fields) {
         return userDao.updateUser(id, fields);
     }
-
 }

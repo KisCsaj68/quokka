@@ -20,4 +20,5 @@ public interface UserDao {
      void deleteUser(UUID id);
 
      Optional<UserDto> updateUser(UUID id, HashMap<String, String> fields);
+
 }
