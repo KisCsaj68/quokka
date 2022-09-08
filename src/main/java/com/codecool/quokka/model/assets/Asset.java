@@ -1,6 +1,4 @@
-package com.codecool.quokka.service.assets;
-
-import com.codecool.quokka.model.AssetType;
+package com.codecool.quokka.model.assets;
 
 import java.math.BigDecimal;
 import java.util.Objects;

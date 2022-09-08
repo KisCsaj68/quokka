@@ -1,8 +1,8 @@
 package com.codecool.quokka.controller;
 
-import com.codecool.quokka.model.AssetType;
-import com.codecool.quokka.service.assets.Asset;
-import com.codecool.quokka.service.assets.AssetDto;
+import com.codecool.quokka.model.assets.AssetType;
+import com.codecool.quokka.model.assets.Asset;
+import com.codecool.quokka.model.assets.AssetDto;
 import com.codecool.quokka.service.assets.AssetService;
 import com.codecool.quokka.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;

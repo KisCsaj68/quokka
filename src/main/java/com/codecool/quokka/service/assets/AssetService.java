@@ -1,7 +1,9 @@
 package com.codecool.quokka.service.assets;
 
 import com.codecool.quokka.dao.assets.AssetDao;
-import com.codecool.quokka.model.AssetType;
+import com.codecool.quokka.model.assets.Asset;
+import com.codecool.quokka.model.assets.AssetDto;
+import com.codecool.quokka.model.assets.AssetType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
