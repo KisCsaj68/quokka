@@ -3,6 +3,7 @@ package com.codecool.quokka.service.assets;
 import com.codecool.quokka.dao.assets.AssetDao;
 import com.codecool.quokka.model.AssetType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,7 +15,7 @@ public class AssetService {
     private final AssetDao assetDao;
 
     @Autowired
-    public AssetService(AssetDao assetDao) {
+    public AssetService(@Qualifier("assetDaoMem") AssetDao assetDao) {
         this.assetDao = assetDao;
     }
 

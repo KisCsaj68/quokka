@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Repository("stockDaoMem")
+@Repository("assetDaoMem")
 public class AssetDaoMem implements AssetDao {
     private static AssetDaoMem instance = null;
     private final HashSet<Asset> assetData;
