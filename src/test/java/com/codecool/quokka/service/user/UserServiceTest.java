@@ -3,9 +3,9 @@ package com.codecool.quokka.service.user;
 import com.codecool.quokka.dao.user.UserDao;
 import com.codecool.quokka.model.user.User;
 import com.codecool.quokka.model.user.UserDto;
-import com.codecool.quokka.service.user.UserService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 @SpringBootTest
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
-class UserServiceTest {
+public class UserServiceTest {
     static User user;
     static UserDto dto;
     static UserDto updatedDto;
@@ -38,7 +38,7 @@ class UserServiceTest {
     @Autowired
     private UserDao userDao;
 
-    @BeforeAll
+    @BeforeClass
     public static void setUp() {
          id = UUID.fromString("b462290f-4006-4d71-8a39-e956e245ede8");
          fakeId = UUID.fromString("b462290f-4008-4d71-8a39-e956e245ede8");
@@ -51,21 +51,21 @@ class UserServiceTest {
 
 
     @Test
-    void addUser() {
+    public void addUser() {
         Mockito.when(userDao.addUser(user)).thenReturn(dto);
         UserDto resultDto = userService.addUser(user);
         assertEquals(dto,resultDto);
     }
 
     @Test
-    void getAllUser() {
+    public void getAllUser() {
         Mockito.when(userDao.getAllUser()).thenReturn(Set.of(dto));
         Set<UserDto> dtos = userService.getAllUser();
         assertEquals(dtos, Set.of(dto));
     }
 
     @Test
-    void getUser() {
+    public void getUser() {
         Mockito.when(userDao.getUser(id)).thenReturn(Optional.of(dto));
         Mockito.when(userDao.getUser(fakeId)).thenReturn(Optional.empty());
         Optional<UserDto> resultDto = userService.getUser(id);
@@ -75,7 +75,7 @@ class UserServiceTest {
     }
 
     @Test
-    void updateUser() {
+    public void updateUser() {
         Mockito.when(userDao.updateUser(id, data)).thenReturn(Optional.of(updatedDto));
         Mockito.when(userDao.updateUser(fakeId, data)).thenReturn(Optional.empty());
         Optional<UserDto> resultDto = userService.updateUser(id,data);
@@ -85,7 +85,7 @@ class UserServiceTest {
     }
 
     @Test
-    void deleteUser() {
+    public void deleteUser() {
         userService.deleteUser(id);
         Mockito.verify(userDao, Mockito.times(1)).deleteUser(any());
 

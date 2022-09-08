@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -43,8 +44,8 @@ public class UserController {
     }
 
     @DeleteMapping
-    public void deleteUserById(@RequestBody User user) {
-        userService.deleteUser(user.getId());
+    public void deleteUserById(@RequestBody HashMap<String, String> body) {
+        userService.deleteUser(UUID.fromString(body.get("id")) );
     }
 
     @PutMapping(path = "{id}")
