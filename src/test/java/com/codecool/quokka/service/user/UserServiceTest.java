@@ -1,15 +1,14 @@
-package com.codecool.quokka.service;
+package com.codecool.quokka.service.user;
 
 import com.codecool.quokka.dao.user.UserDao;
-import com.codecool.quokka.dao.user.implementation.UserDaoMem;
 import com.codecool.quokka.model.user.User;
 import com.codecool.quokka.model.user.UserDto;
+import com.codecool.quokka.service.user.UserService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -86,7 +85,7 @@ class UserServiceTest {
     }
 
     @Test
-    void deleteUser1() {
+    void deleteUser() {
         userService.deleteUser(id);
         Mockito.verify(userDao, Mockito.times(1)).deleteUser(any());
 
