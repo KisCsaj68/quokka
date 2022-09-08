@@ -1,21 +1,15 @@
-package com.codecool.quokka.dao.implementation;
+package com.codecool.quokka.dao.user.implementation;
 
-import com.codecool.quokka.dao.UserDao;
-import com.codecool.quokka.model.User;
+import com.codecool.quokka.dao.user.UserDao;
+import com.codecool.quokka.model.user.User;
 
-import com.codecool.quokka.model.UserDto;
+import com.codecool.quokka.model.user.UserDto;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.codecool.quokka.model.UserData;
-import com.google.gson.Gson;
-import org.springframework.stereotype.Repository;
-
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Repository("inMemoUserDao")

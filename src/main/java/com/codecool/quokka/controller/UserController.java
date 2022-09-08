@@ -1,18 +1,17 @@
 package com.codecool.quokka.controller;
 
-import com.codecool.quokka.model.User;
+import com.codecool.quokka.model.user.User;
 
-import com.codecool.quokka.model.UserDto;
-import com.codecool.quokka.service.UserService;
+import com.codecool.quokka.model.user.UserDto;
+import com.codecool.quokka.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import com.codecool.quokka.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,8 +44,8 @@ public class UserController {
     }
 
     @DeleteMapping
-    public void deleteUserById(@RequestBody User user) {
-        userService.deleteUser(user.getId());
+    public void deleteUserById(@RequestBody HashMap<String, String> body) {
+        userService.deleteUser(UUID.fromString(body.get("id")) );
     }
 
     @PutMapping(path = "{id}")

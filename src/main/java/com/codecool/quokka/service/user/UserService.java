@@ -1,9 +1,9 @@
-package com.codecool.quokka.service;
+package com.codecool.quokka.service.user;
 
-import com.codecool.quokka.dao.UserDao;
-import com.codecool.quokka.model.User;
+import com.codecool.quokka.dao.user.UserDao;
+import com.codecool.quokka.model.user.User;
 
-import com.codecool.quokka.model.UserDto;
+import com.codecool.quokka.model.user.UserDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -1,6 +1,4 @@
-package com.codecool.quokka.model;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package com.codecool.quokka.model.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

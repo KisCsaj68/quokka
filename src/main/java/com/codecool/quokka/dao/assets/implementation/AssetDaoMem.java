@@ -18,7 +18,7 @@ public class AssetDaoMem implements AssetDao {
         this.assetData = new HashSet<>();
     }
 
-    private static AssetDaoMem getInstance() {
+    public static AssetDaoMem getInstance() {
         if (instance == null) {
             instance = new AssetDaoMem();
         }
