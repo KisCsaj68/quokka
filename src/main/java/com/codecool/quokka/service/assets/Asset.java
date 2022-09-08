@@ -1,4 +1,4 @@
-package com.codecool.quokka.service;
+package com.codecool.quokka.service.assets;
 
 import com.codecool.quokka.model.AssetType;
 
@@ -31,7 +31,11 @@ public class Asset {
 
     @Override
     public String toString() {
-        return "Asset{" + "symbol='" + symbol + '\'' + ", type=" + type + ", id=" + id + ", price=" + price + '}';
+        return "Asset{" +
+                "symbol='" + symbol + '\'' +
+                ", type=" + type +
+                ", id=" + id +
+                ", price=" + price + '}';
     }
 
     public int getId() {
