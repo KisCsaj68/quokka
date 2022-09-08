@@ -1,7 +1,7 @@
-package com.codecool.quokka.dao;
+package com.codecool.quokka.dao.user;
 
-import com.codecool.quokka.model.User;
-import com.codecool.quokka.model.UserDto;
+import com.codecool.quokka.model.user.User;
+import com.codecool.quokka.model.user.UserDto;
 
 import java.util.HashMap;
 import java.util.Optional;

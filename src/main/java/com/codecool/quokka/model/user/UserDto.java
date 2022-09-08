@@ -1,4 +1,4 @@
-package com.codecool.quokka.model;
+package com.codecool.quokka.model.user;
 
 import java.util.Objects;
 import java.util.UUID;

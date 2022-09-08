@@ -1,4 +1,4 @@
-package com.codecool.quokka.service;
+package com.codecool.quokka.service.user;
 
 import com.codecool.quokka.dao.user.UserDao;
 import com.codecool.quokka.model.user.User;
