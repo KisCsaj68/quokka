@@ -21,8 +21,8 @@
         <version>2.7.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.codecool</groupId>
-    <artifactId>quokka</artifactId>
+    <groupId>com.codecool.quokka</groupId>
+    <artifactId>api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <description>Quokka Trader Platform</description>
     <properties>
