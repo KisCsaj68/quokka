@@ -1,17 +1,18 @@
-package com.codecool.quokka.dao;
+package com.codecool.quokka.dao.assets;
 
-import com.codecool.quokka.service.Asset;
+import com.codecool.quokka.model.AssetType;
+import com.codecool.quokka.service.assets.Asset;
 
 import java.util.Set;
 
 public interface AssetDao {
     Asset add(Asset asset);
 
-    Set<String> getAll();
-    Set<String> getAllStock();
-    Set<String> getAllCrypto();
+    Set<Asset> getAll();
+    Set<Asset> getAllByType(AssetType assetType);
 
-    Asset get(int id, String type);
-    Asset get(String symbol, String type);
+    Asset get(String symbol, AssetType assetType);
+
+    Asset delete(String symbol, AssetType assetType);
 
 }
