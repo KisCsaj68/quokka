@@ -1,8 +1,9 @@
-package com.codecool.quokka.dao.implementation;
+package com.codecool.quokka.dao.assets.implementation;
 
-import com.codecool.quokka.dao.AssetDao;
+import com.codecool.quokka.dao.assets.AssetDao;
 import com.codecool.quokka.model.AssetType;
-import com.codecool.quokka.service.Asset;
+import com.codecool.quokka.service.assets.Asset;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
@@ -35,37 +36,29 @@ public class AssetDaoMem implements AssetDao {
     }
 
     @Override
-    public Set<String> getAll() {
-        return this.assetData.stream().map(Asset::getSymbol).collect(Collectors.toSet());
+    public Set<Asset> getAll() {
+        return Set.copyOf(this.assetData);
     }
 
     @Override
-    public Set<String> getAllStock() {
-        return this.assetData.stream().filter(a -> a.getType() == AssetType.STOCK).map(Asset::getSymbol).collect(Collectors.toSet());
-    }
-
-    @Override
-    public Set<String> getAllCrypto() {
-        return this.assetData.stream().filter(a -> a.getType() == AssetType.CRYPTO).map(Asset::getSymbol).collect(Collectors.toSet());
-    }
-
-    @Override
-    public Asset get(int id, String type) {
-        AssetType assetType = AssetType.valueOf(type.toUpperCase());
+    public Set<Asset> getAllByType(AssetType assetType) {
         return this.assetData.stream()
-                .filter(t -> assetType.equals(t.getType()))
-                .filter(t -> t.getId() == id)
-                .findFirst()
-                .orElse(null);
+                .filter(a -> a.getType().equals(assetType))
+                .collect(Collectors.toSet());
     }
-
     @Override
-    public Asset get(String symbol, String type) {
-        AssetType assetType = AssetType.valueOf(type.toUpperCase());
+    public Asset get(String symbol, AssetType assetType) {
         return this.assetData.stream()
                 .filter(t -> assetType.equals(t.getType()))
                 .filter(t -> symbol.equals(t.getSymbol()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public Asset delete(String symbol, AssetType assetType) {
+        Asset asset = this.get(symbol, assetType);
+        this.assetData.remove(asset);
+        return asset;
     }
 }
