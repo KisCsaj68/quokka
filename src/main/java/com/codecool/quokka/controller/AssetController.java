@@ -1,8 +1,10 @@
 package com.codecool.quokka.controller;
 
-import com.codecool.quokka.service.Asset;
-import com.codecool.quokka.service.AssetDto;
-import com.codecool.quokka.service.AssetService;
+import com.codecool.quokka.model.AssetType;
+import com.codecool.quokka.service.assets.Asset;
+import com.codecool.quokka.service.assets.AssetDto;
+import com.codecool.quokka.service.assets.AssetService;
+import com.codecool.quokka.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,28 +20,50 @@ public class AssetController {
         this.assetService = assetService;
     }
 
-    @PostMapping(path = "stock")
-    public @ResponseBody AssetDto addAssetStock(@RequestBody Asset asset) {
-        return this.assetService.addAssetStock(asset);
-    }
-
-    @PostMapping(path = "crypto")
-    public @ResponseBody AssetDto addAssetCrypto(@RequestBody Asset asset) {
-        return this.assetService.addAssetCrypto(asset);
-    }
-
     @GetMapping
-    public Set<String> getAllAsset() {
+    public Set<AssetDto> getAllAsset() {
         return this.assetService.getAllAsset();
     }
 
-    @GetMapping(path = "stock")
-    public Set<String> getAllStock() {
-        return this.assetService.getAllStock();
+    @GetMapping("{assetType}")
+    public Set<AssetDto> getAllAssetByType(@PathVariable("assetType") String pathAssetType) {
+        AssetType assetType = Utils.assetTypeParser(pathAssetType);
+        if (assetType == null) {
+            return null;
+        }
+        return this.assetService.getAllByType(assetType);
     }
 
-    @GetMapping(path = "crypto")
-    public Set<String> getAllCrypto() {
-        return this.assetService.getAllCrypto();
+    @PostMapping(path = "{assetType}")
+    public @ResponseBody AssetDto addAssetByType(@PathVariable("assetType") String pathAssetType,
+                                                 @RequestBody Asset asset) {
+        AssetType assetType = Utils.assetTypeParser(pathAssetType);
+        if (assetType == null) {
+            return null;
+        }
+        asset.setType(assetType);
+        return this.assetService.addAsset(asset);
+    }
+
+    @GetMapping(path = "{assetType}/{assetSymbol}")
+    public @ResponseBody AssetDto getAssetBySymbol(@PathVariable("assetType") String pathAssetType,
+                                                   @PathVariable("assetSymbol") String pathAssetSymbol) {
+        AssetType assetType = Utils.assetTypeParser(pathAssetType);
+        if (assetType == null) {
+            return null;
+        }
+        pathAssetSymbol = pathAssetSymbol.toUpperCase();
+        return this.assetService.getAssetBySymbol(pathAssetSymbol, assetType);
+    }
+
+    @DeleteMapping(path = "{assetType}/{assetSymbol}")
+    public @ResponseBody AssetDto deleteAssetBySymbol(@PathVariable("assetType") String pathAssetType,
+                                                      @PathVariable("assetSymbol") String pathAssetSymbol) {
+        AssetType assetType = Utils.assetTypeParser(pathAssetType);
+        if (assetType == null) {
+            return null;
+        }
+        pathAssetSymbol = pathAssetSymbol.toUpperCase();
+        return this.assetService.deleteAssetBySymbol(pathAssetSymbol, assetType);
     }
 }
