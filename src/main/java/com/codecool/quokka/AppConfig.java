@@ -5,7 +5,6 @@ import com.codecool.quokka.dao.assets.implementation.AssetDaoMem;
 import com.codecool.quokka.dao.user.implementation.UserDaoMem;
 import com.codecool.quokka.service.user.UserService;
 import com.codecool.quokka.service.assets.AssetService;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,7 +17,6 @@ public class AppConfig {
     }
 
     @Bean
-    @Qualifier("inMemoUserDao")
     public UserService getUserService() {
         return new UserService(new UserDaoMem());
     }
