@@ -1,9 +1,8 @@
 package com.codecool.quokka.dao.assets.implementation;
 
 import com.codecool.quokka.dao.assets.AssetDao;
-import com.codecool.quokka.model.AssetType;
-import com.codecool.quokka.service.assets.Asset;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.codecool.quokka.model.assets.AssetType;
+import com.codecool.quokka.model.assets.Asset;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;

@@ -1,6 +1,6 @@
 package com.codecool.quokka.utils;
 
-import com.codecool.quokka.model.AssetType;
+import com.codecool.quokka.model.assets.AssetType;
 
 public class Utils {
 
