@@ -1,12 +1,13 @@
-package com.codecool.quokka.service;
+package com.codecool.quokka.service.assets;
 
-import com.codecool.quokka.dao.AssetDao;
+import com.codecool.quokka.dao.assets.AssetDao;
 import com.codecool.quokka.model.AssetType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AssetService {
@@ -24,37 +25,33 @@ public class AssetService {
         return new AssetDto(symbol, price, type);
     }
 
-    public AssetDto addAssetStock(Asset asset) {
-        asset.setType(AssetType.STOCK);
-        Asset newAsset = this.assetDao.add(asset);
-        System.out.println(newAsset);
-        return this.createDto(newAsset);
-    }
-
-    public AssetDto addAssetCrypto(Asset asset) {
-        asset.setType(AssetType.STOCK);
+    public AssetDto addAsset(Asset asset) {
         Asset newAsset = this.assetDao.add(asset);
         return this.createDto(newAsset);
     }
 
-    public Set<String> getAllAsset() {
-        return this.assetDao.getAll();
+    public Set<AssetDto> getAllAsset() {
+        return this.assetDao.getAll().stream()
+                .map(e -> new AssetDto(e.getSymbol(), e.getPrice(), e.getType()))
+                .collect(Collectors.toSet());
     }
 
-    public Set<String> getAllStock() {
-        return this.assetDao.getAllStock();
+    public Set<AssetDto> getAllByType(AssetType assetType) {
+        return this.assetDao
+                .getAllByType(assetType)
+                .stream()
+                .map(e -> new AssetDto(e.getSymbol(), e.getPrice(), e.getType()))
+                .collect(Collectors.toSet());
     }
 
-    public Set<String> getAllCrypto() {
-        return this.assetDao.getAllCrypto();
-    }
-
-    public AssetDto getAssetById(int id, String type) {
-        Asset asset = this.assetDao.get(id, type);
+    public AssetDto getAssetBySymbol(String symbol, AssetType assetType) {
+        Asset asset = this.assetDao.get(symbol, assetType);
         return this.createDto(asset);
     }
-    public AssetDto getAssetBySymbol(String symbol, String type) {
-        Asset asset = this.assetDao.get(symbol, type);
+
+    public AssetDto deleteAssetBySymbol(String symbol, AssetType assetType) {
+        Asset asset = this.assetDao.delete(symbol, assetType);
         return this.createDto(asset);
+
     }
 }

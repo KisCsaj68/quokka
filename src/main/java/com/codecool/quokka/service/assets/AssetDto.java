@@ -1,4 +1,4 @@
-package com.codecool.quokka.service;
+package com.codecool.quokka.service.assets;
 
 import com.codecool.quokka.model.AssetType;
 
