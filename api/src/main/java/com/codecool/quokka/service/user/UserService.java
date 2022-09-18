@@ -1,10 +1,8 @@
 package com.codecool.quokka.service.user;
 
-import com.codecool.quokka.dao.user.UserDao;
 import com.codecool.quokka.model.user.User;
-
+import com.codecool.quokka.dao.user.UserDao;
 import com.codecool.quokka.model.user.UserDto;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
