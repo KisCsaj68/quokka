@@ -1,7 +1,7 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import {Link} from "react-router-dom";
 
 function NavigationBar() {
     return (
@@ -11,11 +11,11 @@ function NavigationBar() {
                     Quokka Trading Platfo®m
                 </Navbar.Brand>
                 <Nav className="me-auto">
-                    <Nav.Link href="/">Home</Nav.Link>
-                    <Nav.Link href="/registration">Registration</Nav.Link>
-                    <Nav.Link href="/login">LogIn</Nav.Link>
-                    <Nav.Link href="/stock">Stock</Nav.Link>
-                    <Nav.Link href="/crypto">Crypto</Nav.Link>
+                    <Link className="link-light" to="/">Home </Link>
+                    <Link className="link-light" to="/registration">Registration</Link>
+                    <Link className="link-light" to="/login">LogIn</Link>
+                    <Link className="link-light" to="/stock">Stock</Link>
+                    <Link className="link-light" to="/crypto">Crypto</Link>
                 </Nav>
             </Container>
         </Navbar>
