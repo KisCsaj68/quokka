@@ -28,6 +28,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping
     public UserDto addUser(@RequestBody User user) {
         return userService.addUser(user);
