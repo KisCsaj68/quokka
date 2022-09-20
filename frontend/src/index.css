@@ -14,6 +14,15 @@ code {
     monospace;
 }
 
+.link-light {
+  text-decoration: none;
+  padding-left: 2rem;
+}
+
+.content {
+  margin-left: 5rem;
+}
+
 @import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
 
 @import url(https://fonts.googleapis.com/css?family=Titillium+Web:300);
@@ -66,7 +75,7 @@ code {
   display:table;
   border-collapse:collapse;
   border-spacing:0;
-  color:#999;
+  color:white;
   font-family: arial;
   font-size: 14px;
   text-decoration:none;
@@ -74,6 +83,61 @@ code {
   -webkit-transition:all .1s linear;
   transition:all .1s linear;
 
+}
+
+img{
+  justify-content: center;
+  position: absolute;
+  top: 9%;
+  right: 45%;
+  place-content: center;
+  align-content: center;
+  border-radius: 80px;
+}
+
+.regButton {
+  position: absolute;
+  right: 45%;
+  top: 75%;
+  background-color: #064663;
+  border-radius: 10px;
+  padding: 10px;
+  color: white;
+}
+
+.logInButton {
+  position: absolute;
+  right: 79%;
+  top: 45%;
+  background-color: #064663;
+  border-radius: 10px;
+  padding: 10px;
+  color: white;
+}
+
+.buttonHome {
+  position: absolute;
+  background-color: #041C32;
+  border-radius: 10px;
+  padding: 10px;
+  top: 40%;
+  right: 46%;
+  color: white;
+}
+
+
+.intro {
+  justify-content: center;
+  position: absolute;
+  text-align: center;
+  color: #533483;
+  top: 30%;
+  right: 25%;
+}
+
+.textmsg{
+  text-align: center;
+  color: #533483;
 }
 
 .main-menu .nav-icon {
@@ -143,5 +207,87 @@ nav ul,nav li {
   font-style: normal;
   font-weight: 300;
   src: local('Titillium WebLight'), local('TitilliumWeb-Light'), url(http://themes.googleusercontent.com/static/fonts/titilliumweb/v2/anMUvcNT0H1YN4FII8wpr24bNCNEoFTpS2BTjF6FB5E.woff) format('woff');
+}
+
+
+* {box-sizing: border-box}
+
+/* Add padding to containers */
+.regContainer {
+  padding: 16px;
+  background-color: #041C32;
+  color: antiquewhite;
+  width: 75%;
+  margin-left: 10%;
+  height: 75vh;
+}
+
+.logInContainer {
+  padding: 16px;
+  background-color: #041C32;
+  color: antiquewhite;
+  width: 75%;
+  margin-left: 10%;
+  height: 45vh;
+}
+
+.regAfterContainer {
+  padding: 16px;
+  background-color: #041C32;
+  color: antiquewhite;
+  width: 75%;
+  margin-left: 10%;
+  height: 6vh;
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #E7F6F2;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+
+/* Overwrite default styles of hr */
+hr {
+  border: 1px solid #f1f1f1;
+  margin-bottom: 25px;
+}
+
+/* Set a style for the submit/register button */
+.registerbtn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+
+.registerbtn:hover {
+  opacity:1;
+}
+
+/* Add a blue text color to links */
+a {
+  color: dodgerblue;
+}
+
+/* Set a grey background color and center the text of the "sign in" section */
+.signin {
+  background-color: #041C32;
+  text-align: center;
+  width: 75%;
+  /*margin-top: 2vh;*/
 }
 
