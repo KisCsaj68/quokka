@@ -18,7 +18,13 @@ This is approach is bad, due to the lossy nature of the polling. No-matter-how f
 
 So instead of the heavy polling of assetcache, we register individual limit orders with assetcache, and let each incoming price datapoint be checked against the registered price checker. 
 For this to be possible we need very fast datastructures for these assets price-trackers.
-Ideally there should be a tuple of balanced trees for each assets. Each tree needs to be ordered (and balanced) by the limit price.
+Ideally there should be a tuple of a two special data structure for each asset. 
+This special datastructure needs to have such properties:
+- should be very fast to search, - ideally O(log n) - since each trade tick for a given asset will need to match against this datastructure
+- should be ordered, so that we only would need to bisect for the lower bound of a fill-able price-tracker. Beyond that all price-trackers are satisfiable
+- should be fast to slice out the satisfied price-trackers
+- should be fast to insert an item while keeping the order
+
 
 ```python
 dict[ticker](buy_tree, sell_tree)
@@ -44,7 +50,7 @@ sell_side_tree.insert(price_tracker(order_id_for_client3, 151.0))
 sell_side_tree.insert(price_tracker(order_id_for_client4, 152.0))
 ```
 
-Searching in an ordered tree is O(log n) so our performance should be fine even for large number of orders.
+Searching in this ordered structure is O(log n) so our performance should be fine even for large number of orders.
 
 An incoming datapoint for `AAPL` would check both buy and sell trees.
 Price-trackers in the buy tree are considered fulfilled if it is equal to or greater than the incoming datapoints price value 
