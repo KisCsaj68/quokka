@@ -11,25 +11,27 @@ import apiRequest from "./apiRequest";
 
 function App() {
     const [fullName, setFullName] = useState('');
-    const [email, setEmail] = useState('');
+    const [email_address, setEmail_address] = useState('');
     const [userName, setUserName] = useState('');
     const [passWrd, setPassWrd] = useState('');
     const history = useNavigate();
 
     const handleRegistration = async (e) => {
         e.preventDefault();
-        const newUser = {fullName, email, userName, passWrd}
+        const newUser = {fullName, email_address: email_address, userName, password: passWrd}
+        console.log(newUser)
         try {
             const response = await apiRequest.post('/api/v1/user', newUser);
+            setEmail_address("");
+            setPassWrd("");
+            setFullName("");
+            setEmail_address("");
+            // setUserName("");
             history('/login');
         } catch (err) {
             console.log(`Error: ${err.message}`);
         }
-        setEmail("");
-        setPassWrd("");
-        setFullName("");
-        setEmail("");
-        setUserName("");
+
     }
 
     const addNewUser = async (fullName, email, userName, passWrd) => {
@@ -59,8 +61,8 @@ function App() {
                                         setFullName={setFullName}
                                         userName={userName}
                                         setUserName={setUserName}
-                                        email={email}
-                                        setEmail={setEmail}
+                                        email={email_address}
+                                        setEmail={setEmail_address}
                                         passWrd={[passWrd]}
                                         setPassWrd={setPassWrd}
                                     />}
