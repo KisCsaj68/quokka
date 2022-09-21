@@ -16,11 +16,11 @@ const Registration = ({handleReg, fullName, email, userName, passWrd, setFullNam
                            onChange={(e) => setFullName(e.target.value)}>
                     </input>
 
-                    <label htmlFor="email"><b>Email</b></label>
+                    <label htmlFor="emailAddress"><b>Email</b></label>
                     <input type="text"
                            placeholder="Enter Email"
-                           name="email"
-                           id="email"
+                           name="emailAddress"
+                           id="emailAddress"
                            required
                            value={email}
                            onChange={(e) => setEmail(e.target.value)}>

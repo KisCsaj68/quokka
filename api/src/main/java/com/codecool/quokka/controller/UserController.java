@@ -5,10 +5,11 @@ import com.codecool.quokka.model.user.User;
 import com.codecool.quokka.model.user.UserDto;
 import com.codecool.quokka.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -28,9 +29,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @PostMapping
+    @CrossOrigin(origins = "http://localhost:3000")
     public UserDto addUser(@RequestBody User user) {
+        System.out.println(user);
         return userService.addUser(user);
     }
 
@@ -40,8 +43,13 @@ public class UserController {
     }
 
     @GetMapping(path = "{id}")
-    public UserDto getUserById(@PathVariable("id") UUID id) {
-        return userService.getUser(id).orElse(null);
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") UUID id) {
+        if (userService.getUser(id).isPresent()){
+            return new ResponseEntity<>(userService.getUser(id).get(), HttpStatus.OK) ;
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping
