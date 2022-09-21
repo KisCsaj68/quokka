@@ -1,5 +1,7 @@
 package com.codecool.quokka.model.assets;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -9,7 +11,7 @@ public class Asset {
     private int id;
     private BigDecimal price;
 
-    public Asset(String symbol, String price) {
+    public Asset(@JsonProperty("symbol") String symbol, @JsonProperty("price") String price) {
         this.symbol = symbol;
         this.price = new BigDecimal(price);
     }
