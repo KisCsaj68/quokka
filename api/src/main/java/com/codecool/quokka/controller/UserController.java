@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/user")
 @RestController
 public class UserController {
+
     private UserService userService;
 
     @Autowired
@@ -32,9 +34,20 @@ public class UserController {
 
     @PostMapping
     @CrossOrigin(origins = "http://localhost:3000")
-    public UserDto addUser(@RequestBody User user) {
-        System.out.println(user);
-        return userService.addUser(user);
+    public ResponseEntity addUser(@RequestBody User user) {
+        if(userService.getUserByEmail(user.getEmailAddress())) {
+            System.out.println(user.getEmailAddress());
+            return new ResponseEntity<>("Email occupied",HttpStatus.BAD_REQUEST);
+        }
+
+        if(userService.getUserByUserName(user.getUserName())){
+            return new ResponseEntity<>("User error",HttpStatus.BAD_REQUEST);
+        }
+
+        if (!userService.validate(user.getEmailAddress())){
+            return new ResponseEntity<>("Email error",HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(userService.addUser(user), HttpStatus.OK);
     }
 
     @GetMapping
@@ -43,7 +56,7 @@ public class UserController {
     }
 
     @GetMapping(path = "{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable("id") UUID id) {
+    public ResponseEntity getUserById(@PathVariable("id") UUID id) {
         if (userService.getUser(id).isPresent()){
             return new ResponseEntity<>(userService.getUser(id).get(), HttpStatus.OK) ;
         }

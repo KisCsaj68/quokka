@@ -21,4 +21,7 @@ public interface UserDao {
 
      Optional<UserDto> updateUser(UUID id, HashMap<String, String> fields);
 
+    boolean getUserByUserName(String userName);
+
+     boolean getUserByEmail(String emailAddress);
 }
