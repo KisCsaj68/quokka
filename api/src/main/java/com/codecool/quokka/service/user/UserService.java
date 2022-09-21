@@ -7,12 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-
 
 @Service
 public class UserService {
@@ -24,9 +22,9 @@ public class UserService {
         this.userDao = userDao;
     }
 
-
-
     public UserDto addUser(User user) {
+        user.hashPassword();
+        System.out.println(user);
         return userDao.addUser(user);
     }
 
