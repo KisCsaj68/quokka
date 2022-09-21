@@ -1,7 +1,9 @@
 package com.codecool.quokka.model.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.hash.Hashing;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class User {
@@ -72,6 +74,12 @@ public class User {
         data.put("userName", this.userName);
         data.put("UserId", this.id.toString());
         return data;
+    }
+
+    public void hashPassword() {
+        this.passWord = Hashing.sha256()
+                .hashString(passWord, StandardCharsets.UTF_8)
+                .toString();
     }
 
     @Override
