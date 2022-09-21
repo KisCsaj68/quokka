@@ -5,7 +5,8 @@ import {Link} from "react-router-dom";
 
 function NavigationBar() {
     return (
-        <Navbar bg="dark" variant="dark">
+        <Navbar bg="dark" variant="dark" fixed={"top"} expand={"lg"} collapseOnSelect>
+            <img className={"quokkaImg"} src="/quokka.png" alt="quokkat" width={"60"} height={"auto"}/>
             <Container>
                 <Navbar.Brand href="#home">
                     Quokka Trading Platfo®m

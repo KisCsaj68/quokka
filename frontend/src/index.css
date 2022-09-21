@@ -98,17 +98,21 @@ img{
 .regButton {
   position: absolute;
   right: 45%;
-  top: 75%;
+  top: 77%;
   background-color: #064663;
   border-radius: 10px;
   padding: 10px;
   color: white;
 }
 
-.logInButton {
+.quokkaImg {
   position: absolute;
-  right: 79%;
-  top: 45%;
+  top:16%;
+  left:0;
+border-radius: 88px;
+}
+.logInButton {
+  position: relative;
   background-color: #064663;
   border-radius: 10px;
   padding: 10px;
@@ -123,6 +127,10 @@ img{
   top: 40%;
   right: 46%;
   color: white;
+}
+
+.inputError {
+  color: #980F5A;
 }
 
 
@@ -214,21 +222,24 @@ nav ul,nav li {
 
 /* Add padding to containers */
 .regContainer {
-  padding: 16px;
+  padding: 10px;
   background-color: #041C32;
   color: antiquewhite;
   width: 75%;
   margin-left: 10%;
+  margin-top: 10vh;
   height: 75vh;
 }
 
 .logInContainer {
+  top: 55%;
   padding: 16px;
   background-color: #041C32;
   color: antiquewhite;
   width: 75%;
   margin-left: 10%;
-  height: 45vh;
+  margin-top: 10vh;
+  height: 50vh;
 }
 
 .regAfterContainer {
@@ -277,6 +288,8 @@ hr {
 .registerbtn:hover {
   opacity:1;
 }
+
+
 
 /* Add a blue text color to links */
 a {

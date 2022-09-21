@@ -1,7 +1,8 @@
 import button from "./Button";
 import {Link} from "react-router-dom";
 
-const Home = () => {
+const Home = ({setError}) => {
+    setError("")
     return (
         <div>
             <img
