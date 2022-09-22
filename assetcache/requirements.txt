@@ -10,7 +10,6 @@ charset-normalizer==2.1.1
 deprecation==2.1.0
 falcon==3.1.0
 frozenlist==1.3.1
--e git+git@github.com:CodecoolGlobal/el-proyecte-grande-sprint-1-java-KisCsaj68.git@ea6f314c146979e4369e5ba175c70441a1fb1d9f#egg=GalleryWebAppUser&subdirectory=assetcache
 gunicorn==20.1.0
 idna==3.4
 msgpack==1.0.3
