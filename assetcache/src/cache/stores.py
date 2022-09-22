@@ -54,7 +54,8 @@ class StockStore(BaseAssetStore):
         self.name: str = self.__class__.__name__
 
     def add_asset(self, asset_name: str) -> bool:
-        stock_cache: StockCache = StockCache(asset_name, self._api)
+        stock_cache: StockCache = StockCache(asset_name, self._api,
+                                             self._api_raw)
         with self._lock:
             self._assets_map[asset_name] = stock_cache
         return True
@@ -66,10 +67,23 @@ class CryptoStore(BaseAssetStore):
         self.name: str = self.__class__.__name__
 
     def add_asset(self, asset_name: str) -> bool:
-        crypto_cache: CryptoCache = CryptoCache(asset_name, self._api)
+        crypto_cache: CryptoCache = CryptoCache(asset_name, self._api,
+                                                self._api_raw)
         with self._lock:
             self._assets_map[asset_name] = crypto_cache
         return True
+
+
+class AssetMarketStore:
+    def __init__(self) -> None:
+        self.crypto_store: CryptoStore = CryptoStore()
+        self.stock_store: StockStore = StockStore()
+
+        self.crypto_store.start()
+        self.stock_store.start()
+
+    def __getitem__(self, symbol: str):
+        pass
 
 
 if __name__ == '__main__':
