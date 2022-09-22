@@ -3,7 +3,7 @@ from abc import abstractmethod
 from threading import RLock
 from typing import List, Union, Dict
 
-from alpaca_trade_api.entity_v2 import BarsV2
+from alpaca_trade_api.entity_v2 import BarsV2, LatestBarsV2, BarV2
 from alpaca_trade_api.entity_v2 import bar_mapping_v2
 from alpaca_trade_api.rest import REST
 from alpaca_trade_api.rest import TimeFrame
@@ -12,19 +12,21 @@ from numpy import mean
 BarDictType = Dict[str, Union[str, float, int]]
 
 
-def parse_bars_v2_to_dict(bars_v2: BarsV2
+def parse_bars_v2_to_dict(bars_v2: Dict[str, Dict]
                           ) -> Dict[str, Union[str, float, int]]:
-    bar_raw: dict = bars_v2.__dict__
-    if "_raw" in bar_raw:
-        bar_raw = bar_raw["_raw"]
+    if isinstance(bars_v2, dict):
+        symbol: str = tuple(bars_v2.keys())[0]
+        bar_raw = bars_v2[symbol]
+        bar_raw["symbol"] = symbol
         return {bar_mapping_v2.get(key, key): val
                 for key, val in bar_raw.items()
                 }
+
     return {}
 
 
 class BaseAssetCache(ABC):
-    # Redis in memmory nosql cache
+    # Redis in memory nosql cache
     def __init__(self, asset_name: str, api: REST, api_raw: REST) -> None:
         self._asset_name: str = asset_name
         self._api: REST = api
@@ -91,8 +93,11 @@ class StockCache(BaseAssetCache):
             self._daily_bars = daily_bars
 
     def update_last_bar(self) -> None:
-        last_bar: BarsV2 = self._api.get_latest_bar(self._asset_name)
-        parsed_last_bar: BarDictType = parse_bars_v2_to_dict(last_bar)
+        last_bar: BarV2 = self._api_raw.get_latest_bar(self._asset_name)
+        last_bar_with_symbol: Dict[str, dict] = {self._asset_name: last_bar}
+        parsed_last_bar: BarDictType = parse_bars_v2_to_dict(
+            last_bar_with_symbol
+        )
 
         with self._lock:
             self._last_bar = parsed_last_bar
@@ -113,12 +118,10 @@ class CryptoCache(BaseAssetCache):
             self._daily_bars = daily_bars
 
     def update_last_bar(self) -> None:
-        last_bar: BarsV2 = self._api.get_latest_crypto_bars(
+        last_bar: LatestBarsV2 = self._api_raw.get_latest_crypto_bars(
             [self._asset_name],
             self.BASE_EXCHANGE_CODE
         )
-        print(last_bar)
-        print(last_bar.__dict__)
-        parsed_last_bar: BarDictType = parse_bars_v2_to_dict(last_bar)
+        parsed_last_bar: dict = parse_bars_v2_to_dict(last_bar)
         with self._lock:
             self._last_bar = parsed_last_bar
