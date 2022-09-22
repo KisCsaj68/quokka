@@ -8,6 +8,8 @@ from src.routes import AllAssetRoute, Ping, AssetRoute
 class AssetCacheAPI:
     def __init__(self) -> None:
         self._app: falcon.App = falcon.App()
+        self.crypto_store = None
+        self.stock_store = None
         self.crypto_route = None
         self.stock_route = None
         self.ping = None
@@ -15,19 +17,26 @@ class AssetCacheAPI:
 
         self.create_fields()
         self.add_routes()
+        self.start_store_threads()
 
     @property
     def app(self) -> falcon.App:
         return self._app
 
+    def start_store_threads(self) -> None:
+        self.crypto_store.start()
+        self.stock_store.start()
+
     def create_fields(self) -> None:
-        crypto_store: CryptoStore = CryptoStore()
-        stock_store: StockStore = StockStore()
+        self.crypto_store: CryptoStore = CryptoStore()
+        self.crypto_store.add_asset("BTCUSD")
+        self.stock_store: StockStore = StockStore()
+        self.stock_store.add_asset("AAPL")
         self.all_asset_route: AllAssetRoute = AllAssetRoute(
-            (crypto_store, stock_store)
+            (self.crypto_store, self.stock_store)
         )
-        self.stock_route: AssetRoute = AssetRoute(stock_store)
-        self.crypto_route: AssetRoute = AssetRoute(crypto_store)
+        self.stock_route: AssetRoute = AssetRoute(self.stock_store)
+        self.crypto_route: AssetRoute = AssetRoute(self.crypto_store)
         self.ping: Ping = Ping()
 
     def add_routes(self) -> None:
