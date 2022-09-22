@@ -5,7 +5,8 @@ from typing import Tuple, Dict, List
 from falcon import Request
 from falcon import Response
 
-from src.cache import BaseAssetStore
+from src.cache import BaseAssetStore, BaseAssetCache
+from src.cache.assets import BarDictType
 
 
 def parse_dict_to_json_bytes(dictionary: dict) -> Tuple[bytes, int]:
@@ -61,9 +62,11 @@ class AssetRoute:
     def on_get_asset(self, req: Request, resp: Response, name: str) -> None:
         if 10 < len(name):
             return
-        asset = self.store[name]
-        if asset is None:
+        name: str = name.upper()
+        asset_cache: BaseAssetCache = self.store[name]
+        if asset_cache is None:
             return
+        asset: BarDictType = asset_cache.last_bar
         resp.data, resp.content_length = parse_dict_to_json_bytes(asset)
         resp.content_type = self.DEFAULT_CONTENT_TYPE
 
