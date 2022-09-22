@@ -84,4 +84,14 @@ public class UserDaoMem implements UserDao {
         }
         return Optional.empty();
     }
+
+    @Override
+    public boolean getUserByUserName(String userName) {
+        return DB.stream().anyMatch(e -> e.getUserName().equals(userName));
+    }
+
+    @Override
+    public boolean getUserByEmail(String emailAddress) {
+        return DB.stream().anyMatch(e -> e.getEmailAddress().equals(emailAddress));
+    }
 }
