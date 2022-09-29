@@ -28,6 +28,6 @@ public class AppConfig {
 
     @Bean
     public AssetDao getAssetDaoMem() {
-        return AssetDaoMem.getInstance();
+        return new AssetDaoMem();
     }
 }
