@@ -2,26 +2,31 @@ package com.codecool.quokka.dao.user;
 
 import com.codecool.quokka.model.user.Account;
 import com.codecool.quokka.model.user.UserDto;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-public interface UserDao {
+public interface UserDao extends CrudRepository<Account, Long> {
 
-     UserDto addUser(String name, String userName, String emailAddress, String passWord);
+//     UserDto addUser(String name, String userName, String emailAddress, String passWord);
+//
+//     UserDto addUser(Account account);
+//     Set<UserDto> getAllUser();
+//
+//     Optional<UserDto> getUser(UUID id);
+//
+//     void deleteUser(UUID id);
+//
+//     Optional<UserDto> updateUser(UUID id, HashMap<String, String> fields);
 
-     UserDto addUser(Account account);
-     Set<UserDto> getAllUser();
+    Optional<Account> findAccountByUserName(String userName);
+    Optional<Account> findAccountByEmailAddress(String emailAddress);
+    void deleteAccountByUserId(UUID id);
+    Optional<Account> findAccountByUserId(UUID id);
+//    boolean getUserByUserName(String userName);
 
-     Optional<UserDto> getUser(UUID id);
-
-     void deleteUser(UUID id);
-
-     Optional<UserDto> updateUser(UUID id, HashMap<String, String> fields);
-
-    boolean getUserByUserName(String userName);
-
-     boolean getUserByEmail(String emailAddress);
+//     boolean getUserByEmail(String emailAddress);
 }

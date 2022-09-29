@@ -69,9 +69,9 @@ public class UserController {
         userService.deleteUser(UUID.fromString(body.get("id")) );
     }
 
-    @PutMapping(path = "{id}")
-    public UserDto updateUser(@PathVariable("id") UUID id, @RequestBody HashMap<String, String> fields){
-        return userService.updateUser(id, fields).orElse(null);
-
-    }
+//    @PutMapping(path = "{id}")
+//    public UserDto updateUser(@PathVariable("id") UUID id, @RequestBody HashMap<String, String> fields){
+//        return userService.updateUser(id, fields).orElse(null);
+//
+//    }
 }
