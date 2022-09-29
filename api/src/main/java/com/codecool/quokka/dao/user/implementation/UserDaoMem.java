@@ -1,7 +1,7 @@
 package com.codecool.quokka.dao.user.implementation;
 
 import com.codecool.quokka.dao.user.UserDao;
-import com.codecool.quokka.model.user.User;
+import com.codecool.quokka.model.user.Account;
 
 import com.codecool.quokka.model.user.UserDto;
 import org.springframework.stereotype.Repository;
@@ -16,22 +16,22 @@ import java.util.Set;
 public class UserDaoMem implements UserDao {
 
 
-    private static Set<User> DB = new HashSet<>() {{
+    private static Set<Account> DB = new HashSet<>() {{
         UUID id = UUID.fromString("b462290f-4006-4d71-8a39-e956e245ede8");
-        add(new User("Test User", "test@asd.com", "TestUser", "asd", id));
+        add(new Account("Test User", "test@asd.com", "TestUser", "asd", id));
     }};
 
     @Override
     public UserDto addUser(String name, String userName, String emailAddress, String passWord) {
-        User newUser = new User(name, emailAddress, userName, passWord);
-        DB.add(newUser);
-        return new UserDto(userName, newUser.getId(), name, emailAddress);
+        Account newAccount = new Account(name, emailAddress, userName, passWord);
+        DB.add(newAccount);
+        return new UserDto(userName, newAccount.getId(), name, emailAddress);
     }
 
     @Override
-    public UserDto addUser(User user) {
-        DB.add(user);
-        return new UserDto(user.getUserName(), user.getId(), user.getFullName(), user.getEmailAddress());
+    public UserDto addUser(Account account) {
+        DB.add(account);
+        return new UserDto(account.getUserName(), account.getId(), account.getFullName(), account.getEmailAddress());
     }
 
     @Override
@@ -52,7 +52,7 @@ public class UserDaoMem implements UserDao {
 
     @Override
     public void deleteUser(UUID id) {
-        Optional<User> user = DB.stream()
+        Optional<Account> user = DB.stream()
                 .filter(e -> e.getId().equals(id))
                 .findFirst();
         if (user.isPresent()) {
@@ -62,24 +62,24 @@ public class UserDaoMem implements UserDao {
 
     @Override
     public Optional<UserDto> updateUser(UUID id, HashMap<String, String> fields) {
-        Optional<User> user = DB.stream()
+        Optional<Account> user = DB.stream()
                 .filter(e -> e.getId().equals(id))
                 .findFirst();
         if (user.isPresent()) {
-            User actualUser = user.get();
+            Account actualAccount = user.get();
             for (String item : fields.keySet()) {
                 switch (item) {
                     case "emailAddress":
-                        actualUser.setEmailAddress(fields.get("emailAddress"));
+                        actualAccount.setEmailAddress(fields.get("emailAddress"));
                         break;
                     case "fullName":
-                        actualUser.setFullName(fields.get("fullName"));
+                        actualAccount.setFullName(fields.get("fullName"));
                     case "passWord":
-                        actualUser.setPassWord(fields.get("passWord"));
+                        actualAccount.setPassword(fields.get("passWord"));
                 }
             }
-            Optional<UserDto> actualDto = Optional.of(new UserDto(actualUser.getUserName(), actualUser.getId(),
-                    actualUser.getFullName(), actualUser.getEmailAddress()));
+            Optional<UserDto> actualDto = Optional.of(new UserDto(actualAccount.getUserName(), actualAccount.getId(),
+                    actualAccount.getFullName(), actualAccount.getEmailAddress()));
             return actualDto;
         }
         return Optional.empty();

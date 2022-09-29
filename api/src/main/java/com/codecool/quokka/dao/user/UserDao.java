@@ -1,6 +1,6 @@
 package com.codecool.quokka.dao.user;
 
-import com.codecool.quokka.model.user.User;
+import com.codecool.quokka.model.user.Account;
 import com.codecool.quokka.model.user.UserDto;
 
 import java.util.HashMap;
@@ -12,7 +12,7 @@ public interface UserDao {
 
      UserDto addUser(String name, String userName, String emailAddress, String passWord);
 
-     UserDto addUser(User user);
+     UserDto addUser(Account account);
      Set<UserDto> getAllUser();
 
      Optional<UserDto> getUser(UUID id);

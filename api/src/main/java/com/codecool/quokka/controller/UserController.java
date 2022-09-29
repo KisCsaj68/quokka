@@ -1,6 +1,6 @@
 package com.codecool.quokka.controller;
 
-import com.codecool.quokka.model.user.User;
+import com.codecool.quokka.model.user.Account;
 
 import com.codecool.quokka.model.user.UserDto;
 import com.codecool.quokka.service.user.UserService;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,20 +33,20 @@ public class UserController {
 
     @PostMapping
     @CrossOrigin(origins = "http://localhost:3000")
-    public ResponseEntity addUser(@RequestBody User user) {
-        if(userService.getUserByEmail(user.getEmailAddress())) {
-            System.out.println(user.getEmailAddress());
+    public ResponseEntity addUser(@RequestBody Account account) {
+        if(userService.getUserByEmail(account.getEmailAddress())) {
+            System.out.println(account.getEmailAddress());
             return new ResponseEntity<>("Email occupied",HttpStatus.BAD_REQUEST);
         }
 
-        if(userService.getUserByUserName(user.getUserName())){
+        if(userService.getUserByUserName(account.getUserName())){
             return new ResponseEntity<>("User error",HttpStatus.BAD_REQUEST);
         }
 
-        if (!userService.validate(user.getEmailAddress())){
+        if (!userService.validate(account.getEmailAddress())){
             return new ResponseEntity<>("Email error",HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(userService.addUser(user), HttpStatus.OK);
+        return new ResponseEntity<>(userService.addUser(account), HttpStatus.OK);
     }
 
     @GetMapping

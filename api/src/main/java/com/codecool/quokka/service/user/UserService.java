@@ -1,6 +1,6 @@
 package com.codecool.quokka.service.user;
 
-import com.codecool.quokka.model.user.User;
+import com.codecool.quokka.model.user.Account;
 import com.codecool.quokka.dao.user.UserDao;
 import com.codecool.quokka.model.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +27,9 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public UserDto addUser(User user) {
-        user.hashPassword();
-        return userDao.addUser(user);
+    public UserDto addUser(Account account) {
+        account.hashPassword();
+        return userDao.addUser(account);
     }
 
     public Set<UserDto> getAllUser() {

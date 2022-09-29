@@ -1,7 +1,7 @@
 package com.codecool.quokka.service.user;
 
 import com.codecool.quokka.dao.user.UserDao;
-import com.codecool.quokka.model.user.User;
+import com.codecool.quokka.model.user.Account;
 import com.codecool.quokka.model.user.UserDto;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,8 +24,8 @@ import static org.mockito.ArgumentMatchers.any;
 @SpringBootTest
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class UserServiceTest {
-    static User user;
+public class AccountServiceTest {
+    static Account account;
     static UserDto dto;
     static UserDto updatedDto;
     static UUID id;
@@ -42,9 +42,9 @@ public class UserServiceTest {
     public static void setUp() {
          id = UUID.fromString("b462290f-4006-4d71-8a39-e956e245ede8");
          fakeId = UUID.fromString("b462290f-4008-4d71-8a39-e956e245ede8");
-         user = new User("Test User", "test@asd.com", "TestUser", "asd", id);
-         dto = new UserDto(user.getUserName(), user.getId(), user.getFullName(), user.getEmailAddress());
-         updatedDto = new UserDto("User3456", user.getId(), user.getFullName(), user.getEmailAddress());
+         account = new Account("Test User", "test@asd.com", "TestUser", "asd", id);
+         dto = new UserDto(account.getUserName(), account.getId(), account.getFullName(), account.getEmailAddress());
+         updatedDto = new UserDto("User3456", account.getId(), account.getFullName(), account.getEmailAddress());
          data = new HashMap<>();
          data.put("fullName", "User3456");
     }
@@ -52,8 +52,8 @@ public class UserServiceTest {
 
     @Test
     public void addUser() {
-        Mockito.when(userDao.addUser(user)).thenReturn(dto);
-        UserDto resultDto = userService.addUser(user);
+        Mockito.when(userDao.addUser(account)).thenReturn(dto);
+        UserDto resultDto = userService.addUser(account);
         assertEquals(dto,resultDto);
     }
 
