@@ -1,12 +1,9 @@
 package com.codecool.quokka.dao.user;
 
-import com.codecool.quokka.model.user.Account;
-import com.codecool.quokka.model.user.UserDto;
+import com.codecool.quokka.model.account.Account;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.HashMap;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 public interface UserDao extends CrudRepository<Account, Long> {

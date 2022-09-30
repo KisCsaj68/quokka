@@ -1,7 +1,7 @@
 package com.codecool.quokka.controller;
 
 import com.codecool.quokka.QuokkaApplication;
-import com.codecool.quokka.model.user.Account;
+import com.codecool.quokka.model.account.Account;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;

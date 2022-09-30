@@ -1,8 +1,8 @@
 package com.codecool.quokka.controller;
 
-import com.codecool.quokka.model.user.Account;
+import com.codecool.quokka.model.account.Account;
 
-import com.codecool.quokka.model.user.UserDto;
+import com.codecool.quokka.model.account.AccountDto;
 import com.codecool.quokka.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 
 @RequestMapping("/api/v1/user")
 @RestController
@@ -50,7 +49,7 @@ public class UserController {
     }
 
     @GetMapping
-    public Set<UserDto> getAllUser() {
+    public Set<AccountDto> getAllUser() {
         return userService.getAllUser();
     }
 
@@ -69,9 +68,9 @@ public class UserController {
         userService.deleteUser(UUID.fromString(body.get("id")) );
     }
 
-//    @PutMapping(path = "{id}")
-//    public UserDto updateUser(@PathVariable("id") UUID id, @RequestBody HashMap<String, String> fields){
-//        return userService.updateUser(id, fields).orElse(null);
-//
-//    }
+    @PutMapping(path = "{id}")
+    public AccountDto updateUser(@PathVariable("id") UUID id, @RequestBody HashMap<String, String> fields){
+        return userService.updateUser(id, fields).orElse(null);
+
+    }
 }

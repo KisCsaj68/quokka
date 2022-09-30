@@ -1,19 +1,20 @@
 package com.codecool.quokka.service.user;
 
-import com.codecool.quokka.model.user.Account;
+import com.codecool.quokka.model.account.Account;
 import com.codecool.quokka.dao.user.UserDao;
-import com.codecool.quokka.model.user.UserDto;
+import com.codecool.quokka.model.account.AccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import javax.transaction.Transactional;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class UserService {
@@ -27,42 +28,52 @@ public class UserService {
     public UserService(UserDao userDao) {
         this.userDao = userDao;
     }
-//    public UserService(@Qualifier("inMemoUserDao") UserDao userDao) {
-//        this.userDao = userDao;
-//    }
 
-    public UserDto addUser(Account account) {
+    public AccountDto addUser(Account account) {
         account.hashPassword();
-//        return userDao.addUser(account);
-        userDao.save(account);
-        UserDto data = new UserDto(account.getUserName(), account.getId(), account.getFullName(), account.getEmailAddress())
-;        return data;
+        return AccountDto.from(userDao.save(account));
     }
 
-    public Set<UserDto> getAllUser() {
-        Set<Account> accounts = (Set<Account>) userDao.findAll();
-        return accounts.stream()
-                .map(e -> new UserDto(e.getUserName(), e.getId(), e.getFullName(), e.getEmailAddress()))
+    public Set<AccountDto> getAllUser() {
+        return StreamSupport.stream(userDao.findAll().spliterator(), false)
+                .map(AccountDto::from)
                 .collect(Collectors.toSet());
     }
 
-    public Optional<UserDto> getUser(UUID id) {
+    public Optional<AccountDto> getUser(UUID id) {
         Optional<Account> account = userDao.findAccountByUserId(id);
         if (account.isPresent()) {
-            var acc = account.get();
-            return Optional.of(new UserDto(acc.getUserName(), acc.getId(), acc.getFullName(), acc.getEmailAddress()));
+            return Optional.of(AccountDto.from(account.get()));
         }
         return Optional.empty();
     }
 
+    @Transactional
     public void deleteUser(UUID id) {
         userDao.deleteAccountByUserId(id);
-//        userDao.deleteUser(id);
     }
 
-//    public Optional<UserDto> updateUser(UUID id, HashMap<String, String> fields) {
-//        return userDao.updateUser(id, fields);
-//    }
+    public Optional<AccountDto> updateUser(UUID id, Map<String, String> fields) {
+        Optional<Account> account = userDao.findAccountByUserId(id);
+        if (account.isEmpty()) {
+            return Optional.empty();
+        }
+        Account acc = account.get();
+        for (String item : fields.keySet()) {
+            switch (item) {
+                case "emailAddress":
+                    acc.setEmailAddress(fields.get("emailAddress"));
+                    break;
+                case "fullName":
+                    acc.setFullName(fields.get("fullName"));
+                    break;
+                case "password":
+                    acc.setPassword(fields.get("password"));
+                    break;
+            }
+        }
+        return Optional.of(AccountDto.from(userDao.save(acc)));
+    }
 
     public boolean validate(String emailStr) {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
@@ -71,7 +82,6 @@ public class UserService {
 
     public boolean getUserByUserName(String userName) {
         return userDao.findAccountByUserName(userName).isPresent();
-//        return userDao.getUserByUserName(userName);
     }
 
     public boolean getUserByEmail(String emailAddress) {

@@ -1,8 +1,8 @@
 package com.codecool.quokka.service.user;
 
 import com.codecool.quokka.dao.user.UserDao;
-import com.codecool.quokka.model.user.Account;
-import com.codecool.quokka.model.user.UserDto;
+import com.codecool.quokka.model.account.Account;
+import com.codecool.quokka.model.account.AccountDto;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -26,8 +26,8 @@ import static org.mockito.ArgumentMatchers.any;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class AccountServiceTest {
     static Account account;
-    static UserDto dto;
-    static UserDto updatedDto;
+    static AccountDto dto;
+    static AccountDto updatedDto;
     static UUID id;
     static UUID fakeId;
     static HashMap<String, String> data;
@@ -43,8 +43,8 @@ public class AccountServiceTest {
          id = UUID.fromString("b462290f-4006-4d71-8a39-e956e245ede8");
          fakeId = UUID.fromString("b462290f-4008-4d71-8a39-e956e245ede8");
          account = new Account("Test User", "test@asd.com", "TestUser", "asd", id);
-         dto = new UserDto(account.getUserName(), account.getId(), account.getFullName(), account.getEmailAddress());
-         updatedDto = new UserDto("User3456", account.getId(), account.getFullName(), account.getEmailAddress());
+         dto = AccountDto.from(account);
+         updatedDto = new AccountDto("User3456", account.getId(), account.getFullName(), account.getEmailAddress());
          data = new HashMap<>();
          data.put("fullName", "User3456");
     }
@@ -53,14 +53,14 @@ public class AccountServiceTest {
     @Test
     public void addUser() {
         Mockito.when(userDao.save(account)).thenReturn(account);
-        UserDto resultDto = userService.addUser(account);
+        AccountDto resultDto = userService.addUser(account);
         assertEquals(dto,resultDto);
     }
 
     @Test
     public void getAllUser() {
         Mockito.when(userDao.findAll()).thenReturn(Set.of(account));
-        Set<UserDto> dtos = userService.getAllUser();
+        Set<AccountDto> dtos = userService.getAllUser();
         assertEquals(dtos, Set.of(dto));
     }
 
@@ -68,8 +68,8 @@ public class AccountServiceTest {
     public void getUser() {
         Mockito.when(userDao.findAccountByUserId(id)).thenReturn(Optional.of(account));
         Mockito.when(userDao.findAccountByUserId(fakeId)).thenReturn(Optional.empty());
-        Optional<UserDto> resultDto = userService.getUser(id);
-        Optional<UserDto> fakeDto = userService.getUser(fakeId);
+        Optional<AccountDto> resultDto = userService.getUser(id);
+        Optional<AccountDto> fakeDto = userService.getUser(fakeId);
         assertEquals(resultDto, Optional.of(dto));
         assertEquals(fakeDto, Optional.empty());
     }

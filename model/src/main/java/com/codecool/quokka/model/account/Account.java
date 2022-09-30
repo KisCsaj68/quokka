@@ -1,4 +1,4 @@
-package com.codecool.quokka.model.user;
+package com.codecool.quokka.model.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.hash.Hashing;
@@ -117,7 +117,7 @@ public class Account {
 
     @Override
     public String toString() {
-        return "User{" + "id=" + userId + ", fullName='" + fullName + '\'' + ", userName='" + userName + '\'' + ", emailAddress='" + emailAddress + '\'' + ", passWord='" + password + '\'' + '}';
+        return "User{" + "id=" + userId + ", fullName='" + fullName + '\'' + ", userName='" + userName + '\'' + ", emailAddress='" + emailAddress + '\'' + ", password='" + password + '\'' + '}';
     }
 }
 
