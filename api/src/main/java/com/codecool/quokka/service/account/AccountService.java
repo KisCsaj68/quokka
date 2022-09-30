@@ -1,7 +1,7 @@
-package com.codecool.quokka.service.user;
+package com.codecool.quokka.service.account;
 
 import com.codecool.quokka.model.account.Account;
-import com.codecool.quokka.dao.user.UserDao;
+import com.codecool.quokka.dao.account.AccountDao;
 import com.codecool.quokka.model.account.AccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,31 +17,31 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class UserService {
+public class AccountService {
 
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", Pattern.CASE_INSENSITIVE);
 
-    private final UserDao userDao;
+    private final AccountDao accountDao;
 
     @Autowired
-    public UserService(UserDao userDao) {
-        this.userDao = userDao;
+    public AccountService(AccountDao accountDao) {
+        this.accountDao = accountDao;
     }
 
-    public AccountDto addUser(Account account) {
+    public AccountDto addAccount(Account account) {
         account.hashPassword();
-        return AccountDto.from(userDao.save(account));
+        return AccountDto.from(accountDao.save(account));
     }
 
-    public Set<AccountDto> getAllUser() {
-        return StreamSupport.stream(userDao.findAll().spliterator(), false)
+    public Set<AccountDto> getAllAccount() {
+        return StreamSupport.stream(accountDao.findAll().spliterator(), false)
                 .map(AccountDto::from)
                 .collect(Collectors.toSet());
     }
 
-    public Optional<AccountDto> getUser(UUID id) {
-        Optional<Account> account = userDao.findAccountByUserId(id);
+    public Optional<AccountDto> getAccount(UUID id) {
+        Optional<Account> account = accountDao.findAccountByUserId(id);
         if (account.isPresent()) {
             return Optional.of(AccountDto.from(account.get()));
         }
@@ -49,12 +49,12 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(UUID id) {
-        userDao.deleteAccountByUserId(id);
+    public void deleteAccount(UUID id) {
+        accountDao.deleteAccountByUserId(id);
     }
 
-    public Optional<AccountDto> updateUser(UUID id, Map<String, String> fields) {
-        Optional<Account> account = userDao.findAccountByUserId(id);
+    public Optional<AccountDto> updateAccount(UUID id, Map<String, String> fields) {
+        Optional<Account> account = accountDao.findAccountByUserId(id);
         if (account.isEmpty()) {
             return Optional.empty();
         }
@@ -72,7 +72,7 @@ public class UserService {
                     break;
             }
         }
-        return Optional.of(AccountDto.from(userDao.save(acc)));
+        return Optional.of(AccountDto.from(accountDao.save(acc)));
     }
 
     public boolean validate(String emailStr) {
@@ -80,11 +80,11 @@ public class UserService {
         return matcher.find();
     }
 
-    public boolean getUserByUserName(String userName) {
-        return userDao.findAccountByUserName(userName).isPresent();
+    public boolean getAccountByUserName(String userName) {
+        return accountDao.findAccountByUserName(userName).isPresent();
     }
 
-    public boolean getUserByEmail(String emailAddress) {
-        return userDao.findAccountByEmailAddress(emailAddress).isPresent();
+    public boolean getAccountByEmail(String emailAddress) {
+        return accountDao.findAccountByEmailAddress(emailAddress).isPresent();
     }
 }

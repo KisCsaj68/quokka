@@ -117,7 +117,7 @@ public class Account {
 
     @Override
     public String toString() {
-        return "User{" + "id=" + userId + ", fullName='" + fullName + '\'' + ", userName='" + userName + '\'' + ", emailAddress='" + emailAddress + '\'' + ", password='" + password + '\'' + '}';
+        return "Account{" + "id=" + userId + ", fullName='" + fullName + '\'' + ", userName='" + userName + '\'' + ", emailAddress='" + emailAddress + '\'' + ", password='" + password + '\'' + '}';
     }
 }
 

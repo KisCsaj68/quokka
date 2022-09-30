@@ -1,6 +1,6 @@
-package com.codecool.quokka.service.user;
+package com.codecool.quokka.service.account;
 
-import com.codecool.quokka.dao.user.UserDao;
+import com.codecool.quokka.dao.account.AccountDao;
 import com.codecool.quokka.model.account.Account;
 import com.codecool.quokka.model.account.AccountDto;
 import org.junit.BeforeClass;
@@ -33,10 +33,10 @@ public class AccountServiceTest {
     static HashMap<String, String> data;
 
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
 
     @Autowired
-    private UserDao userDao;
+    private AccountDao accountDao;
 
     @BeforeClass
     public static void setUp() {
@@ -51,33 +51,33 @@ public class AccountServiceTest {
 
 
     @Test
-    public void addUser() {
-        Mockito.when(userDao.save(account)).thenReturn(account);
-        AccountDto resultDto = userService.addUser(account);
+    public void addAccount() {
+        Mockito.when(accountDao.save(account)).thenReturn(account);
+        AccountDto resultDto = accountService.addAccount(account);
         assertEquals(dto,resultDto);
     }
 
     @Test
-    public void getAllUser() {
-        Mockito.when(userDao.findAll()).thenReturn(Set.of(account));
-        Set<AccountDto> dtos = userService.getAllUser();
+    public void getAllAccount() {
+        Mockito.when(accountDao.findAll()).thenReturn(Set.of(account));
+        Set<AccountDto> dtos = accountService.getAllAccount();
         assertEquals(dtos, Set.of(dto));
     }
 
     @Test
-    public void getUser() {
-        Mockito.when(userDao.findAccountByUserId(id)).thenReturn(Optional.of(account));
-        Mockito.when(userDao.findAccountByUserId(fakeId)).thenReturn(Optional.empty());
-        Optional<AccountDto> resultDto = userService.getUser(id);
-        Optional<AccountDto> fakeDto = userService.getUser(fakeId);
+    public void getAccount() {
+        Mockito.when(accountDao.findAccountByUserId(id)).thenReturn(Optional.of(account));
+        Mockito.when(accountDao.findAccountByUserId(fakeId)).thenReturn(Optional.empty());
+        Optional<AccountDto> resultDto = accountService.getAccount(id);
+        Optional<AccountDto> fakeDto = accountService.getAccount(fakeId);
         assertEquals(resultDto, Optional.of(dto));
         assertEquals(fakeDto, Optional.empty());
     }
 
 //    @Test
 //    public void updateUser() {
-//        Mockito.when(userDao.updateUser(id, data)).thenReturn(Optional.of(updatedDto));
-//        Mockito.when(userDao.updateUser(fakeId, data)).thenReturn(Optional.empty());
+//        Mockito.when(accountDao.updateUser(id, data)).thenReturn(Optional.of(updatedDto));
+//        Mockito.when(accountDao.updateUser(fakeId, data)).thenReturn(Optional.empty());
 //        Optional<UserDto> resultDto = userService.updateUser(id,data);
 //        Optional<UserDto> fakeResultDto = userService.updateUser(fakeId,data);
 //        assertEquals(resultDto, Optional.of(dto));
@@ -85,9 +85,9 @@ public class AccountServiceTest {
 //    }
 
     @Test
-    public void deleteUser() {
-        userService.deleteUser(id);
-        Mockito.verify(userDao, Mockito.times(1)).deleteAccountByUserId(any());
+    public void deleteAccount() {
+        accountService.deleteAccount(id);
+        Mockito.verify(accountDao, Mockito.times(1)).deleteAccountByUserId(any());
 
     }
 
