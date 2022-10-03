@@ -1,0 +1,38 @@
+{
+    "assets": {
+        "crypto": [
+            "BTCUSD",
+            "ETHUSD",
+            "BCHUSD",
+            "AAVEUSD",
+            "LTCUSD",
+            "SOLUSD",
+            "AVAXUSD",
+            "LINKUSD",
+            "UNIUSD",
+            "SUSHIUSD",
+            "MATICUSD",
+            "ALGOUSD",
+            "BATUSD",
+            "GRTUSD",
+            "DOGEUSD",
+            "TRXUSD",
+            "SHIBUSD"
+        ],
+        "stock": [
+            "AAPL",
+            "TSLA",
+            "ETSY",
+            "GOOGL",
+            "GOOG",
+            "ADBE",
+            "AAP",
+            "AMD",
+            "ALLE",
+            "KIM",
+            "MPC",
+            "META",
+            "TSCO"
+        ]
+    }
+}
