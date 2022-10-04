@@ -1,7 +1,9 @@
 package com.codecool.quokka.model.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.hash.Hashing;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class User {
@@ -12,10 +14,10 @@ public class User {
 
     private String passWord;
 
-    public User(@JsonProperty("fullName") String fullName,
-                @JsonProperty("emailAddress") String emailAddress,
-                @JsonProperty("userName") String userName,
-                @JsonProperty("passWord") String passWord) {
+    public User(@JsonProperty("full_name") String fullName,
+                @JsonProperty("email_address") String emailAddress,
+                @JsonProperty("user_name") String userName,
+                @JsonProperty("password") String passWord) {
         this.id = UUID.randomUUID();
         this.fullName = fullName;
         this.userName = userName;
@@ -23,10 +25,10 @@ public class User {
         this.passWord = passWord;
     }
 
-    public User(@JsonProperty("fullName") String fullName,
-                @JsonProperty("emailAddress") String emailAddress,
-                @JsonProperty("userName") String userName,
-                @JsonProperty("passWord") String passWord,
+    public User(String fullName,
+                String emailAddress,
+                String userName,
+                String passWord,
                 UUID id) {
         this.id = id;
         this.fullName = fullName;
@@ -74,6 +76,12 @@ public class User {
         return data;
     }
 
+    public void hashPassword() {
+        this.passWord = Hashing.sha256()
+                .hashString(passWord, StandardCharsets.UTF_8)
+                .toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -90,7 +98,6 @@ public class User {
     @Override
     public String toString() {
         return "User{" + "id=" + id + ", fullName='" + fullName + '\'' + ", userName='" + userName + '\'' + ", emailAddress='" + emailAddress + '\'' + ", passWord='" + passWord + '\'' + '}';
-
     }
 }
 

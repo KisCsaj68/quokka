@@ -5,12 +5,14 @@ import com.codecool.quokka.model.user.User;
 import com.codecool.quokka.model.user.UserDto;
 import com.codecool.quokka.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/user")
 @RestController
 public class UserController {
+
     private UserService userService;
 
     @Autowired
@@ -28,9 +31,23 @@ public class UserController {
         this.userService = userService;
     }
 
+
     @PostMapping
-    public UserDto addUser(@RequestBody User user) {
-        return userService.addUser(user);
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity addUser(@RequestBody User user) {
+        if(userService.getUserByEmail(user.getEmailAddress())) {
+            System.out.println(user.getEmailAddress());
+            return new ResponseEntity<>("Email occupied",HttpStatus.BAD_REQUEST);
+        }
+
+        if(userService.getUserByUserName(user.getUserName())){
+            return new ResponseEntity<>("User error",HttpStatus.BAD_REQUEST);
+        }
+
+        if (!userService.validate(user.getEmailAddress())){
+            return new ResponseEntity<>("Email error",HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(userService.addUser(user), HttpStatus.OK);
     }
 
     @GetMapping
@@ -39,8 +56,13 @@ public class UserController {
     }
 
     @GetMapping(path = "{id}")
-    public UserDto getUserById(@PathVariable("id") UUID id) {
-        return userService.getUser(id).orElse(null);
+    public ResponseEntity getUserById(@PathVariable("id") UUID id) {
+        if (userService.getUser(id).isPresent()){
+            return new ResponseEntity<>(userService.getUser(id).get(), HttpStatus.OK) ;
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping
