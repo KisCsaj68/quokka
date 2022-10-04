@@ -1,10 +1,8 @@
 package com.codecool.quokka.controller;
 
 import com.codecool.quokka.model.OrderDto;
-import com.codecool.quokka.model.order.Order;
-import com.codecool.quokka.model.order.OrderType;
+import com.codecool.quokka.model.order.AssetOrder;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,14 +20,14 @@ public class FinController {
     @PostMapping(path = "/api/v1/order")
     public ResponseEntity createNewOrder(@RequestBody OrderDto data) {
 
-        Order actualOrder = data.toEntity(ACCOUNT_ID);
-        if (data.getType().equals(OrderType.LIMIT)) {
-            // post request to OMS / LimitOrder
-            throw new UnsupportedOperationException("Limit order not supported yet");
-        }
+        AssetOrder actualAssetOrder = data.toEntity(ACCOUNT_ID);
+//        if (data.getType().equals(OrderType.LIMIT)) {
+//            // post request to OMS / LimitOrder
+//            throw new UnsupportedOperationException("Limit order not supported yet");
+//        }
         //post request to OMS / marketOrder
-        HttpEntity<Order> request = new HttpEntity<>(actualOrder);
-        String orderCreateResponse = restTemplate.postForObject(url, request, String.class);
-        return new ResponseEntity<>(orderCreateResponse, HttpStatus.OK);
+        HttpEntity<AssetOrder> request = new HttpEntity<>(actualAssetOrder);
+        ResponseEntity orderCreateResponse = restTemplate.postForObject(url, request, ResponseEntity.class);
+        return orderCreateResponse;
     }
 }
