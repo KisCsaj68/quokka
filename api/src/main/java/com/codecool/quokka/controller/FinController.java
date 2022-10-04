@@ -24,12 +24,11 @@ public class FinController {
 
         Order actualOrder = data.toEntity(ACCOUNT_ID);
         if (data.getType().equals(OrderType.LIMIT)) {
-            throw new UnsupportedOperationException("Limit order not supported yet");
             // post request to OMS / LimitOrder
+            throw new UnsupportedOperationException("Limit order not supported yet");
         }
         //post request to OMS / marketOrder
         HttpEntity<Order> request = new HttpEntity<>(actualOrder);
-        System.out.println(request.getBody());
         String orderCreateResponse = restTemplate.postForObject(url, request, String.class);
         return new ResponseEntity<>(orderCreateResponse, HttpStatus.OK);
     }
