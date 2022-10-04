@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-public class Order {
+public class AssetOrder {
     @Id
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -25,8 +25,8 @@ public class Order {
     private OrderStatus status;
     @JsonProperty("type")
     private OrderType type;
-    @JsonProperty("limit")
-    private BigDecimal limit;
+    @JsonProperty("order_limit")
+    private BigDecimal orderLimit;
 
     private UUID assetId;
 
@@ -38,17 +38,17 @@ public class Order {
         this.id = id;
     }
 
-    public Order(int quantity, UUID assetId, UUID accountId, OrderStatus status, OrderType type, BigDecimal limit) {
+    public AssetOrder(int quantity, UUID assetId, UUID accountId, OrderStatus status, OrderType type, BigDecimal orderLimit) {
         this.quantity = quantity;
         this.assetId = assetId;
         this.accountId = accountId;
         this.status = status;
         this.type = type;
-        this.limit = limit;
+        this.orderLimit = orderLimit;
         this.orderId = UUID.randomUUID();
     }
 
-    public Order(){}
+    public AssetOrder(){}
 
     public int getQuantity() {
         return quantity;
@@ -74,8 +74,8 @@ public class Order {
         return type;
     }
 
-    public BigDecimal getLimit() {
-        return limit;
+    public BigDecimal getOrderLimit() {
+        return orderLimit;
     }
 
     public void setQuantity(int quantity) {
@@ -98,8 +98,8 @@ public class Order {
         this.type = type;
     }
 
-    public void setLimit(BigDecimal limit) {
-        this.limit = limit;
+    public void setOrderLimit(BigDecimal limit) {
+        this.orderLimit = limit;
     }
 
     public void setAssetId(UUID assetId) {
@@ -115,7 +115,7 @@ public class Order {
                 ", id=" + orderId +
                 ", status=" + status +
                 ", type=" + type +
-                ", limit=" + limit +
+                ", limit=" + orderLimit +
                 '}';
     }
 }
