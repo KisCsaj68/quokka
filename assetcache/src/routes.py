@@ -1,8 +1,10 @@
 import json
+
 from typing import Tuple, Dict, Union, Callable
 
 from falcon import Request
 from falcon import Response
+
 
 from src.data_handlers.collectors.tickers import LatestStockTicker, \
     LatestCryptoTicker
@@ -102,3 +104,5 @@ class LatestAssetRoute:
         if not symbol.isascii():
             return False
         return True
+
+   

@@ -11,19 +11,19 @@ import java.util.stream.Collectors;
 
 @Repository("assetDaoMem")
 public class AssetDaoMem implements AssetDao {
-    private static AssetDaoMem instance = null;
+//    private static AssetDaoMem instance = null;
     private final HashSet<Asset> assetData;
 
-    private AssetDaoMem() {
+    public AssetDaoMem() {
         this.assetData = new HashSet<>();
     }
 
-    public static AssetDaoMem getInstance() {
-        if (instance == null) {
-            instance = new AssetDaoMem();
-        }
-        return instance;
-    }
+//    public static AssetDaoMem getInstance() {
+//        if (instance == null) {
+//            instance = new AssetDaoMem();
+//        }
+//        return instance;
+//    }
 
     @Override
     public Asset add(Asset asset) {
