@@ -40,7 +40,7 @@ Frontend is implemented using React.
 ### Backend
 Quokka Trading Platfo®m's backend follows the microservice architecture.
 There are 4 backend components separated by their main distinct responsibilities:
-- API is responsible for exposing user-facing functionalities through RESTful API
+- API is responsible for exposing account-facing functionalities through RESTful API
 - Order Management System (OMS) is responsible for all tracking all trade related actions
 - Asset cache is responsible for:
   - providing RESTful APIs for asset related functionalities

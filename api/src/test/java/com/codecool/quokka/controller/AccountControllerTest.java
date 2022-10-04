@@ -1,7 +1,7 @@
 package com.codecool.quokka.controller;
 
 import com.codecool.quokka.QuokkaApplication;
-import com.codecool.quokka.model.user.User;
+import com.codecool.quokka.model.account.Account;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,
         classes = QuokkaApplication.class)
 @AutoConfigureMockMvc
-public class UserControllerTest {
+public class AccountControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -74,10 +74,10 @@ public class UserControllerTest {
 //    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testCreateNewUser() throws Exception {
-        User user = new User("User Added", "user@asd.com", "UserAdded", "asd");
+        Account account = new Account("User Added", "user@asd.com", "UserAdded", "asd");
         mvc.perform(post("/api/v1/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(user)))
+                .content(new ObjectMapper().writeValueAsString(account)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.fullName", is("User Added")));
     }
