@@ -1,6 +1,6 @@
 package com.codecool.quokka.model;
 
-import com.codecool.quokka.model.order.Order;
+import com.codecool.quokka.model.order.AssetOrder;
 import com.codecool.quokka.model.order.OrderStatus;
 import com.codecool.quokka.model.order.OrderType;
 
@@ -36,7 +36,7 @@ public class OrderDto {
         return limit;
     }
 
-    public Order toEntity(UUID accountId) {
-        return new Order(this.getQty(), null, accountId, OrderStatus.OPEN, this.getType(), this.getLimit());
+    public AssetOrder toEntity(UUID accountId) {
+        return new AssetOrder(this.getQty(), null, accountId, OrderStatus.OPEN, this.getType(), this.getLimit());
     }
 }
