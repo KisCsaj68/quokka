@@ -7,7 +7,7 @@ import Stock from "./Stock";
 import LogIn from "./LogIn";
 import Crypto from "./Crypto";
 import {useState} from "react";
-import apiRequest from "./apiRequest";
+import {regApi} from "./apiRequest";
 
 function App() {
     const [fullName, setFullName] = useState('');
@@ -21,7 +21,7 @@ function App() {
         e.preventDefault();
         const newUser = {fullName, email_address: email_address, userName, password: passWrd}
         try {
-            const response = await apiRequest.post('/api/v1/user', newUser);
+            const response = await regApi.post('/api/v1/user', newUser);
             if(response.status < 300) {
                 setEmail_address("");
                 setPassWrd("");
