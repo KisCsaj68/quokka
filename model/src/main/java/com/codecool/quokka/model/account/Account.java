@@ -8,10 +8,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Entity
-
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private UUID userId;
