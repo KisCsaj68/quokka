@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -17,15 +18,16 @@ import java.util.UUID;
 public class AssetOrder {
     @Id
     @JsonIgnore
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
+    private UUID id;
 
     @JsonProperty("quantity")
     private int quantity;
 
     private UUID accountId;
 
-    private UUID orderId;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
     @JsonProperty("type")
@@ -38,11 +40,11 @@ public class AssetOrder {
 
     private String symbol;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -53,7 +55,6 @@ public class AssetOrder {
         this.status = status;
         this.type = type;
         this.orderLimit = orderLimit;
-        this.orderId = UUID.randomUUID();
     }
 
     public int getQuantity() {
@@ -63,10 +64,6 @@ public class AssetOrder {
 
     public UUID getAccountId() {
         return accountId;
-    }
-
-    public UUID getOrderId() {
-        return orderId;
     }
 
     public OrderStatus getStatus() {
@@ -89,9 +86,6 @@ public class AssetOrder {
         this.accountId = accountId;
     }
 
-    public void setOrderId(UUID orderId) {
-        this.orderId = orderId;
-    }
 
     public void setStatus(OrderStatus status) {
         this.status = status;
@@ -112,7 +106,7 @@ public class AssetOrder {
                 "quantity=" + quantity +
                 ", symbol=" + symbol +
                 ", accountId=" + accountId +
-                ", id=" + orderId +
+                ", id=" + id +
                 ", status=" + status +
                 ", type=" + type +
                 ", limit=" + orderLimit +

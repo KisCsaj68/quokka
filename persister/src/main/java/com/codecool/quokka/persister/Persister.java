@@ -2,8 +2,6 @@ package com.codecool.quokka.persister;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
 @EntityScan("com.codecool.quokka.model")
