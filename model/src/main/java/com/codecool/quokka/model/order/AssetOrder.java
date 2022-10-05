@@ -17,18 +17,17 @@ public class AssetOrder {
     @JsonProperty("quantity")
     private int quantity;
 
-    @JsonProperty("account_id")
     private UUID accountId;
-    @JsonProperty("id")
+
     private UUID orderId;
-    @JsonProperty("status")
     private OrderStatus status;
     @JsonProperty("type")
     private OrderType type;
     @JsonProperty("order_limit")
     private BigDecimal orderLimit;
 
-    private UUID assetId;
+    @JsonProperty("symbol")
+    private String symbol;
 
     public Long getId() {
         return id;
@@ -38,9 +37,9 @@ public class AssetOrder {
         this.id = id;
     }
 
-    public AssetOrder(int quantity, UUID assetId, UUID accountId, OrderStatus status, OrderType type, BigDecimal orderLimit) {
+    public AssetOrder(int quantity, String symbol, UUID accountId, OrderStatus status, OrderType type, BigDecimal orderLimit) {
         this.quantity = quantity;
-        this.assetId = assetId;
+        this.symbol = symbol;
         this.accountId = accountId;
         this.status = status;
         this.type = type;
@@ -54,9 +53,6 @@ public class AssetOrder {
         return quantity;
     }
 
-    public UUID getAssetId() {
-        return assetId;
-    }
 
     public UUID getAccountId() {
         return accountId;
@@ -102,15 +98,12 @@ public class AssetOrder {
         this.orderLimit = limit;
     }
 
-    public void setAssetId(UUID assetId) {
-        this.assetId = assetId;
-    }
 
     @Override
     public String toString() {
         return "Order{" +
                 "quantity=" + quantity +
-                ", assetId=" + assetId +
+                ", symbol=" + symbol +
                 ", accountId=" + accountId +
                 ", id=" + orderId +
                 ", status=" + status +
