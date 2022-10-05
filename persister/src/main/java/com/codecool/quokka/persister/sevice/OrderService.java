@@ -1,6 +1,6 @@
 package com.codecool.quokka.persister.sevice;
 
-import com.codecool.quokka.model.order.AssetOrder;
+import com.codecool.quokka.model.order.Orders;
 import com.codecool.quokka.persister.MQConfig;
 import com.codecool.quokka.persister.dal.OrderDal;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -22,7 +22,7 @@ public class OrderService {
     }
 
     @RabbitListener(queues = MQConfig.QUEUE)
-    public void orderHandler(AssetOrder order) {
+    public void orderHandler(Orders order) {
         System.out.println("Order from Rabbit listener" + order);
         orderDal.save(order);
     }

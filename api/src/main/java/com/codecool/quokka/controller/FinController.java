@@ -1,7 +1,7 @@
 package com.codecool.quokka.controller;
 
 import com.codecool.quokka.model.OrderDto;
-import com.codecool.quokka.model.order.AssetOrder;
+import com.codecool.quokka.model.order.Orders;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,13 +20,13 @@ public class FinController {
     @PostMapping(path = "/api/v1/order")
     public ResponseEntity createNewOrder(@RequestBody OrderDto data) {
 
-        AssetOrder actualAssetOrder = data.toEntity(ACCOUNT_ID);
+        Orders actualOrders = data.toEntity(ACCOUNT_ID);
 //        if (data.getType().equals(OrderType.LIMIT)) {
 //            // post request to OMS / LimitOrder
 //            throw new UnsupportedOperationException("Limit order not supported yet");
 //        }
         //post request to OMS / marketOrder
-        HttpEntity<AssetOrder> request = new HttpEntity<>(actualAssetOrder);
+        HttpEntity<Orders> request = new HttpEntity<>(actualOrders);
         ResponseEntity orderCreateResponse = restTemplate.postForObject(url, request, ResponseEntity.class);
         return orderCreateResponse;
     }

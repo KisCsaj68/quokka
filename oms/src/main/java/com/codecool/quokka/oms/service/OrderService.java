@@ -1,6 +1,6 @@
 package com.codecool.quokka.oms.service;
 
-import com.codecool.quokka.model.order.AssetOrder;
+import com.codecool.quokka.model.order.Orders;
 import com.codecool.quokka.model.order.OrderStatus;
 import com.codecool.quokka.oms.MQConfig;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -19,7 +19,7 @@ public class OrderService {
         this.template = template;
     }
 
-    public ResponseEntity createOrder(AssetOrder data) {
+    public ResponseEntity createOrder(Orders data) {
         data.setStatus(OrderStatus.OPEN);
         System.out.println(data);
 

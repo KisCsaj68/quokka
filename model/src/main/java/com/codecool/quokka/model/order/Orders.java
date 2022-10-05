@@ -15,7 +15,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AssetOrder {
+public class Orders {
     @Id
     @JsonIgnore
 //    @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -27,6 +27,7 @@ public class AssetOrder {
     private int quantity;
 
     private UUID accountId;
+    private BigDecimal price;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
@@ -37,7 +38,6 @@ public class AssetOrder {
     private BigDecimal orderLimit;
 
     @JsonProperty("symbol")
-
     private String symbol;
 
     public UUID getId() {
@@ -48,13 +48,15 @@ public class AssetOrder {
         this.id = id;
     }
 
-    public AssetOrder(int quantity, String symbol, UUID accountId, OrderStatus status, OrderType type, BigDecimal orderLimit) {
+    public Orders(int quantity, String symbol, UUID accountId, OrderStatus status, OrderType type, BigDecimal orderLimit, BigDecimal price) {
         this.quantity = quantity;
         this.symbol = symbol;
         this.accountId = accountId;
         this.status = status;
         this.type = type;
         this.orderLimit = orderLimit;
+        this.price = price;
+
     }
 
     public int getQuantity() {
