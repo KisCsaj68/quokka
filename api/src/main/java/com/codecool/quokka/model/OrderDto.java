@@ -37,6 +37,6 @@ public class OrderDto {
     }
 
     public AssetOrder toEntity(UUID accountId) {
-        return new AssetOrder(this.getQty(), null, accountId, OrderStatus.OPEN, this.getType(), this.getLimit());
+        return new AssetOrder(this.getQty(), this.getSymbol(), accountId, OrderStatus.OPEN, this.getType(), this.getLimit());
     }
 }
