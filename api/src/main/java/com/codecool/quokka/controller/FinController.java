@@ -15,7 +15,7 @@ import java.util.UUID;
 public class FinController {
     public static final UUID ACCOUNT_ID = UUID.fromString("a1521309-f533-460a-a9fc-3028b0efc79b");
     RestTemplate restTemplate = new RestTemplate();
-    String url = "http://localhost:8081/api/v1/order"; //TODO: when dockerized use oms' hostname instead of localhost.
+    String url = "http://localhost:9000/api/v1/order"; //TODO: when dockerized use oms' hostname instead of localhost.
 
     @PostMapping(path = "/api/v1/order")
     public ResponseEntity createNewOrder(@RequestBody OrderDto data) {
