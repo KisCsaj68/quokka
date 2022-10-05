@@ -2,12 +2,12 @@ package com.codecool.quokka.oms.service;
 
 import com.codecool.quokka.model.order.AssetOrder;
 import com.codecool.quokka.model.order.OrderStatus;
+import com.codecool.quokka.oms.MQConfig;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
 public class OrderService {

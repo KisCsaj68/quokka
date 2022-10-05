@@ -110,7 +110,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        com.codecool.quokka.oms.Main
+                                        com.codecool.quokka.oms.OrderManagementService
                                     </mainClass>
                                 </manifest>
                             </archive>

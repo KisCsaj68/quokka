@@ -1,4 +1,4 @@
-package com.codecool.quokka.oms.service;
+package com.codecool.quokka.oms;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
