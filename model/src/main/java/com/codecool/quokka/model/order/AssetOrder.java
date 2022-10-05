@@ -2,12 +2,18 @@ package com.codecool.quokka.model.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AssetOrder {
     @Id
     @JsonIgnore
@@ -20,13 +26,16 @@ public class AssetOrder {
     private UUID accountId;
 
     private UUID orderId;
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
     @JsonProperty("type")
+    @Enumerated(EnumType.STRING)
     private OrderType type;
     @JsonProperty("order_limit")
     private BigDecimal orderLimit;
 
     @JsonProperty("symbol")
+
     private String symbol;
 
     public Long getId() {
@@ -46,8 +55,6 @@ public class AssetOrder {
         this.orderLimit = orderLimit;
         this.orderId = UUID.randomUUID();
     }
-
-    public AssetOrder(){}
 
     public int getQuantity() {
         return quantity;
