@@ -23,10 +23,11 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity createOrder(@RequestBody AssetOrder data) {
-        if (data.getType().equals(OrderType.LIMIT)){
-            return new ResponseEntity<>("Limit order not supported yet", HttpStatus.BAD_REQUEST);
-        }
-        System.out.println("Hello from OMS" + data);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        return orderService.createOrder(data);
+//        if (data.getType().equals(OrderType.LIMIT)){
+//            return new ResponseEntity<>("Limit order not supported yet", HttpStatus.BAD_REQUEST);
+//        }
+//        System.out.println("Hello from OMS" + data);
+//        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }
