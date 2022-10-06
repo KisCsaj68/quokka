@@ -1,5 +1,6 @@
 package com.codecool.quokka.oms.controller;
 
+import com.codecool.quokka.model.assets.AssetType;
 import com.codecool.quokka.model.order.Orders;
 import com.codecool.quokka.oms.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,8 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity createOrder(@RequestBody Orders data) {
+    public ResponseEntity createStockOrder(@RequestBody Orders data) {
+        System.out.println(data);
         return orderService.createOrder(data);
 //        if (data.getType().equals(OrderType.LIMIT)){
 //            return new ResponseEntity<>("Limit order not supported yet", HttpStatus.BAD_REQUEST);
@@ -28,4 +30,5 @@ public class OrderController {
 //        System.out.println("Hello from OMS" + data);
 //        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
+
 }
