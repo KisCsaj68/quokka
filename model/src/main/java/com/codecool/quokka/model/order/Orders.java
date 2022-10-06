@@ -1,5 +1,6 @@
 package com.codecool.quokka.model.order;
 
+import com.codecool.quokka.model.assets.AssetType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -17,10 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Orders {
     @Id
-    @JsonIgnore
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
+//    @JsonIgnore
     private UUID id;
 
     @JsonProperty("quantity")
@@ -34,6 +32,10 @@ public class Orders {
     @JsonProperty("type")
     @Enumerated(EnumType.STRING)
     private OrderType type;
+
+    @Enumerated(EnumType.STRING)
+    private AssetType assetType;
+
     @JsonProperty("order_limit")
     private BigDecimal orderLimit;
 
@@ -48,7 +50,7 @@ public class Orders {
         this.id = id;
     }
 
-    public Orders(int quantity, String symbol, UUID accountId, OrderStatus status, OrderType type, BigDecimal orderLimit, BigDecimal price) {
+    public Orders(int quantity, String symbol, UUID accountId, OrderStatus status, OrderType type, BigDecimal orderLimit, BigDecimal price, AssetType assetType) {
         this.quantity = quantity;
         this.symbol = symbol;
         this.accountId = accountId;
@@ -56,13 +58,13 @@ public class Orders {
         this.type = type;
         this.orderLimit = orderLimit;
         this.price = price;
-
+        this.assetType = assetType;
+        this.id = UUID.randomUUID();
     }
 
     public int getQuantity() {
         return quantity;
     }
-
 
     public UUID getAccountId() {
         return accountId;
@@ -88,7 +90,6 @@ public class Orders {
         this.accountId = accountId;
     }
 
-
     public void setStatus(OrderStatus status) {
         this.status = status;
     }
@@ -101,17 +102,44 @@ public class Orders {
         this.orderLimit = limit;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public AssetType getAssetType() {
+        return assetType;
+    }
+
+    public void setAssetType(AssetType assetType) {
+        this.assetType = assetType;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
+
 
     @Override
     public String toString() {
-        return "Order{" +
-                "quantity=" + quantity +
-                ", symbol=" + symbol +
+        return "Orders{" +
+                "id=" + id +
+                ", quantity=" + quantity +
                 ", accountId=" + accountId +
-                ", id=" + id +
+                ", price=" + price +
                 ", status=" + status +
                 ", type=" + type +
-                ", limit=" + orderLimit +
+                ", assetType=" + assetType +
+                ", orderLimit=" + orderLimit +
+                ", symbol='" + symbol + '\'' +
                 '}';
     }
 }
