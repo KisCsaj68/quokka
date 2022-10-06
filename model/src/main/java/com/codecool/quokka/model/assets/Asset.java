@@ -9,11 +9,11 @@ public class Asset {
     private final String symbol;
     private AssetType type;
     private int id;
-    private BigDecimal price;
+    private BigDecimal open;
 
-    public Asset(@JsonProperty("symbol") String symbol, @JsonProperty("price") String price) {
+    public Asset(@JsonProperty("symbol") String symbol, @JsonProperty("open") String open) {
         this.symbol = symbol;
-        this.price = new BigDecimal(price);
+        this.open = BigDecimal.valueOf(Double.valueOf(open));
     }
 
 
@@ -34,8 +34,7 @@ public class Asset {
         return "Asset{" +
                 "symbol='" + symbol + '\'' +
                 ", type=" + type +
-                ", id=" + id +
-                ", price=" + price + '}';
+                ", open=" + open + '}';
     }
 
     public int getId() {
@@ -50,12 +49,12 @@ public class Asset {
         return this.symbol;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public BigDecimal getOpen() {
+        return open;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setOpen(BigDecimal open) {
+        this.open = open;
     }
 
 

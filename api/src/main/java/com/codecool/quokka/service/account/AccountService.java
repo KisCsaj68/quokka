@@ -41,7 +41,7 @@ public class AccountService {
     }
 
     public Optional<AccountDto> getAccount(UUID id) {
-        Optional<Account> account = accountDao.findAccountByUserId(id);
+        Optional<Account> account = accountDao.findAccountById(id);
         if (account.isPresent()) {
             return Optional.of(AccountDto.from(account.get()));
         }
@@ -50,11 +50,11 @@ public class AccountService {
 
     @Transactional
     public void deleteAccount(UUID id) {
-        accountDao.deleteAccountByUserId(id);
+        accountDao.deleteAccountById(id);
     }
 
     public Optional<AccountDto> updateAccount(UUID id, Map<String, String> fields) {
-        Optional<Account> account = accountDao.findAccountByUserId(id);
+        Optional<Account> account = accountDao.findAccountById(id);
         if (account.isEmpty()) {
             return Optional.empty();
         }

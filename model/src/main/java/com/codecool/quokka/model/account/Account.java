@@ -1,20 +1,25 @@
 package com.codecool.quokka.model.account;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.hash.Hashing;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Entity
-
 public class Account {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+//    private Long id;
 
-    private UUID userId;
+    @Id
+    @GeneratedValue(generator = "uuid")
+    @JsonIgnore
+    @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
+    private UUID id;
     private String fullName;
     private String userName;
     private String emailAddress;
@@ -27,7 +32,7 @@ public class Account {
                    @JsonProperty("email_address") String emailAddress,
                    @JsonProperty("user_name") String userName,
                    @JsonProperty("password") String password) {
-        this.userId = UUID.randomUUID();
+        this.id = UUID.randomUUID();
         this.fullName = fullName;
         this.userName = userName;
         this.emailAddress = emailAddress;
@@ -39,7 +44,7 @@ public class Account {
                    String userName,
                    String password,
                    UUID id) {
-        this.userId = id;
+        this.id = id;
         this.fullName = fullName;
         this.userName = userName;
         this.emailAddress = emailAddress;
@@ -51,7 +56,7 @@ public class Account {
     }
 
     public UUID getId() {
-        return userId;
+        return id;
     }
 
     public String getFullName() {
@@ -83,7 +88,7 @@ public class Account {
     }
 
     public void setUserId(UUID userId) {
-        this.userId = userId;
+        this.id = userId;
     }
 
     public void setUserName(String userName) {
@@ -107,17 +112,17 @@ public class Account {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
-        return userId.equals(account.userId) && userName.equals(account.userName) && emailAddress.equals(account.emailAddress);
+        return id.equals(account.id) && userName.equals(account.userName) && emailAddress.equals(account.emailAddress);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, userName, emailAddress);
+        return Objects.hash(id, userName, emailAddress);
     }
 
     @Override
     public String toString() {
-        return "Account{" + "id=" + userId + ", fullName='" + fullName + '\'' + ", userName='" + userName + '\'' + ", emailAddress='" + emailAddress + '\'' + ", password='" + password + '\'' + '}';
+        return "Account{" + "id=" + id + ", fullName='" + fullName + '\'' + ", userName='" + userName + '\'' + ", emailAddress='" + emailAddress + '\'' + ", password='" + password + '\'' + '}';
     }
 }
 
