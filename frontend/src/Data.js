@@ -1,13 +1,13 @@
 import {useEffect, useState} from "react";
 import {assetApi} from "./apiRequest";
-import StockView from "./StockView";
+import DataView from "./DataView";
 import "./Table.css"
 
-const Stock = () => {
+const Data = ({type}) => {
     const [stocks, setStocks] = useState([]);
     useEffect(() => {
         const controller = new AbortController();
-        fetchSymbols(controller.signal).then(r => setStocks(r))
+        fetchSymbols(controller.signal, type).then(r => setStocks(r))
         return () => controller.abort();
     }, [])
 
@@ -19,22 +19,27 @@ const Stock = () => {
                     <th><h1>Name</h1></th>
                     <th><h1>Price</h1></th>
                     <th><h1>Trend</h1></th>
+                    <th><h1>Quantity</h1></th>
+                    <th><h1></h1></th>
                 </tr>
                 </thead>
                 <tbody>
                     {stocks.map((name) =>
-                        <StockView key={name} name={name}/>)}
+                        <DataView key={name} name={name} assetType={type}/>)}
                 </tbody>
             </table>
         </div>
     )
 }
 
-const fetchSymbols = async (signal) => {
+const fetchSymbols = async (signal, type) => {
     try {
-        const response = await assetApi("/api/v1/stock", {signal});
+        const url = "/api/v1/asset/" + type;
+        const response = await assetApi(url, {signal});
+        console.log(response);
         if (response.status < 300) {
-            return response.data.stock;
+            return response.data
+            ;
         }
     } catch (err) {
         console.log(err);
@@ -43,4 +48,4 @@ const fetchSymbols = async (signal) => {
 }
 
 
-export default Stock;
+export default Data;

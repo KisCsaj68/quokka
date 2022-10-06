@@ -3,11 +3,12 @@ import SideBar from "./SideBar"
 import {Link, Route, Routes, useNavigate} from "react-router-dom";
 import Home from "./Home";
 import Registration from "./Registration"
-import Stock from "./Stock";
+import Data from "./Data";
 import LogIn from "./LogIn";
 import Crypto from "./Crypto";
 import {useState} from "react";
-import {regApi} from "./apiRequest";
+import {api} from "./apiRequest";
+import Stock from "./Stock";
 
 function App() {
     const [fullName, setFullName] = useState('');
@@ -21,7 +22,7 @@ function App() {
         e.preventDefault();
         const newUser = {fullName, email_address: email_address, userName, password: passWrd}
         try {
-            const response = await regApi.post('/api/v1/user', newUser);
+            const response = await api.post('/api/v1/user', newUser);
             if(response.status < 300) {
                 setEmail_address("");
                 setPassWrd("");
