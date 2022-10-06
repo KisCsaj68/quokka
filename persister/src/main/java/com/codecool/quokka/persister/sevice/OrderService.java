@@ -22,8 +22,14 @@ public class OrderService {
     }
 
     @RabbitListener(queues = MQConfig.QUEUE)
-    public void orderHandler(Orders order) {
+    public void addNewOrder(Orders order) {
+        if (orderDal.findById(order.getId()).isPresent()) {
+            orderDal.updatePriceById(order.getPrice(), order.getId(), order.getStatus());
+            return;
+        }
         System.out.println("Order from Rabbit listener" + order);
         orderDal.save(order);
     }
+
+
 }
