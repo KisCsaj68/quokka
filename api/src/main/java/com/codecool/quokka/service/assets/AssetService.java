@@ -23,7 +23,7 @@ public class AssetService {
 
     private AssetDto createDto(Asset asset) {
         String symbol = asset.getSymbol();
-        BigDecimal price = asset.getPrice();
+        BigDecimal price = asset.getOpen();
         AssetType type = asset.getType();
         return new AssetDto(symbol, price, type);
     }
@@ -35,7 +35,7 @@ public class AssetService {
 
     public Set<AssetDto> getAllAsset() {
         return this.assetDao.getAll().stream()
-                .map(e -> new AssetDto(e.getSymbol(), e.getPrice(), e.getType()))
+                .map(e -> new AssetDto(e.getSymbol(), e.getOpen(), e.getType()))
                 .collect(Collectors.toSet());
     }
 
@@ -43,7 +43,7 @@ public class AssetService {
         return this.assetDao
                 .getAllByType(assetType)
                 .stream()
-                .map(e -> new AssetDto(e.getSymbol(), e.getPrice(), e.getType()))
+                .map(e -> new AssetDto(e.getSymbol(), e.getOpen(), e.getType()))
                 .collect(Collectors.toSet());
     }
 

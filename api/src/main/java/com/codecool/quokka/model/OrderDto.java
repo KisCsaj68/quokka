@@ -1,5 +1,6 @@
 package com.codecool.quokka.model;
 
+import com.codecool.quokka.model.assets.AssetType;
 import com.codecool.quokka.model.order.Orders;
 import com.codecool.quokka.model.order.OrderStatus;
 import com.codecool.quokka.model.order.OrderType;
@@ -14,12 +15,15 @@ public class OrderDto {
     private BigDecimal limit;
     private BigDecimal price;
 
-    public OrderDto(int qty, String symbol, OrderType type, BigDecimal limit, BigDecimal price) {
+    private AssetType assetType;
+
+    public OrderDto(int qty, String symbol, OrderType type, BigDecimal limit, BigDecimal price, AssetType assetType) {
         this.quantity = qty;
         this.symbol = symbol;
         this.type = type;
         this.limit = limit;
         this.price = price;
+        this.assetType= assetType;
     }
 
     public int getQuantity() {
@@ -42,7 +46,11 @@ public class OrderDto {
         return price;
     }
 
+    public AssetType getAssetType() {
+        return assetType;
+    }
+
     public Orders toEntity(UUID accountId) {
-        return new Orders(this.getQuantity(), this.getSymbol(), accountId, OrderStatus.OPEN, this.getType(), this.getLimit(), this.getPrice());
+        return new Orders(this.getQuantity(), this.getSymbol(), accountId, OrderStatus.OPEN, this.getType(), this.getLimit(), this.getPrice(), this.getAssetType());
     }
 }
