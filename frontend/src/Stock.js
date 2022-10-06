@@ -1,9 +1,7 @@
+import Data from "./Data";
+
 const Stock = () => {
-    return (
-        <div>
-            <h1>Stock</h1>
-        </div>
-    )
+    return <Data type={"stock"}/>
 }
 
 export default Stock;

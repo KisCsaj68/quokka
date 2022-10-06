@@ -4,20 +4,8 @@
             "BTCUSD",
             "ETHUSD",
             "BCHUSD",
-            "AAVEUSD",
-            "LTCUSD",
-            "SOLUSD",
-            "AVAXUSD",
-            "LINKUSD",
-            "UNIUSD",
-            "SUSHIUSD",
-            "MATICUSD",
-            "ALGOUSD",
-            "BATUSD",
-            "GRTUSD",
-            "DOGEUSD",
-            "TRXUSD",
-            "SHIBUSD"
+            "LTCUSD"
+
         ],
         "stock": [
             "AAPL",

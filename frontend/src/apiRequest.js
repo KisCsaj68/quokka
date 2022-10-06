@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = "http://localhost"
+const BASE_URL = "http://localhost:3000"
 // export default axios.create({
 //     baseURL: 'http://localhost:3000',
 //     headers:{
@@ -15,12 +15,12 @@ axios.defaults.headers["Accept"] = "application/json";
 axios.defaults.headers["Content-Type"] = "application/json";
 axios.defaults.headers["Access-Control-Allow-Origin"] = "*";
 
-export const regApi = axios.create({
-    baseURL: `${BASE_URL}:8080`
+export const api = axios.create({
+    baseURL: `${BASE_URL}`
 });
 
 export const assetApi = axios.create({
-    baseURL: `${BASE_URL}:8000`
+    baseURL: `${BASE_URL}`
 });
 
 
