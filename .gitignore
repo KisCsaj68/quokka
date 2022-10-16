@@ -15,4 +15,7 @@ target/
 
 # Package Files
 *.jar
+
+*/__pycache__/*
 *.iml
+*.pyc

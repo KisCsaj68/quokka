@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface AccountDao extends CrudRepository<Account, Long> {
+public interface AccountDao extends CrudRepository<Account, UUID> {
 
 //     UserDto addUser(String name, String userName, String emailAddress, String passWord);
 //
@@ -21,8 +21,8 @@ public interface AccountDao extends CrudRepository<Account, Long> {
 
     Optional<Account> findAccountByUserName(String userName);
     Optional<Account> findAccountByEmailAddress(String emailAddress);
-    void deleteAccountByUserId(UUID id);
-    Optional<Account> findAccountByUserId(UUID id);
+    void deleteAccountById(UUID id);
+    Optional<Account> findAccountById(UUID id);
 //    boolean getUserByUserName(String userName);
 
 //     boolean getUserByEmail(String emailAddress);

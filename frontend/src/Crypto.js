@@ -1,9 +1,9 @@
+import Data from "./Data";
+
 const Crypto = () => {
-    return (
-        <div>
-            <h1>Crypto</h1>
-        </div>
-    )
+
+    return <Data type={"crypto"}/>
+
 }
 
 export default Crypto;
