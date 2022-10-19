@@ -5,11 +5,14 @@ COPY ./model /model
 COPY ./oms /oms
 
 WORKDIR /model
-RUN mvn clean install
+# go-offline using the pom.xml
+RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
+RUN --mount=type=cache,target=/root/.m2 mvn clean install
 
 WORKDIR /oms
-RUN mvn clean package
-CMD ["ls",'-latrR']
+# go-offline using the pom.xml
+RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
+RUN --mount=type=cache,target=/root/.m2 mvn clean package
 
 
 FROM openjdk:17.0.1-jdk-slim

@@ -5,10 +5,14 @@ COPY ./model /model
 COPY ./api /api
 
 WORKDIR /model
-RUN mvn clean install
+# go-offline using the pom.xml
+RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
+RUN --mount=type=cache,target=/root/.m2 mvn clean install
 
 WORKDIR /api
-RUN mvn clean package -Dmaven.test.skip=true
+# go-offline using the pom.xml
+RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
+RUN --mount=type=cache,target=/root/.m2 mvn clean package
 
 
 
