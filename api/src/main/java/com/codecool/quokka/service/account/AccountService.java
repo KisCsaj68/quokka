@@ -31,7 +31,8 @@ public class AccountService {
 
     public AccountDto addAccount(Account account) {
         account.hashPassword();
-        return AccountDto.from(accountDao.save(account));
+        accountDao.saveAndFlush(account);
+        return AccountDto.from(account);
     }
 
     public Set<AccountDto> getAllAccount() {

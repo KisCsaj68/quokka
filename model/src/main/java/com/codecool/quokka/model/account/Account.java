@@ -19,6 +19,7 @@ public class Account {
     @GeneratedValue(generator = "uuid")
     @JsonIgnore
     @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
+    //better solution to use Long, and sequence
     private UUID id;
     private String fullName;
     private String userName;

@@ -13,10 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -59,15 +56,15 @@ public class AccountServiceTest {
 
     @Test
     public void getAllAccount() {
-        Mockito.when(accountDao.findAll()).thenReturn(Set.of(account));
+        Mockito.when(accountDao.findAll()).thenReturn((List.of(account)));
         Set<AccountDto> dtos = accountService.getAllAccount();
         assertEquals(dtos, Set.of(dto));
     }
 
     @Test
     public void getAccount() {
-        Mockito.when(accountDao.findAccountByUserId(id)).thenReturn(Optional.of(account));
-        Mockito.when(accountDao.findAccountByUserId(fakeId)).thenReturn(Optional.empty());
+        Mockito.when(accountDao.findAccountById(id)).thenReturn(Optional.of(account));
+        Mockito.when(accountDao.findAccountById(fakeId)).thenReturn(Optional.empty());
         Optional<AccountDto> resultDto = accountService.getAccount(id);
         Optional<AccountDto> fakeDto = accountService.getAccount(fakeId);
         assertEquals(resultDto, Optional.of(dto));
@@ -87,7 +84,7 @@ public class AccountServiceTest {
     @Test
     public void deleteAccount() {
         accountService.deleteAccount(id);
-        Mockito.verify(accountDao, Mockito.times(1)).deleteAccountByUserId(any());
+        Mockito.verify(accountDao, Mockito.times(1)).deleteAccountById(any());
 
     }
 
