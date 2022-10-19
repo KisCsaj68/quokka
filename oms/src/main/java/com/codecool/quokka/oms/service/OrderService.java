@@ -3,6 +3,7 @@ package com.codecool.quokka.oms.service;
 import com.codecool.quokka.model.assets.Asset;
 import com.codecool.quokka.model.order.Orders;
 import com.codecool.quokka.model.order.OrderStatus;
+import com.codecool.quokka.model.position.Position;
 import com.codecool.quokka.oms.MQConfig;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Date;
 
 @Component
 public class OrderService {
@@ -40,7 +43,8 @@ public class OrderService {
         template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ORDER_ROUTING_KEY, data);
 
         // Create position, send to persister RMQ
-
+        Position position = new Position(data.getQuantity(), data.getAccountId(), data.getSymbol(), data.getPrice(), null, new Date());
+        template.convertAndSend(MQConfig.EXCHANGE, MQConfig.POSITION_ROUTING_KEY, position);
         // Store both Entity in-memory
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);

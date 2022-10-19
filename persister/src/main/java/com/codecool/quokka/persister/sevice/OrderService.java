@@ -1,8 +1,10 @@
 package com.codecool.quokka.persister.sevice;
 
 import com.codecool.quokka.model.order.Orders;
+import com.codecool.quokka.model.position.Position;
 import com.codecool.quokka.persister.MQConfig;
 import com.codecool.quokka.persister.dal.OrderDal;
+import com.codecool.quokka.persister.dal.PositionDal;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +16,13 @@ import org.springframework.stereotype.Service;
 public class OrderService {
     private RabbitTemplate template;
     private OrderDal orderDal;
+    private PositionDal positionDal;
 
     @Autowired
-    public OrderService(RabbitTemplate template, OrderDal orderDal) {
+    public OrderService(RabbitTemplate template, OrderDal orderDal, PositionDal positionDal) {
         this.template = template;
         this.orderDal = orderDal;
+        this.positionDal = positionDal;
     }
 
     @RabbitListener(queues = MQConfig.ORDER_QUEUE)
@@ -29,6 +33,11 @@ public class OrderService {
         }
         System.out.println("Order from Rabbit listener" + order);
         orderDal.save(order);
+    }
+
+    @RabbitListener(queues = MQConfig.POSITION_QUEUE)
+    public void addNewPosition(Position position) {
+        positionDal.save(position);
     }
 
 
