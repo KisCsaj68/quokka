@@ -21,7 +21,7 @@ public class OrderService {
         this.orderDal = orderDal;
     }
 
-    @RabbitListener(queues = MQConfig.QUEUE)
+    @RabbitListener(queues = MQConfig.ORDER_QUEUE)
     public void addNewOrder(Orders order) {
         if (orderDal.findById(order.getId()).isPresent()) {
             orderDal.updatePriceById(order.getPrice(), order.getId(), order.getStatus());
