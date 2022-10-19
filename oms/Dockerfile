@@ -1,6 +1,8 @@
-FROM maven:3.8.6 as oms_builder
+ARG MVN_VERSION=3.8.6
+ARG JAVA_IMAGE_VERSION=17.0.1
+FROM maven:${MVN_VERSION} as builder
 
-USER root
+
 COPY ./model /model
 COPY ./oms /oms
 
@@ -15,7 +17,8 @@ RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
 RUN --mount=type=cache,target=/root/.m2 mvn clean package
 
 
-FROM openjdk:17.0.1-jdk-slim
-COPY --from=oms_builder /oms/target/oms-0.0.1-SNAPSHOT.jar /
+ARG JAVA_IMAGE_VERSION
+FROM openjdk:${JAVA_IMAGE_VERSION}-jdk-slim
+COPY --from=builder /oms/target/oms-0.0.1-SNAPSHOT-jar-with-dependencies.jar /
 ENTRYPOINT ["java"]
-CMD ["-jar","./oms-0.0.1-SNAPSHOT.jar"]
+CMD ["-jar","./oms-0.0.1-SNAPSHOT-jar-with-dependencies.jar"]
