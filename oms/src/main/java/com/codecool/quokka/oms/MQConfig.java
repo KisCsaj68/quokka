@@ -11,9 +11,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MQConfig {
 
-//    public static final String QUEUE = "order_queue";
+    public static final String ORDER_QUEUE = "order_queue";
+    public static final String POSITION_QUEUE = "position_queue";
     public static final String EXCHANGE = "order_exchange";
-    public static final String ROUTING_KEY = "order_routingKey";
+    public static final String ORDER_ROUTING_KEY = "order_routingKey";
     public static final String POSITION_ROUTING_KEY = "position_routingKey";
 
 //    @Bean
@@ -36,8 +37,8 @@ public class MQConfig {
 
     @Bean
     public Declarables topicBindings(TopicExchange topicExchange) {
-        Queue orderQueue = new Queue("order_queue", false);
-        Queue positionQueue = new Queue("position_queue", false);
+        Queue orderQueue = new Queue(ORDER_QUEUE);
+        Queue positionQueue = new Queue(POSITION_QUEUE);
 
         return new Declarables(
                 orderQueue,
@@ -45,7 +46,7 @@ public class MQConfig {
                 topicExchange,
                 BindingBuilder
                         .bind(orderQueue)
-                        .to(topicExchange).with(ROUTING_KEY),
+                        .to(topicExchange).with(ORDER_ROUTING_KEY),
                 BindingBuilder
                         .bind(positionQueue)
                         .to(topicExchange).with(POSITION_ROUTING_KEY));

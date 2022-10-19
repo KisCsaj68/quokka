@@ -6,7 +6,6 @@ import com.codecool.quokka.model.order.OrderStatus;
 import com.codecool.quokka.oms.MQConfig;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -29,7 +28,7 @@ public class OrderService {
         data.setStatus(OrderStatus.OPEN);
 
         // Send open order to persister via RMQ
-        template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ROUTING_KEY, data);
+        template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ORDER_ROUTING_KEY, data);
 
 
         // Ask the actual price from assetcache port 8000.
@@ -38,7 +37,7 @@ public class OrderService {
         // Fill the price to the order and update the order in DB.
         data.setPrice(asset.getOpen());
         data.setStatus(OrderStatus.FILLED);
-        template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ROUTING_KEY, data);
+        template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ORDER_ROUTING_KEY, data);
 
         // Create position, send to persister RMQ
 
