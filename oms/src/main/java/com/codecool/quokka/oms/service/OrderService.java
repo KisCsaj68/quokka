@@ -34,15 +34,13 @@ public class OrderService {
 
         // Ask the actual price from assetcache port 8000.
         Asset asset = restTemplate.getForObject(url + data.getAssetType().toString().toLowerCase() + "/" + data.getSymbol(),Asset.class);
-        System.out.println(asset);
 
         // Fill the price to the order and update the order in DB.
         data.setPrice(asset.getOpen());
         data.setStatus(OrderStatus.FILLED);
-        System.out.println(data);
+        template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ROUTING_KEY, data);
 
         // Create position, send to persister RMQ
-        template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ROUTING_KEY, data);
 
         // Store both Entity in-memory
 

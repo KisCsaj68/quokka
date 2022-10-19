@@ -11,26 +11,44 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MQConfig {
 
-    public static final String QUEUE = "order_queue";
+//    public static final String QUEUE = "order_queue";
     public static final String EXCHANGE = "order_exchange";
     public static final String ROUTING_KEY = "order_routingKey";
+    public static final String POSITION_ROUTING_KEY = "position_routingKey";
 
-    @Bean
-    public Queue queue() {
-        return  new Queue(QUEUE);
-    }
+//    @Bean
+//    public Queue queue() {
+//        return  new Queue(QUEUE);
+//    }
 
     @Bean
     public TopicExchange exchange() {
         return new TopicExchange(EXCHANGE);
     }
 
+//    @Bean
+//    public Binding binding(Queue queue, TopicExchange exchange) {
+//        return BindingBuilder
+//                .bind(queue)
+//                .to(exchange)
+//                .with(ROUTING_KEY);
+//    }
+
     @Bean
-    public Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder
-                .bind(queue)
-                .to(exchange)
-                .with(ROUTING_KEY);
+    public Declarables topicBindings(TopicExchange topicExchange) {
+        Queue orderQueue = new Queue("order_queue", false);
+        Queue positionQueue = new Queue("position_queue", false);
+
+        return new Declarables(
+                orderQueue,
+                positionQueue,
+                topicExchange,
+                BindingBuilder
+                        .bind(orderQueue)
+                        .to(topicExchange).with(ROUTING_KEY),
+                BindingBuilder
+                        .bind(positionQueue)
+                        .to(topicExchange).with(POSITION_ROUTING_KEY));
     }
 
     @Bean
