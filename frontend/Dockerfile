@@ -1,12 +1,19 @@
-FROM node:18.10-bullseye-slim
+ARG NODE_VERSION=18.10
+FROM node:${NODE_VERSION}-alpine
 
-WORKDIR /usr/src/frontend
+WORKDIR /frontend
 
-COPY package*.json ./
+COPY package.json ./
+COPY package-lock.json ./
+COPY public/ public/
+COPY src/ src/
+#COPY node_modules/ ./
 
-RUN npm ci --only=production
-COPY --chown=node:node . .
-USER node
+
+#RUN npm i
+RUN --mount=type=cache,target=/frontend/.npm npm set cache /frontend/.npm && npm install
 EXPOSE 3000
+ENTRYPOINT ["npm"]
+CMD ["run", "start"]
 
-CMD ["dumb-init","node","App.js"]
+
