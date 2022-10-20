@@ -18,8 +18,8 @@ import java.util.Date;
 public class OrderService {
 
     private RabbitTemplate template;
-    RestTemplate restTemplate = new RestTemplate();
-    String url = "http://localhost:8000/api/v1/"; //TODO: when dockerized use oms' hostname instead of localhost.
+    private RestTemplate restTemplate = new RestTemplate();
+    private String url = "http://assetcache:8000/api/v1/"; //TODO: when dockerized use oms' hostname instead of localhost.
 
 
     @Autowired

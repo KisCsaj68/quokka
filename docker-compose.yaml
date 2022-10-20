@@ -1,0 +1,64 @@
+version: "3.9"
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    ports:
+      - "15672:16672"
+      - "5672:5672"
+    image: rabbitmq:3-management
+    hostname: quokka-rabbit
+  postgres:
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - "./volumes/postgres:/var/lib/postgresql/data"
+    image: postgres:14
+    environment:
+      - POSTGRES_PASSWORD=asdqwe
+  frontend:
+    container_name: frontend
+    image: quokka/frontend
+    ports:
+      - "3000:3000"
+  api:
+    container_name: api
+    ports:
+      - "8080:8080"
+    image: quokka/api
+    depends_on:
+      - postgres
+  oms:
+    container_name: oms
+    ports:
+      - "9000:9000"
+    image: quokka/oms
+    depends_on:
+      - postgres
+      - rabbitmq
+  assetcache:
+    container_name: assetcache
+    ports:
+      - "8000:8000"
+    image: quokka/assetcache
+    depends_on:
+      - rabbitmq
+  persister:
+    container_name: persister
+    ports:
+      - "9001:9001"
+    image: quokka/persister
+    depends_on:
+      - rabbitmq
+      - postgres
+
+
+
+
+
+#  asset-cache:
+#    container_name: asset_cache
+#    build: ./assetcache/.
+#    ports:
+#      - "5000:5000"

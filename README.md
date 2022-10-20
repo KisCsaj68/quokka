@@ -68,8 +68,6 @@ Backend:
   - gRPC
 
 
-
-
-```mermaid
-
-```
+### Spring profiles
+There are two spring profiles available. the default, and a dev profile.
+If you want to run the application in your IDE locally, please activate the `dev` profile (like this: https://www.baeldung.com/spring-profiles#4-jvm-system-parameter or any other preferred ways)
