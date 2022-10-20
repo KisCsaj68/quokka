@@ -52,13 +52,3 @@ services:
     depends_on:
       - rabbitmq
       - postgres
-
-
-
-
-
-#  asset-cache:
-#    container_name: asset_cache
-#    build: ./assetcache/.
-#    ports:
-#      - "5000:5000"

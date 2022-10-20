@@ -19,7 +19,8 @@ import java.util.*;
 public class AssetController {
     private RestTemplate restTemplate = new RestTemplate();
     private ObjectMapper mapper = new ObjectMapper();
-    private String url = "http://localhost:8000/api/v1/"; //TODO: when dockerized use oms' hostname instead of localhost.
+
+    private String url = "http://assetcache:8000/api/v1/";
 //    private final AssetService assetService;
 //
 //    @Autowired
