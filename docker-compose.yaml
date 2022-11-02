@@ -19,21 +19,25 @@ services:
       - POSTGRES_PASSWORD=asdqwe
   frontend:
     container_name: frontend
-    image: quokka/frontend
+    build:
+      context: ./frontend
     ports:
       - "3000:3000"
   api:
     container_name: api
     ports:
       - "8080:8080"
-    image: quokka/api
+    build:
+      context: ./
+      dockerfile: ./api/Dockerfile
     depends_on:
       - postgres
   oms:
     container_name: oms
     ports:
       - "9000:9000"
-    image: quokka/oms
+    build:
+      context: ./oms
     depends_on:
       - postgres
       - rabbitmq
@@ -41,14 +45,16 @@ services:
     container_name: assetcache
     ports:
       - "8000:8000"
-    image: quokka/assetcache
+    build:
+      context: ./assetcache
     depends_on:
       - rabbitmq
   persister:
     container_name: persister
     ports:
       - "9001:9001"
-    image: quokka/persister
+    build:
+      context: ./persister
     depends_on:
       - rabbitmq
       - postgres
