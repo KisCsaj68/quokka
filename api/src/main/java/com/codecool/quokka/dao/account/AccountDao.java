@@ -3,10 +3,12 @@ package com.codecool.quokka.dao.account;
 import com.codecool.quokka.model.account.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public interface AccountDao extends JpaRepository<Account, UUID> {
 
 //     UserDto addUser(String name, String userName, String emailAddress, String passWord);
