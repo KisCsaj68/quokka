@@ -19,6 +19,7 @@ public class Account {
     @GeneratedValue(generator = "uuid")
     @JsonIgnore
     @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(columnDefinition = "uuid")
     //better solution to use Long, and sequence
     private UUID id;
     private String fullName;
@@ -33,7 +34,7 @@ public class Account {
                    @JsonProperty("email_address") String emailAddress,
                    @JsonProperty("user_name") String userName,
                    @JsonProperty("password") String password) {
-        this.id = UUID.randomUUID();
+//        this.id = UUID.randomUUID();
         this.fullName = fullName;
         this.userName = userName;
         this.emailAddress = emailAddress;

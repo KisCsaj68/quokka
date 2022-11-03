@@ -1,18 +1,26 @@
 package com.codecool.quokka.model.account;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+
 import java.util.Objects;
 import java.util.UUID;
-
 public class AccountDto {
 
+//    @JsonProperty("userName")
     private String userName;
+//    @JsonProperty("id")
     private UUID id;
 
+//    @JsonProperty("fullName")
     private String fullName;
 
+//    @JsonProperty("emailAddress")
     private String emailAddress;
 
-    public AccountDto(String userName, UUID id, String fullName, String emailAddress) {
+    @JsonCreator
+    public AccountDto(@JsonProperty("userName") String userName, @JsonProperty("id") UUID id, @JsonProperty("fullName") String fullName, @JsonProperty("emailAddress") String emailAddress) {
         this.userName = userName;
         this.id = id;
         this.fullName = fullName;

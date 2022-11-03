@@ -31,8 +31,9 @@ public class AccountService {
 
     public AccountDto addAccount(Account account) {
         account.hashPassword();
-        accountDao.saveAndFlush(account);
-        return AccountDto.from(account);
+        Account accnt = accountDao.saveAndFlush(account);
+        System.out.println(accnt);
+        return AccountDto.from(accnt);
     }
 
     public Set<AccountDto> getAllAccount() {
@@ -42,6 +43,7 @@ public class AccountService {
     }
 
     public Optional<AccountDto> getAccount(UUID id) {
+        System.out.println(id);
         Optional<Account> account = accountDao.findAccountById(id);
         if (account.isPresent()) {
             return Optional.of(AccountDto.from(account.get()));
