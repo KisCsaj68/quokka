@@ -22,12 +22,13 @@ import static org.mockito.ArgumentMatchers.any;
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class AccountServiceTest {
-    static Account account;
-    static AccountDto dto;
-    static AccountDto updatedDto;
-    static UUID id;
-    static UUID fakeId;
-    static HashMap<String, String> data;
+    private static Account account;
+    private static Account account2;
+    private static AccountDto dto;
+    private static AccountDto updatedDto;
+    private static UUID id;
+    private static UUID fakeId;
+    private static HashMap<String, String> data;
 
     @Autowired
     private AccountService accountService;
@@ -40,6 +41,7 @@ public class AccountServiceTest {
          id = UUID.fromString("b462290f-4006-4d71-8a39-e956e245ede8");
          fakeId = UUID.fromString("b462290f-4008-4d71-8a39-e956e245ede8");
          account = new Account("Test User", "test@asd.com", "TestUser", "asd", id);
+         account2 = new Account("Test User", "test@asd.com", "TestUser", "asd");
          dto = AccountDto.from(account);
          updatedDto = new AccountDto("User3456", account.getId(), account.getFullName(), account.getEmailAddress());
          data = new HashMap<>();
@@ -49,8 +51,8 @@ public class AccountServiceTest {
 
     @Test
     public void addAccount() {
-        Mockito.when(accountDao.save(account)).thenReturn(account);
-        AccountDto resultDto = accountService.addAccount(account);
+        Mockito.when(accountDao.saveAndFlush(account2)).thenReturn(account);
+        AccountDto resultDto = accountService.addAccount(account2);
         assertEquals(dto,resultDto);
     }
 
