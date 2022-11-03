@@ -118,11 +118,50 @@ public class AccountControllerTest {
         MvcResult response = mvc.perform(post("/api/v1/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(account)))
-                .andExpect(status().isOk())
-                .andReturn();
+                        .andExpect(status().isOk())
+                        .andReturn();
         AccountDto createdAccount;
         String actualJson = response.getResponse().getContentAsString();
         createdAccount = new ObjectMapper().readValue(actualJson, AccountDto.class);
         assertEquals(createdAccount.getUserName(), userName);
+    }
+
+    @Test
+    public void testOccupiedEmail() throws Exception {
+        String userName = "UserAdded";
+        String fullName = "User Added";
+        String emailAddress = accountDto.getEmailAddress();
+        String password = "asd";
+        Account account = new Account(fullName, emailAddress, userName, password);
+        mvc.perform(post("/api/v1/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(account)))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void testInvalidEmail() throws Exception {
+        String userName = "User";
+        String fullName = "User";
+        String emailAddress = "@latte.com";
+        String password = "asd";
+        Account account = new Account(fullName, emailAddress, userName, password);
+        mvc.perform(post("/api/v1/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(account)))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void testDuplicateUser() throws Exception {
+        String userName = accountDto.getUserName();
+        String fullName = "User FullName";
+        String emailAddress = "coffee@latte.com";
+        String password = "asd";
+        Account account = new Account(fullName, emailAddress, userName, password);
+        mvc.perform(post("/api/v1/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(account)))
+                .andExpect(status().is4xxClientError());
     }
 }
