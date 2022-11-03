@@ -3,14 +3,10 @@ package com.codecool.quokka.controller;
 import com.codecool.quokka.QuokkaApplication;
 import com.codecool.quokka.model.account.Account;
 import com.codecool.quokka.model.account.AccountDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,19 +14,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.HashMap;
 import java.util.UUID;
 
-import static org.hamcrest.CoreMatchers.is;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -38,75 +33,135 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         classes = QuokkaApplication.class)
 @AutoConfigureMockMvc
 public class AccountControllerTest {
-
-
+    private AccountDto accountDto;
 
     @Autowired
     private MockMvc mvc;
 
     @Before
     public void setUp() throws Exception {
-        Account account = new Account("Test User", "user@asd.com", "UserAdded", "asd", UUID.fromString("b462290f-4006-4d71-8a39-e956e245ede8"));
-        mvc.perform(post("/api/v1/user")
+        Account account = new Account("Test User", "user" + UUID.randomUUID() + "@asd.com", "UserAdded" + UUID.randomUUID(), "asd");
+        MvcResult response = mvc.perform(post("/api/v1/user")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(account)));
-
+                        .content(new ObjectMapper().writeValueAsString(account)))
+                .andReturn();
+        String actualJson = response.getResponse().getContentAsString();
+        System.out.println(actualJson);
+        accountDto = new ObjectMapper().readValue(actualJson, AccountDto.class);
     }
 
     @After
     public void cleanUp() throws Exception {
         HashMap data = new HashMap<>();
-        data.put("id", "b462290f-4006-4d71-8a39-e956e245ede8");
+        data.put("id", accountDto.getId());
         mvc.perform(delete("/api/v1/user/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper(). writeValueAsString(data))).andExpect(status().isOk());
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(data)))
+                .andExpect(status().isOk());
     }
 
     @Test
     public void testUsersEndPoint()
             throws Exception {
-        mvc.perform(get("/api/v1/user"))
+        MvcResult response = mvc.perform(get("/api/v1/user"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn();
+        String actualJson = response.getResponse().getContentAsString();
+        assertTrue(actualJson.contains(accountDto.getId().toString()));
     }
 
-//    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+    //    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testDeleteUserById() throws Exception {
         HashMap data = new HashMap<>();
-        data.put("id", "b462290f-4006-4d71-8a39-e956e245ede8");
+        data.put("id", accountDto.getId());
         mvc.perform(delete("/api/v1/user").contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(data))).andExpect(status().isOk());
+                .content(new ObjectMapper().writeValueAsString(data)));
+//                .andExpect(status().isOk());
+        mvc.perform(get("/api/v1/user/" + accountDto.getId().toString()))
+                .andExpect(status().is4xxClientError());
     }
 
-//    @Test
-//    public void testSpecificUserById() throws Exception {
-//        mvc.perform(get("/api/v1/user/b462290f-4006-4d71-8a39-e956e245ede8"))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.fullName", is("Test User")))
-//                .andExpect(jsonPath("$.id", is("b462290f-4006-4d71-8a39-e956e245ede8")));
-//    }
-////    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-//    @Test
-//    public void testUpdateUserById() throws Exception {
-//        HashMap data = new HashMap<>();
-//        data.put("fullName", "User3456");
-//        mvc.perform(put("/api/v1/user/b462290f-4006-4d71-8a39-e956e245ede8")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(new ObjectMapper().writeValueAsString(data)))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.fullName", is("User3456")));
-//    }
+    @Test
+    public void testSpecificUserById() throws Exception {
+        mvc.perform(get("/api/v1/user/" + accountDto.getId().toString()))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(accountDto.getId().toString()))
+                .andExpect(jsonPath("$.userName").value(accountDto.getUserName()))
+                .andExpect(jsonPath("$.fullName").value(accountDto.getFullName()))
+                .andExpect(jsonPath("$.emailAddress").value(accountDto.getEmailAddress()));
+    }
 
-//    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+    ////    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+    @Test
+    public void testUpdateUserById() throws Exception {
+        HashMap data = new HashMap<>();
+        String newUserName = "User3456";
+        data.put("fullName", newUserName);
+        mvc.perform(put("/api/v1/user/" + accountDto.getId().toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(data)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.fullName").value(newUserName));
+    }
+
+    //    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testCreateNewUser() throws Exception {
-        Account account = new Account("User Added22", "user222@asd.com", "UserAdded22", "asd");
+        String userName = "UserAdded22";
+        String fullName = "User Added22";
+        String emailAddress = "user222@asd.com";
+        String password = "asd";
+        Account account = new Account(fullName, emailAddress, userName, password);
+        MvcResult response = mvc.perform(post("/api/v1/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(account)))
+                        .andExpect(status().isOk())
+                        .andReturn();
+        AccountDto createdAccount;
+        String actualJson = response.getResponse().getContentAsString();
+        createdAccount = new ObjectMapper().readValue(actualJson, AccountDto.class);
+        assertEquals(createdAccount.getUserName(), userName);
+    }
+
+    @Test
+    public void testOccupiedEmail() throws Exception {
+        String userName = "UserAdded";
+        String fullName = "User Added";
+        String emailAddress = accountDto.getEmailAddress();
+        String password = "asd";
+        Account account = new Account(fullName, emailAddress, userName, password);
         mvc.perform(post("/api/v1/user")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(account)))
-                .andExpect(status().isOk());
-//                .andExpect(jsonPath("$.fullName", is("User Added")));
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void testInvalidEmail() throws Exception {
+        String userName = "User";
+        String fullName = "User";
+        String emailAddress = "@latte.com";
+        String password = "asd";
+        Account account = new Account(fullName, emailAddress, userName, password);
+        mvc.perform(post("/api/v1/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(account)))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void testDuplicateUser() throws Exception {
+        String userName = accountDto.getUserName();
+        String fullName = "User FullName";
+        String emailAddress = "coffee@latte.com";
+        String password = "asd";
+        Account account = new Account(fullName, emailAddress, userName, password);
+        mvc.perform(post("/api/v1/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(account)))
+                .andExpect(status().is4xxClientError());
     }
 }

@@ -34,7 +34,6 @@ public class AccountController {
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity addUser(@RequestBody Account account) {
         if(accountService.getAccountByEmail(account.getEmailAddress())) {
-            System.out.println(account.getEmailAddress());
             return new ResponseEntity<>("Email occupied",HttpStatus.BAD_REQUEST);
         }
 

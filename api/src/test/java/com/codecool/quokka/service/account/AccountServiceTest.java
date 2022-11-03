@@ -22,12 +22,18 @@ import static org.mockito.ArgumentMatchers.any;
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class AccountServiceTest {
-    static Account account;
-    static AccountDto dto;
-    static AccountDto updatedDto;
-    static UUID id;
-    static UUID fakeId;
-    static HashMap<String, String> data;
+    private static Account account;
+    private static Account accountWithoutId;
+    private static Account updatedAccountFullName;
+    private static Account updatedAccountUEmail;
+    private static AccountDto dto;
+    private static AccountDto updatedFullNameDto;
+    private static AccountDto updatedEmailDto;
+    private static UUID id;
+    private static UUID fakeId;
+    private static HashMap<String, String> data;
+    private static HashMap<String, String> dataEmail;
+    private static HashMap<String, String> dataPassword;
 
     @Autowired
     private AccountService accountService;
@@ -37,21 +43,31 @@ public class AccountServiceTest {
 
     @BeforeClass
     public static void setUp() {
-         id = UUID.fromString("b462290f-4006-4d71-8a39-e956e245ede8");
-         fakeId = UUID.fromString("b462290f-4008-4d71-8a39-e956e245ede8");
-         account = new Account("Test User", "test@asd.com", "TestUser", "asd", id);
-         dto = AccountDto.from(account);
-         updatedDto = new AccountDto("User3456", account.getId(), account.getFullName(), account.getEmailAddress());
-         data = new HashMap<>();
-         data.put("fullName", "User3456");
-    }
+        id = UUID.fromString("b462290f-4006-4d71-8a39-e956e245ede8");
+        fakeId = UUID.fromString("b462290f-4008-4d71-8a39-e956e245ede8");
 
+        account = new Account("Test User", "test@asd.com", "TestUser", "asd", id);
+        accountWithoutId = new Account("Test User", "test@asd.com", "TestUser", "asd");
+        updatedAccountFullName = new Account("User3456", "test@asd.com", "TestUser", "asd", id);
+        updatedAccountUEmail = new Account("Test User", "User3456@codecool.com", "TestUser", "asd", id);
+
+        dto = AccountDto.from(account);
+        updatedFullNameDto = new AccountDto(account.getUserName(), account.getId(), "User3456", account.getEmailAddress());
+        updatedEmailDto = new AccountDto(account.getUserName(), account.getId(), account.getFullName(), "User3456@codecool.com");
+
+        data = new HashMap<>();
+        data.put("fullName", "User3456");
+        dataEmail = new HashMap<>();
+        dataEmail.put("emailAddress", "User3456@codecool.com");
+        dataPassword = new HashMap<>();
+        dataPassword.put("password", "qwe");
+    }
 
     @Test
     public void addAccount() {
-        Mockito.when(accountDao.save(account)).thenReturn(account);
-        AccountDto resultDto = accountService.addAccount(account);
-        assertEquals(dto,resultDto);
+        Mockito.when(accountDao.saveAndFlush(accountWithoutId)).thenReturn(account);
+        AccountDto resultDto = accountService.addAccount(accountWithoutId);
+        assertEquals(dto, resultDto);
     }
 
     @Test
@@ -71,24 +87,57 @@ public class AccountServiceTest {
         assertEquals(fakeDto, Optional.empty());
     }
 
-//    @Test
-//    public void updateUser() {
-//        Mockito.when(accountDao.updateUser(id, data)).thenReturn(Optional.of(updatedDto));
-//        Mockito.when(accountDao.updateUser(fakeId, data)).thenReturn(Optional.empty());
-//        Optional<UserDto> resultDto = userService.updateUser(id,data);
-//        Optional<UserDto> fakeResultDto = userService.updateUser(fakeId,data);
-//        assertEquals(resultDto, Optional.of(dto));
-//        assertEquals(fakeResultDto, Optional.empty());
-//    }
+    @Test
+    public void updateUserFullName() {
+        Mockito.when(accountDao.findAccountById(id)).thenReturn(Optional.ofNullable(accountWithoutId));
+        Mockito.when(accountDao.save(accountWithoutId)).thenReturn(updatedAccountFullName);
+        Optional<AccountDto> resultDto = accountService.updateAccount(id, data);
+        assertEquals(resultDto, Optional.of(updatedFullNameDto));
+    }
+
+    @Test
+    public void updateEmail() {
+        Mockito.when(accountDao.findAccountById(id)).thenReturn(Optional.ofNullable(accountWithoutId));
+        Mockito.when(accountDao.save(accountWithoutId)).thenReturn(updatedAccountUEmail);
+        Optional<AccountDto> resultDto = accountService.updateAccount(id, dataEmail);
+        assertEquals(resultDto, Optional.of(updatedEmailDto));
+    }
+
+    @Test
+    public void updatePassword() {
+        Mockito.when(accountDao.findAccountById(id)).thenReturn(Optional.ofNullable(accountWithoutId));
+        Mockito.when(accountDao.save(accountWithoutId)).thenReturn(account);
+        Optional<AccountDto> resultDto = accountService.updateAccount(id, dataPassword);
+        assertEquals(resultDto, Optional.of(dto));
+    }
+
+    @Test
+    public void updateNonExistingId() {
+        Mockito.when(accountDao.findAccountById(fakeId)).thenReturn(Optional.ofNullable(null));
+        Optional<AccountDto> resultDto = accountService.updateAccount(fakeId, dataPassword);
+        assertEquals(resultDto, Optional.empty());
+    }
 
     @Test
     public void deleteAccount() {
         accountService.deleteAccount(id);
         Mockito.verify(accountDao, Mockito.times(1)).deleteAccountById(any());
-
     }
 
+    @Test
+    public void emailValidatorWithValidEmail() {
+        assertTrue(accountService.validate("test@asd.com"));
+    }
 
+    @Test
+    public void getAccountByUserName() {
+        Mockito.when(accountDao.findAccountByUserName("TestUser")).thenReturn(Optional.ofNullable(account));
+        assertTrue(accountService.getAccountByUserName("TestUser"));
+    }
 
-
+    @Test
+    public void getAccountByEmail() {
+        Mockito.when(accountDao.findAccountByEmailAddress("test@asd.com")).thenReturn(Optional.ofNullable(account));
+        assertTrue(accountService.getAccountByEmail("test@asd.com"));
+    }
 }

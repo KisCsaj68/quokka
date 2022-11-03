@@ -3,10 +3,12 @@ package com.codecool.quokka.service.account;
 import com.codecool.quokka.model.account.Account;
 import com.codecool.quokka.dao.account.AccountDao;
 import com.codecool.quokka.model.account.AccountDto;
+import com.google.common.hash.Hashing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -19,8 +21,7 @@ import java.util.stream.StreamSupport;
 @Service
 public class AccountService {
 
-    public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
-            Pattern.compile("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", Pattern.CASE_INSENSITIVE);
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", Pattern.CASE_INSENSITIVE);
 
     private final AccountDao accountDao;
 
@@ -31,17 +32,17 @@ public class AccountService {
 
     public AccountDto addAccount(Account account) {
         account.hashPassword();
-        accountDao.saveAndFlush(account);
-        return AccountDto.from(account);
+        Account accnt = accountDao.saveAndFlush(account);
+        System.out.println(accnt);
+        return AccountDto.from(accnt);
     }
 
     public Set<AccountDto> getAllAccount() {
-        return StreamSupport.stream(accountDao.findAll().spliterator(), false)
-                .map(AccountDto::from)
-                .collect(Collectors.toSet());
+        return StreamSupport.stream(accountDao.findAll().spliterator(), false).map(AccountDto::from).collect(Collectors.toSet());
     }
 
     public Optional<AccountDto> getAccount(UUID id) {
+        System.out.println(id);
         Optional<Account> account = accountDao.findAccountById(id);
         if (account.isPresent()) {
             return Optional.of(AccountDto.from(account.get()));
@@ -69,7 +70,8 @@ public class AccountService {
                     acc.setFullName(fields.get("fullName"));
                     break;
                 case "password":
-                    acc.setPassword(fields.get("password"));
+                    String password = Hashing.sha256().hashString(fields.get("password"), StandardCharsets.UTF_8).toString();
+                    acc.setPassword(password);
                     break;
             }
         }
