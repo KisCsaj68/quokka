@@ -126,8 +126,6 @@ public class Orders {
         this.symbol = symbol;
     }
 
-
-
     @Override
     public String toString() {
         return "Orders{" +

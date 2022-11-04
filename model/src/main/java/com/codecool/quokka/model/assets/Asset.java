@@ -16,7 +16,6 @@ public class Asset {
         this.open = BigDecimal.valueOf(Double.valueOf(open));
     }
 
-
     public AssetType getType() {
         return this.type;
     }
@@ -56,7 +55,6 @@ public class Asset {
     public void setOpen(BigDecimal open) {
         this.open = open;
     }
-
 
     @Override
     public boolean equals(Object o) {

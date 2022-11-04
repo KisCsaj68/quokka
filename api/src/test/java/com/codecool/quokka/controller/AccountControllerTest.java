@@ -46,7 +46,6 @@ public class AccountControllerTest {
                         .content(new ObjectMapper().writeValueAsString(account)))
                 .andReturn();
         String actualJson = response.getResponse().getContentAsString();
-        System.out.println(actualJson);
         accountDto = new ObjectMapper().readValue(actualJson, AccountDto.class);
     }
 
@@ -71,14 +70,12 @@ public class AccountControllerTest {
         assertTrue(actualJson.contains(accountDto.getId().toString()));
     }
 
-    //    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testDeleteUserById() throws Exception {
         HashMap data = new HashMap<>();
         data.put("id", accountDto.getId());
         mvc.perform(delete("/api/v1/user").contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(data)));
-//                .andExpect(status().isOk());
         mvc.perform(get("/api/v1/user/" + accountDto.getId().toString()))
                 .andExpect(status().is4xxClientError());
     }
@@ -94,7 +91,6 @@ public class AccountControllerTest {
                 .andExpect(jsonPath("$.emailAddress").value(accountDto.getEmailAddress()));
     }
 
-    ////    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testUpdateUserById() throws Exception {
         HashMap data = new HashMap<>();
@@ -107,7 +103,6 @@ public class AccountControllerTest {
                 .andExpect(jsonPath("$.fullName").value(newUserName));
     }
 
-    //    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     public void testCreateNewUser() throws Exception {
         String userName = "UserAdded22";

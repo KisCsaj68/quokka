@@ -15,7 +15,6 @@ RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
 RUN --mount=type=cache,target=/root/.m2 mvn clean package
 
 
-
 FROM openjdk:17.0.1-jdk-slim
 COPY --from=builder /api/target/api-0.0.1-SNAPSHOT-jar-with-dependencies.jar /
 ENTRYPOINT ["java"]

@@ -11,16 +11,12 @@ import java.util.*;
 
 @Entity
 public class Account {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-//    private Long id;
 
     @Id
     @GeneratedValue(generator = "uuid")
     @JsonIgnore
     @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(columnDefinition = "uuid")
-    //better solution to use Long, and sequence
     private UUID id;
     private String fullName;
     private String userName;
@@ -28,24 +24,14 @@ public class Account {
 
     private String password;
 
-
-
-    public Account(@JsonProperty("full_name") String fullName,
-                   @JsonProperty("email_address") String emailAddress,
-                   @JsonProperty("user_name") String userName,
-                   @JsonProperty("password") String password) {
-//        this.id = UUID.randomUUID();
+    public Account(@JsonProperty("full_name") String fullName, @JsonProperty("email_address") String emailAddress, @JsonProperty("user_name") String userName, @JsonProperty("password") String password) {
         this.fullName = fullName;
         this.userName = userName;
         this.emailAddress = emailAddress;
         this.password = password;
     }
 
-    public Account(String fullName,
-                   String emailAddress,
-                   String userName,
-                   String password,
-                   UUID id) {
+    public Account(String fullName, String emailAddress, String userName, String password, UUID id) {
         this.id = id;
         this.fullName = fullName;
         this.userName = userName;
@@ -54,7 +40,6 @@ public class Account {
     }
 
     public Account() {
-
     }
 
     public UUID getId() {
@@ -96,17 +81,9 @@ public class Account {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    //    public Map<String, String> getUserData() {
-//        Map<String, String> data = new HashMap<>();
-//        data.put("userName", this.userName);
-//        data.put("UserId", this.userId.toString());
-//        return data;
-//    }
 
     public void hashPassword() {
-        this.password = Hashing.sha256()
-                .hashString(password, StandardCharsets.UTF_8)
-                .toString();
+        this.password = Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString();
     }
 
     @Override

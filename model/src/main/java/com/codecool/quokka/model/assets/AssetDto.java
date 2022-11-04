@@ -24,5 +24,4 @@ public class AssetDto {
     public float getPrice() {
         return price;
     }
-
 }

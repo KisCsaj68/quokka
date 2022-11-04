@@ -9,16 +9,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
 
-//    @Bean
-//    public UserDaoMem getUserDaoMem() {
-//        return new UserDaoMem();
-//    }
-
-//    @Bean
-//    public UserService getUserService() {
-//        return new UserService(new UserDao());
-//    }
-
     @Bean
     public AssetService getAssetService() {
         return new AssetService(getAssetDaoMem());

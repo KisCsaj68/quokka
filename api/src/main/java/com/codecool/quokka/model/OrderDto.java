@@ -23,7 +23,7 @@ public class OrderDto {
         this.type = type;
         this.limit = limit;
         this.price = price;
-        this.assetType= assetType;
+        this.assetType = assetType;
     }
 
     public int getQuantity() {
