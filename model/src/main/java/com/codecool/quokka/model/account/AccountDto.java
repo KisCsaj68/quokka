@@ -59,4 +59,14 @@ public class AccountDto {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @Override
+    public String toString() {
+        return "AccountDto{" +
+                "userName='" + userName + '\'' +
+                ", id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                '}';
+    }
 }
