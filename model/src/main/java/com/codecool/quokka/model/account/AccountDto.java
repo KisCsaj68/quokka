@@ -6,17 +6,18 @@ import lombok.AllArgsConstructor;
 
 import java.util.Objects;
 import java.util.UUID;
+
 public class AccountDto {
 
-//    @JsonProperty("userName")
+    //    @JsonProperty("userName")
     private String userName;
-//    @JsonProperty("id")
+    //    @JsonProperty("id")
     private UUID id;
 
-//    @JsonProperty("fullName")
+    //    @JsonProperty("fullName")
     private String fullName;
 
-//    @JsonProperty("emailAddress")
+    //    @JsonProperty("emailAddress")
     private String emailAddress;
 
     @JsonCreator

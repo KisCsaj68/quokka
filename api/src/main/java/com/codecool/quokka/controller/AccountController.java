@@ -29,20 +29,17 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-
     @PostMapping
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity addUser(@RequestBody Account account) {
-        if(accountService.getAccountByEmail(account.getEmailAddress())) {
-            return new ResponseEntity<>("Email occupied",HttpStatus.BAD_REQUEST);
+        if (accountService.getAccountByEmail(account.getEmailAddress())) {
+            return new ResponseEntity<>("Email occupied", HttpStatus.BAD_REQUEST);
         }
-
-        if(accountService.getAccountByUserName(account.getUserName())){
-            return new ResponseEntity<>("User error",HttpStatus.BAD_REQUEST);
+        if (accountService.getAccountByUserName(account.getUserName())) {
+            return new ResponseEntity<>("User error", HttpStatus.BAD_REQUEST);
         }
-
-        if (!accountService.validate(account.getEmailAddress())){
-            return new ResponseEntity<>("Email error",HttpStatus.BAD_REQUEST);
+        if (!accountService.validate(account.getEmailAddress())) {
+            return new ResponseEntity<>("Email error", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(accountService.addAccount(account), HttpStatus.OK);
     }
@@ -54,22 +51,20 @@ public class AccountController {
 
     @GetMapping(path = "{id}")
     public ResponseEntity getUserById(@PathVariable("id") UUID id) {
-        if (accountService.getAccount(id).isPresent()){
-            return new ResponseEntity<>(accountService.getAccount(id).get(), HttpStatus.OK) ;
-        }
-        else {
+        if (accountService.getAccount(id).isPresent()) {
+            return new ResponseEntity<>(accountService.getAccount(id).get(), HttpStatus.OK);
+        } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping
     public void deleteUserById(@RequestBody HashMap<String, String> body) {
-        accountService.deleteAccount(UUID.fromString(body.get("id")) );
+        accountService.deleteAccount(UUID.fromString(body.get("id")));
     }
 
     @PutMapping(path = "{id}")
-    public AccountDto updateUser(@PathVariable("id") UUID id, @RequestBody HashMap<String, String> fields){
+    public AccountDto updateUser(@PathVariable("id") UUID id, @RequestBody HashMap<String, String> fields) {
         return accountService.updateAccount(id, fields).orElse(null);
-
     }
 }

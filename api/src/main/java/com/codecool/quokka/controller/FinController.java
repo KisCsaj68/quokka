@@ -22,11 +22,8 @@ public class FinController {
 
     @PostMapping(path = "stock")
     public ResponseEntity createNewStockOrder(@RequestBody OrderDto data) {
-
         Orders actualOrders = data.toEntity(ACCOUNT_ID);
         actualOrders.setAssetType(AssetType.STOCK);
-        System.out.println(actualOrders);
-
 
         //post request to OMS / marketOrder
         HttpEntity<Orders> request = new HttpEntity<>(actualOrders);
@@ -36,13 +33,9 @@ public class FinController {
 
     @PostMapping(path = "crypto")
     public ResponseEntity createNewCryptoOrder(@RequestBody OrderDto data) {
-
         Orders actualOrders = data.toEntity(ACCOUNT_ID);
         actualOrders.setAssetType(AssetType.CRYPTO);
-//        if (data.getType().equals(OrderType.LIMIT)) {
-//            // post request to OMS / LimitOrder
-//            throw new UnsupportedOperationException("Limit order not supported yet");
-//        }
+
         //post request to OMS / marketOrder
         HttpEntity<Orders> request = new HttpEntity<>(actualOrders);
         ResponseEntity orderCreateResponse = restTemplate.postForObject(url, request, ResponseEntity.class);

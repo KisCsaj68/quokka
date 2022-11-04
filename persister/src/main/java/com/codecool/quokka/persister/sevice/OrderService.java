@@ -31,7 +31,6 @@ public class OrderService {
             orderDal.updatePriceById(order.getPrice(), order.getId(), order.getStatus());
             return;
         }
-        System.out.println("Order from Rabbit listener" + order);
         orderDal.save(order);
     }
 
@@ -39,6 +38,4 @@ public class OrderService {
     public void addNewPosition(Position position) {
         positionDal.save(position);
     }
-
-
 }

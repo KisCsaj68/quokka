@@ -21,7 +21,6 @@ public class OrderService {
     private RestTemplate restTemplate = new RestTemplate();
     private String url = "http://assetcache:8000/api/v1/"; //TODO: when dockerized use oms' hostname instead of localhost.
 
-
     @Autowired
     public OrderService(RabbitTemplate template) {
         this.template = template;
@@ -33,9 +32,8 @@ public class OrderService {
         // Send open order to persister via RMQ
         template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ORDER_ROUTING_KEY, data);
 
-
         // Ask the actual price from assetcache port 8000.
-        Asset asset = restTemplate.getForObject(url + data.getAssetType().toString().toLowerCase() + "/" + data.getSymbol(),Asset.class);
+        Asset asset = restTemplate.getForObject(url + data.getAssetType().toString().toLowerCase() + "/" + data.getSymbol(), Asset.class);
 
         // Fill the price to the order and update the order in DB.
         data.setPrice(asset.getOpen());
@@ -45,9 +43,10 @@ public class OrderService {
         // Create position, send to persister RMQ
         Position position = new Position(data.getQuantity(), data.getAccountId(), data.getSymbol(), data.getPrice(), null, new Date());
         template.convertAndSend(MQConfig.EXCHANGE, MQConfig.POSITION_ROUTING_KEY, position);
+
         // Store both Entity in-memory
+        //TODO
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
-
 }

@@ -21,16 +21,9 @@ public class AssetController {
     private ObjectMapper mapper = new ObjectMapper();
 
     private String url = "http://assetcache:8000/api/v1/";
-//    private final AssetService assetService;
-//
-//    @Autowired
-//    public AssetController(AssetService assetService) {
-//        this.assetService = assetService;
-//    }
     @GetMapping( "{type}")
     public List<String> getAssets(@PathVariable("type") String type) throws JsonProcessingException {
         String newUrl = url + type;
-        System.out.println(newUrl);
         String response = restTemplate.getForObject(newUrl, String.class);
         JsonNode jsonNode = mapper.readTree(response);
         JsonNode jsonNode1 = jsonNode.get(type);
