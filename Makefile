@@ -17,7 +17,7 @@ docker-build:
 	popd
 
 mvn-build:
-	mvn clean install --file model/pom.xml
+	mvn clean install --file common/pom.xml
 	for component in $(java_components); do \
   		mvn clean package --file $$component/pom.xml ; \
   	done
