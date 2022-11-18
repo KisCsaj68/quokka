@@ -6,6 +6,7 @@ import com.google.common.hash.Hashing;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
