@@ -3,10 +3,10 @@ ARG JAVA_IMAGE_VERSION=17.0.1
 FROM maven:${MVN_VERSION} as builder
 
 
-COPY ./model /model
+COPY ./common /common
 COPY ./oms /oms
 
-WORKDIR /model
+WORKDIR /common
 # go-offline using the pom.xml
 RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
 RUN --mount=type=cache,target=/root/.m2 mvn clean install

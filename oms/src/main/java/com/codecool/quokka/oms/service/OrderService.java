@@ -1,10 +1,10 @@
 package com.codecool.quokka.oms.service;
 
 import com.codecool.quokka.model.assets.Asset;
+import com.codecool.quokka.model.mqConfig.MQConfig;
 import com.codecool.quokka.model.order.Orders;
 import com.codecool.quokka.model.order.OrderStatus;
 import com.codecool.quokka.model.position.Position;
-import com.codecool.quokka.oms.MQConfig;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Component
@@ -27,6 +28,7 @@ public class OrderService {
     }
 
     public ResponseEntity createOrder(Orders data) {
+        System.out.println(data);
         data.setStatus(OrderStatus.OPEN);
 
         // Send open order to persister via RMQ
