@@ -9,6 +9,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,11 +18,13 @@ import java.util.*;
 
 @RequestMapping("/api/v1/asset")
 @RestController
+@ConfigurationProperties
 public class AssetController {
     private RestTemplate restTemplate = new RestTemplate();
     private ObjectMapper mapper = new ObjectMapper();
 
-    private String url = "http://assetcache:8000/api/v1/";
+    @Value("${quokka.service.assetcache.address}${quokka.service.assetcache.endpoint}")
+    private String url;
     @GetMapping( "{type}")
     public List<String> getAssets(@PathVariable("type") String type) throws JsonProcessingException {
         String newUrl = url + type;

@@ -7,20 +7,25 @@ import com.codecool.quokka.model.order.OrderStatus;
 import com.codecool.quokka.model.position.Position;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @Component
+@ConfigurationProperties
 public class OrderService {
 
     private RabbitTemplate template;
     private RestTemplate restTemplate = new RestTemplate();
-    private String url = "http://assetcache:8000/api/v1/"; //TODO: when dockerized use oms' hostname instead of localhost.
+
+
+    @Value("${quokka.service.assetcache.address}${quokka.service.assetcache.endpoint}")
+    private String assetCacheURL;
 
     @Autowired
     public OrderService(RabbitTemplate template) {
@@ -35,7 +40,7 @@ public class OrderService {
         template.convertAndSend(MQConfig.EXCHANGE, MQConfig.ORDER_ROUTING_KEY, data);
 
         // Ask the actual price from assetcache port 8000.
-        Asset asset = restTemplate.getForObject(url + data.getAssetType().toString().toLowerCase() + "/" + data.getSymbol(), Asset.class);
+        Asset asset = restTemplate.getForObject(assetCacheURL + data.getAssetType().toString().toLowerCase() + "/" + data.getSymbol(), Asset.class);
 
         // Fill the price to the order and update the order in DB.
         data.setPrice(asset.getOpen());
