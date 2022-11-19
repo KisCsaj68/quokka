@@ -1,8 +1,8 @@
 package com.codecool.quokka.persister.sevice;
 
-import com.codecool.quokka.model.mqConfig.MQConfig;
 import com.codecool.quokka.model.order.Orders;
 import com.codecool.quokka.model.position.Position;
+import com.codecool.quokka.persister.MQConfig;
 import com.codecool.quokka.persister.dal.OrderDal;
 import com.codecool.quokka.persister.dal.PositionDal;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

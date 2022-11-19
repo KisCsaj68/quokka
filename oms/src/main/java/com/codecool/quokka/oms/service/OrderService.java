@@ -1,10 +1,10 @@
 package com.codecool.quokka.oms.service;
 
 import com.codecool.quokka.model.assets.Asset;
-import com.codecool.quokka.model.mqConfig.MQConfig;
 import com.codecool.quokka.model.order.Orders;
 import com.codecool.quokka.model.order.OrderStatus;
 import com.codecool.quokka.model.position.Position;
+import com.codecool.quokka.oms.MQConfig;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
