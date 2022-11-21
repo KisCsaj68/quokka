@@ -1,8 +1,8 @@
 package com.codecool.quokka.persister.sevice;
 
+import com.codecool.quokka.model.mqconfig.Config;
 import com.codecool.quokka.model.order.Orders;
 import com.codecool.quokka.model.position.Position;
-import com.codecool.quokka.persister.MQConfig;
 import com.codecool.quokka.persister.dal.OrderDal;
 import com.codecool.quokka.persister.dal.PositionDal;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -25,7 +25,7 @@ public class OrderService {
         this.positionDal = positionDal;
     }
 
-    @RabbitListener(queues = MQConfig.ORDER_QUEUE)
+    @RabbitListener(queues = Config.ORDER_QUEUE)
     public void addNewOrder(Orders order) {
         if (orderDal.findById(order.getId()).isPresent()) {
             orderDal.updatePriceById(order.getPrice(), order.getId(), order.getStatus());
@@ -34,7 +34,7 @@ public class OrderService {
         orderDal.save(order);
     }
 
-    @RabbitListener(queues = MQConfig.POSITION_QUEUE)
+    @RabbitListener(queues = Config.POSITION_QUEUE)
     public void addNewPosition(Position position) {
         positionDal.save(position);
     }
