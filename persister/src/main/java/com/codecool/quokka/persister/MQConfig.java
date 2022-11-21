@@ -1,5 +1,6 @@
-package com.codecool.quokka.model.mqConfig;
+package com.codecool.quokka.persister;
 
+import com.codecool.quokka.persister.dal.OrderDal;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MQConfig {
+
     public static final String ORDER_QUEUE = "order_queue";
     public static final String POSITION_QUEUE = "position_queue";
     public static final String EXCHANGE = "order_exchange";
