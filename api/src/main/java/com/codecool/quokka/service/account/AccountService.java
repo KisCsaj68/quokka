@@ -5,6 +5,9 @@ import com.codecool.quokka.dao.account.AccountDao;
 import com.codecool.quokka.model.account.AccountDto;
 import com.google.common.hash.Hashing;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -19,7 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class AccountService {
+public class AccountService  implements UserDetailsService {
 
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", Pattern.CASE_INSENSITIVE);
 
@@ -87,5 +90,11 @@ public class AccountService {
 
     public boolean getAccountByEmail(String emailAddress) {
         return accountDao.findAccountByEmailAddress(emailAddress).isPresent();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return accountDao.findAccountByUserName(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 }
