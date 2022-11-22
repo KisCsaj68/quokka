@@ -3,6 +3,7 @@ package com.codecool.quokka.controller;
 import com.codecool.quokka.QuokkaApplication;
 import com.codecool.quokka.model.account.Account;
 import com.codecool.quokka.model.account.AccountDto;
+import com.codecool.quokka.model.role.AccountRole;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
@@ -16,7 +17,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -35,18 +38,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class AccountControllerTest {
     private AccountDto accountDto;
+    private AccountRole role = new AccountRole("Trader", "Trading");
 
     @Autowired
     private MockMvc mvc;
 
     @Before
     public void setUp() throws Exception {
-        Account account = new Account("Test User", "user" + UUID.randomUUID() + "@asd.com", "UserAdded" + UUID.randomUUID(), "asd");
+        Account account = new Account("Test User", "user" + UUID.randomUUID() + "@asd.com", "UserAdded" + UUID.randomUUID(), "asd", true, true, true, true, new HashSet<>(Arrays.asList(role)));
         MvcResult response = mvc.perform(post("/api/v1/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(account)))
                 .andReturn();
         String actualJson = response.getResponse().getContentAsString();
+
         accountDto = new ObjectMapper().readValue(actualJson, AccountDto.class);
     }
 
@@ -110,7 +115,7 @@ public class AccountControllerTest {
         String fullName = "User Added22";
         String emailAddress = "user222@asd.com";
         String password = "asd";
-        Account account = new Account(fullName, emailAddress, userName, password);
+        Account account = new Account(fullName, emailAddress, userName, password, true, true, true, true, new HashSet<>(Arrays.asList(role)));
         MvcResult response = mvc.perform(post("/api/v1/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(account)))
@@ -128,7 +133,7 @@ public class AccountControllerTest {
         String fullName = "User Added";
         String emailAddress = accountDto.getEmailAddress();
         String password = "asd";
-        Account account = new Account(fullName, emailAddress, userName, password);
+        Account account = new Account(fullName, emailAddress, userName, password, true, true, true, true, new HashSet<>(Arrays.asList(role)));
         mvc.perform(post("/api/v1/user")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(account)))
@@ -141,7 +146,7 @@ public class AccountControllerTest {
         String fullName = "User";
         String emailAddress = "@latte.com";
         String password = "asd";
-        Account account = new Account(fullName, emailAddress, userName, password);
+        Account account = new Account(fullName, emailAddress, userName, password, true, true, true, true, new HashSet<>(Arrays.asList(role)));
         mvc.perform(post("/api/v1/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(account)))
@@ -154,7 +159,7 @@ public class AccountControllerTest {
         String fullName = "User FullName";
         String emailAddress = "coffee@latte.com";
         String password = "asd";
-        Account account = new Account(fullName, emailAddress, userName, password);
+        Account account = new Account(fullName, emailAddress, userName, password, true, true, true, true, new HashSet<>(Arrays.asList(role)));
         mvc.perform(post("/api/v1/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(account)))
