@@ -34,7 +34,7 @@ public class AccountService  implements UserDetailsService {
     }
 
     public AccountDto addAccount(Account account) {
-        account.hashPassword();
+        account.encryptPassword();
         Account accnt = accountDao.saveAndFlush(account);
         return AccountDto.from(accnt);
     }
