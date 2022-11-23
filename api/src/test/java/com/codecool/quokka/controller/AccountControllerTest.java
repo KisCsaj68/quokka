@@ -45,7 +45,7 @@ public class AccountControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        Account account = new Account("Test User", "user" + UUID.randomUUID() + "@asd.com", "UserAdded" + UUID.randomUUID(), "asd", true, true, true, true, new HashSet<>(Arrays.asList(role)));
+        Account account = new Account("Test User", "user" + UUID.randomUUID() + "@asd.com", "UserAdded" + UUID.randomUUID(), "asd");
         MvcResult response = mvc.perform(post("/api/v1/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(account)))
@@ -115,7 +115,7 @@ public class AccountControllerTest {
         String fullName = "User Added22";
         String emailAddress = "user222@asd.com";
         String password = "asd";
-        Account account = new Account(fullName, emailAddress, userName, password, true, true, true, true, new HashSet<>(Arrays.asList(role)));
+        Account account = new Account(fullName, emailAddress, userName, password);
         MvcResult response = mvc.perform(post("/api/v1/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(account)))
@@ -133,7 +133,7 @@ public class AccountControllerTest {
         String fullName = "User Added";
         String emailAddress = accountDto.getEmailAddress();
         String password = "asd";
-        Account account = new Account(fullName, emailAddress, userName, password, true, true, true, true, new HashSet<>(Arrays.asList(role)));
+        Account account = new Account(fullName, emailAddress, userName, password);
         mvc.perform(post("/api/v1/user")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(account)))
@@ -146,7 +146,7 @@ public class AccountControllerTest {
         String fullName = "User";
         String emailAddress = "@latte.com";
         String password = "asd";
-        Account account = new Account(fullName, emailAddress, userName, password, true, true, true, true, new HashSet<>(Arrays.asList(role)));
+        Account account = new Account(fullName, emailAddress, userName, password);
         mvc.perform(post("/api/v1/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(account)))
@@ -159,7 +159,7 @@ public class AccountControllerTest {
         String fullName = "User FullName";
         String emailAddress = "coffee@latte.com";
         String password = "asd";
-        Account account = new Account(fullName, emailAddress, userName, password, true, true, true, true, new HashSet<>(Arrays.asList(role)));
+        Account account = new Account(fullName, emailAddress, userName, password);
         mvc.perform(post("/api/v1/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(account)))
