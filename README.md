@@ -23,6 +23,56 @@ It is capable of:
 Under the hood, Quokka Trading Platfo®m has a high performance order management engine.
 It's mission critical state is handled fully in-memory, while every change of that state will eventually get persisted.
 
+
+## Feature progress:
+### Architecture
+- [x] microservice components
+- [x] microservice communication (RESTApi, RabbitMQ)
+- [x] fast multistage dockerbuilds with caching enabled
+
+### Infra/Misc
+- [x] Makefile for automating more complex housekeeping tasks
+- [ ] helm-chart to run on k8s
+- [ ] Logging
+- [ ] Log shipping (ELK stack)
+
+  #### Visibility
+  - [ ] prometheus metrics
+  - [ ] grafana dashboard
+
+
+
+### User management
+- [x] User registration
+- [ ] Change password
+- [ ] Login/ Logout
+- [ ] JWT base authentication/ authorization
+- [ ] Protected routes
+
+### Finance management
+- [x] Market order
+- [ ] Limit order
+- [x] Position
+- [ ] Sell position
+- [ ] CSD
+- [ ] CSW
+
+### Assse management
+- [x] API request base connection to Alpaca
+- [ ] Stream base connection to Alpaca
+- [ ] Price tickers for limit order settlement
+
+### Persistance
+- [x] write-ahead log persistent in RabbitMQ
+- [x] persister component saves data into relational DB
+- [ ] reload pending orders from DB into in-memory on app start
+- [ ] keep and serve pending orders from in-memory
+
+### Fronend
+- [x] Minimal frontend
+- [ ] Refactor components
+
+
 ## Architectural overview
 
 
