@@ -43,6 +43,7 @@ public class AssetController {
     }
 
     @GetMapping("{assetType}/{assetSymbol}")
+    @PreAuthorize("hasRole('TRADER')")
     public Map<String,Object> getAssetData(@PathVariable("assetType") String pathAssetType,
                                            @PathVariable("assetSymbol") String pathAssetSymbol){
         String newUrl = url + pathAssetType + "/" + pathAssetSymbol;
