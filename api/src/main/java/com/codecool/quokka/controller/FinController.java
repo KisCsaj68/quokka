@@ -64,8 +64,8 @@ public class FinController {
 
     @PostMapping(path = "crypto")
     @PreAuthorize("hasRole('TRADER')")
-    public ResponseEntity createNewCryptoOrder(@RequestBody OrderDto data) {
-        Orders actualOrders = data.toEntity(ACCOUNT_ID);
+    public ResponseEntity createNewCryptoOrder(@RequestBody OrderDto data, @RequestHeader("Authorization") String token) {
+        Orders actualOrders = data.toEntity(tokenEncoder.getUserId(token));
         actualOrders.setAssetType(AssetType.CRYPTO);
 
         //post request to OMS / marketOrder
