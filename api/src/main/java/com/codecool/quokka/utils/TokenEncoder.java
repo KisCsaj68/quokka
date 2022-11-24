@@ -7,11 +7,12 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Optional;
 import java.util.UUID;
-
+@Component
 public class TokenEncoder {
     private final JwtConfig jwtConfig;
     private  final AccountDao accountDao;
@@ -24,10 +25,6 @@ public class TokenEncoder {
         this.secretKey = secretKey;
     }
 
-//    @PostConstruct
-//    public void initDao() {
-//        this.accountDao = dao;
-//    }
 
     public  UUID getUserId(String token) {
         String userToke = token.replace(jwtConfig.getTokenPrefix(), "");
