@@ -1,6 +1,6 @@
 package com.codecool.quokka.service.account;
 
-import com.codecool.quokka.dao.AccountRoleDao;
+import com.codecool.quokka.dao.role.AccountRoleDao;
 import com.codecool.quokka.dao.account.AccountDao;
 import com.codecool.quokka.model.account.Account;
 import com.codecool.quokka.model.account.AccountDto;

@@ -1,4 +1,4 @@
-package com.codecool.quokka.dao;
+package com.codecool.quokka.dao.role;
 
 import com.codecool.quokka.model.role.AccountRole;
 import org.springframework.data.jpa.repository.JpaRepository;
