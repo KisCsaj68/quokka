@@ -29,13 +29,4 @@ public class AppConfig {
     public JwtConfig getJwtConfig() {
         return new JwtConfig();
     }
-
-
-
-
-
-    @Bean
-    public TokenEncoder getTokenEncoder() {
-        return new TokenEncoder(getJwtConfig());
-    }
 }
