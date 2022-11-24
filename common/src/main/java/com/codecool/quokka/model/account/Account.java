@@ -34,12 +34,14 @@ public class Account implements UserDetails {
     private final boolean isCredentialsNonExpired;
     private final boolean isEnabled;
 
+    @Transient
+    private final Collection<? extends GrantedAuthority> authorities;
+
     @JsonIgnore
     private static final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(10);
     @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @JoinTable(name = "account_account_role", joinColumns = {@JoinColumn(name = "account_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private final Set<AccountRole> roles;
-
-    private static AccountRole traderRole =  new AccountRole("TRADER", "Trading");
 
     /**
      * Constructor to create Account instance data in JSON.
@@ -49,11 +51,12 @@ public class Account implements UserDetails {
         this.userName = userName;
         this.emailAddress = emailAddress;
         this.password = password;
-        this.roles = Sets.newHashSet(traderRole);
+        this.roles = new HashSet<>();
         this.isAccountNonExpired = true;
         this.isAccountNonLocked = true;
         this.isCredentialsNonExpired = true;
         this.isEnabled = true;
+        this.authorities = getAuthorities();
 
     }
 
@@ -66,19 +69,21 @@ public class Account implements UserDetails {
         this.userName = userName;
         this.emailAddress = emailAddress;
         this.password = password;
-        this.roles = Sets.newHashSet(traderRole);
+        this.roles = new HashSet<>();
         this.isAccountNonExpired = true;
         this.isAccountNonLocked = true;
         this.isCredentialsNonExpired = true;
         this.isEnabled = true;
+        this.authorities = getAuthorities();
     }
 
     public Account() {
-        this.roles = Sets.newHashSet(traderRole);;
+        this.roles = new HashSet<>();
         this.isAccountNonExpired = true;
         this.isAccountNonLocked = true;
         this.isCredentialsNonExpired = true;
         this.isEnabled = true;
+        this.authorities = getAuthorities();
 
     }
 
@@ -183,6 +188,10 @@ public class Account implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isEnabled;
+    }
+
+    public void addRole(AccountRole role) {
+        this.roles.add(role);
     }
 }
 
