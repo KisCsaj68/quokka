@@ -5,6 +5,8 @@ import com.codecool.quokka.jwt.JwtTokenVerifier;
 import com.codecool.quokka.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import com.codecool.quokka.service.account.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,14 +22,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.crypto.SecretKey;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@ConfigurationProperties
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
     private final AccountService userService;
     private final JwtConfig jwtConfig;
     private final SecretKey secretKey;
+
+    @Value("${quokka.controller.auth.endpoint}")
+    private String url;
 
     @Autowired
     public AppSecurityConfig(PasswordEncoder passwordEncoder, AccountService userService, JwtConfig jwtConfig, SecretKey secretKey) {
@@ -39,14 +45,15 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        System.out.println("Hello security configproperties" + url);
         http
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
+                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey, url))
                 .addFilterAfter(new JwtTokenVerifier(jwtConfig, secretKey), JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/v1/login").permitAll()
+//                .antMatchers(HttpMethod.GET, "/api/v1/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/user").permitAll()
                 .antMatchers("/", "index", "/static/css/", "/static/js/", "/webjars/**/").permitAll()
@@ -66,5 +73,6 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(userService);
         return provider;
     }
+
 }
 
