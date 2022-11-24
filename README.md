@@ -28,39 +28,39 @@ It's mission critical state is handled fully in-memory, while every change of th
 ### Architecture
 - [x] microservice components
 - [x] microservice communication (RESTApi, RabbitMQ)
-- [x] fast multistage dockerbuilds with caching enabled
+
 
 ### Infra/Misc
 - [x] Makefile for automating more complex housekeeping tasks
+- [x] fast multistage dockerbuilds with caching enabled
 - [ ] helm-chart to run on k8s
 - [ ] Logging
 - [ ] Log shipping (ELK stack)
-
-  #### Visibility
-  - [ ] prometheus metrics
-  - [ ] grafana dashboard
+- [ ] Visibility
+    - [ ] prometheus metrics
+    - [ ] grafana dashboard
 
 
 
 ### User management
 - [x] User registration
 - [ ] Change password
-- [ ] Login/ Logout
-- [ ] JWT base authentication/ authorization
+- [ ] Login / Logout
+- [ ] JWT based authentication / authorization
 - [ ] Protected routes
 
 ### Finance management
 - [x] Market order
 - [ ] Limit order
-- [x] Position
+- [x] Open Position
 - [ ] Sell position
-- [ ] CSD
-- [ ] CSW
+- [ ] Cash deposit - CSD
+- [ ] Cash withdrawal - CSW
 
-### Assse management
-- [x] API request base connection to Alpaca
-- [ ] Stream base connection to Alpaca
-- [ ] Price tickers for limit order settlement
+### Asset management
+- [x] API request based connection to Alpaca
+- [ ] Stream based connection to Alpaca
+- [ ] Price trackers for limit order settlement
 
 ### Persistance
 - [x] write-ahead log persistent in RabbitMQ
@@ -70,11 +70,11 @@ It's mission critical state is handled fully in-memory, while every change of th
 
 ### Fronend
 - [x] Minimal frontend
-- [ ] Refactor components
+- [ ] Login / Logout
+- [ ] Responsive web design
 
 
 ## Architectural overview
-
 
 Quokka Trading Platfo®m has three tiers:
 
