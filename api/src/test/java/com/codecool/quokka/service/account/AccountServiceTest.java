@@ -1,5 +1,6 @@
 package com.codecool.quokka.service.account;
 
+import com.codecool.quokka.dao.AccountRoleDao;
 import com.codecool.quokka.dao.account.AccountDao;
 import com.codecool.quokka.model.account.Account;
 import com.codecool.quokka.model.account.AccountDto;
@@ -30,9 +31,12 @@ public class AccountServiceTest {
     @Mock
     private AccountDao accountDao;
 
+    @Mock
+    private AccountRoleDao accountRoleDao;
+
     @Before
     public void setUp() {
-        accountService = new AccountService(accountDao);
+        accountService = new AccountService(accountDao, accountRoleDao);
     }
 
     @Test
