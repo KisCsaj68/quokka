@@ -22,7 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.crypto.SecretKey;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @ConfigurationProperties
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
