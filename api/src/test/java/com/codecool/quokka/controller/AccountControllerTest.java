@@ -5,6 +5,7 @@ import com.codecool.quokka.model.account.Account;
 import com.codecool.quokka.model.account.AccountDto;
 import com.codecool.quokka.model.role.AccountRole;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Maps;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,14 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -39,13 +38,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AccountControllerTest {
     private AccountDto accountDto;
     private AccountRole role = new AccountRole("Trader", "Trading");
-
+    private Account account;
     @Autowired
     private MockMvc mvc;
 
+    private String jwtHeader;
+
     @Before
     public void setUp() throws Exception {
-        Account account = new Account("Test User", "user" + UUID.randomUUID() + "@asd.com", "UserAdded" + UUID.randomUUID(), "asd");
+        account = new Account("Test User", "user" + UUID.randomUUID() + "@asd.com", "UserAdded" + UUID.randomUUID(), "asd");
         MvcResult response = mvc.perform(post("/api/v1/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(account)))
@@ -53,6 +54,14 @@ public class AccountControllerTest {
         String actualJson = response.getResponse().getContentAsString();
 
         accountDto = new ObjectMapper().readValue(actualJson, AccountDto.class);
+
+        Map<String, String> credentials = Map.of("user_name", account.getUserName(), "password", account.getPassword());
+        response= mvc.perform(post("/api/v1/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(credentials)))
+                .andExpect(status().isOk())
+                .andReturn();
+        jwtHeader = response.getResponse().getHeader("Authorization");
     }
 
     @After
@@ -61,19 +70,23 @@ public class AccountControllerTest {
         data.put("id", accountDto.getId());
         mvc.perform(delete("/api/v1/user/")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(data)))
+                        .content(new ObjectMapper().writeValueAsString(data))
+                        .header("Authorization", jwtHeader))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void testUsersEndPoint()
+    public void testGetUsersEndPoint()
             throws Exception {
-        MvcResult response = mvc.perform(get("/api/v1/user"))
+        MvcResult response = mvc.perform(get("/api/v1/user")
+                        .header("Authorization", jwtHeader))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andReturn();
         String actualJson = response.getResponse().getContentAsString();
         assertTrue(actualJson.contains(accountDto.getId().toString()));
+
+
     }
 
     @Test
@@ -81,14 +94,17 @@ public class AccountControllerTest {
         HashMap data = new HashMap<>();
         data.put("id", accountDto.getId());
         mvc.perform(delete("/api/v1/user").contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(data)));
-        mvc.perform(get("/api/v1/user/" + accountDto.getId().toString()))
-                .andExpect(status().is4xxClientError());
+                .content(new ObjectMapper().writeValueAsString(data))
+                .header("Authorization", jwtHeader));
+        mvc.perform(get("/api/v1/user/" + accountDto.getId().toString())
+                        .header("Authorization", jwtHeader))
+                .andExpect(status().is(404));
     }
 
     @Test
     public void testSpecificUserById() throws Exception {
-        mvc.perform(get("/api/v1/user/" + accountDto.getId().toString()))
+        mvc.perform(get("/api/v1/user/" + accountDto.getId().toString())
+                        .header("Authorization", jwtHeader))
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(accountDto.getId().toString()))
@@ -104,6 +120,7 @@ public class AccountControllerTest {
         data.put("fullName", newUserName);
         mvc.perform(put("/api/v1/user/" + accountDto.getId().toString())
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", jwtHeader)
                         .content(new ObjectMapper().writeValueAsString(data)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.fullName").value(newUserName));
