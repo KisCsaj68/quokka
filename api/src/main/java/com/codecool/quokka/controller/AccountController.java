@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -63,13 +64,21 @@ public class AccountController {
 
     @DeleteMapping
     @PreAuthorize("hasRole('ROLE_TRADER')")
-    public void deleteUserById(@RequestBody HashMap<String, String> body) {
-        accountService.deleteAccount(UUID.fromString(body.get("id")));
+    public ResponseEntity deleteUserById(@RequestBody HashMap<String, String> body) {
+        if (accountService.getAccount(UUID.fromString(body.get("id"))).isPresent()){
+            accountService.deleteAccount(UUID.fromString(body.get("id")));
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping(path = "{id}")
     @PreAuthorize("hasRole('ROLE_TRADER')")
-    public AccountDto updateUser(@PathVariable("id") UUID id, @RequestBody HashMap<String, String> fields) {
-        return accountService.updateAccount(id, fields).orElse(null);
+    public ResponseEntity updateUser(@PathVariable("id") UUID id, @RequestBody HashMap<String, String> fields) {
+        Optional<AccountDto> accountDto = accountService.updateAccount(id, fields);
+        if (accountDto.isPresent()){
+            return new ResponseEntity<>(accountDto.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
