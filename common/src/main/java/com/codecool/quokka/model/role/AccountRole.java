@@ -26,7 +26,7 @@ public class AccountRole {
 
     @Column(nullable = true)
     private String description;
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
     private Set<Account> accounts;
 
     public AccountRole(String name, String description) {
