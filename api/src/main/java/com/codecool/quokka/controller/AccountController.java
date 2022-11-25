@@ -55,8 +55,9 @@ public class AccountController {
     @GetMapping(path = "{id}")
     @PreAuthorize("hasRole('ROLE_TRADER')")
     public ResponseEntity getUserById(@PathVariable("id") UUID id) {
-        if (accountService.getAccount(id).isPresent()) {
-            return new ResponseEntity<>(accountService.getAccount(id).get(), HttpStatus.OK);
+        Optional<AccountDto> account = accountService.getAccount(id);
+        if (account.isPresent()) {
+            return new ResponseEntity<>(account.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -65,8 +66,9 @@ public class AccountController {
     @DeleteMapping
     @PreAuthorize("hasRole('ROLE_TRADER')")
     public ResponseEntity deleteUserById(@RequestBody HashMap<String, String> body) {
-        if (accountService.getAccount(UUID.fromString(body.get("id"))).isPresent()){
-            accountService.deleteAccount(UUID.fromString(body.get("id")));
+        UUID id = UUID.fromString(body.get("id"));
+        if (accountService.getAccount(id).isPresent()){
+            accountService.deleteAccount(id);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
