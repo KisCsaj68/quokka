@@ -7,6 +7,7 @@ import com.codecool.quokka.service.account.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -45,25 +46,29 @@ public class AccountController {
     }
 
     @GetMapping
+    // admin endpoint
     public Set<AccountDto> getAllUser() {
         return accountService.getAllAccount();
     }
 
     @GetMapping(path = "{id}")
+    @PreAuthorize("hasRole('ROLE_TRADER')")
     public ResponseEntity getUserById(@PathVariable("id") UUID id) {
         if (accountService.getAccount(id).isPresent()) {
             return new ResponseEntity<>(accountService.getAccount(id).get(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping
+    @PreAuthorize("hasRole('ROLE_TRADER')")
     public void deleteUserById(@RequestBody HashMap<String, String> body) {
         accountService.deleteAccount(UUID.fromString(body.get("id")));
     }
 
     @PutMapping(path = "{id}")
+    @PreAuthorize("hasRole('ROLE_TRADER')")
     public AccountDto updateUser(@PathVariable("id") UUID id, @RequestBody HashMap<String, String> fields) {
         return accountService.updateAccount(id, fields).orElse(null);
     }
