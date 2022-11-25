@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,6 +27,7 @@ public class AssetController {
     @Value("${quokka.service.assetcache.address}${quokka.service.assetcache.endpoint}")
     private String url;
     @GetMapping( "{type}")
+    @PreAuthorize("hasRole('TRADER')")
     public List<String> getAssets(@PathVariable("type") String type) throws JsonProcessingException {
         String newUrl = url + type;
         String response = restTemplate.getForObject(newUrl, String.class);
@@ -41,6 +43,7 @@ public class AssetController {
     }
 
     @GetMapping("{assetType}/{assetSymbol}")
+    @PreAuthorize("hasRole('TRADER')")
     public Map<String,Object> getAssetData(@PathVariable("assetType") String pathAssetType,
                                            @PathVariable("assetSymbol") String pathAssetSymbol){
         String newUrl = url + pathAssetType + "/" + pathAssetSymbol;

@@ -19,7 +19,7 @@ docker-build:
 mvn-build:
 	mvn clean install --file common/pom.xml
 	for component in $(java_components); do \
-  		mvn clean package --file $$component/pom.xml ; \
+  		mvn clean package -DskipTests --file $$component/pom.xml ; \
   	done
 
 build: mvn-build docker-build

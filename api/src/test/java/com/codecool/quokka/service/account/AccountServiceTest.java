@@ -1,8 +1,10 @@
 package com.codecool.quokka.service.account;
 
+import com.codecool.quokka.dao.role.AccountRoleDao;
 import com.codecool.quokka.dao.account.AccountDao;
 import com.codecool.quokka.model.account.Account;
 import com.codecool.quokka.model.account.AccountDto;
+import com.codecool.quokka.model.role.AccountRole;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,6 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 @RunWith(MockitoJUnitRunner.class)
 public class AccountServiceTest {
     private static final UUID id = UUID.fromString("b462290f-4006-4d71-8a39-e956e245ede8");
+    private static AccountRole role = new AccountRole("Trader", "Trading");
     private static final UUID fakeId = UUID.fromString("b462290f-4008-4d71-8a39-e956e245ede8");
     private static final Account account = new Account("Test User", "test@asd.com", "TestUser", "asd", id);
     private static final Account accountWithoutId = new Account("Test User", "test@asd.com", "TestUser", "asd");
@@ -28,9 +31,12 @@ public class AccountServiceTest {
     @Mock
     private AccountDao accountDao;
 
+    @Mock
+    private AccountRoleDao accountRoleDao;
+
     @Before
     public void setUp() {
-        accountService = new AccountService(accountDao);
+        accountService = new AccountService(accountDao, accountRoleDao);
     }
 
     @Test

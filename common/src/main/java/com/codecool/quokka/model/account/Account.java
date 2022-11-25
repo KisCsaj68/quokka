@@ -1,17 +1,22 @@
 package com.codecool.quokka.model.account;
 
+import com.codecool.quokka.model.role.AccountRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.hash.Hashing;
+import com.google.common.collect.Sets;
+import lombok.AllArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Entity
-public class Account {
+@AllArgsConstructor
+public class Account implements UserDetails {
 
     @Id
     @GeneratedValue(generator = "uuid")
@@ -24,23 +29,62 @@ public class Account {
     private String emailAddress;
 
     private String password;
+    private final boolean isAccountNonExpired;
+    private final boolean isAccountNonLocked;
+    private final boolean isCredentialsNonExpired;
+    private final boolean isEnabled;
 
+    @Transient
+    private final Collection<? extends GrantedAuthority> authorities;
+
+    @JsonIgnore
+    private static final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(10);
+    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @JoinTable(name = "account_account_role", joinColumns = {@JoinColumn(name = "account_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    private final Set<AccountRole> roles;
+
+    /**
+     * Constructor to create Account instance data in JSON.
+     */
     public Account(@JsonProperty("full_name") String fullName, @JsonProperty("email_address") String emailAddress, @JsonProperty("user_name") String userName, @JsonProperty("password") String password) {
         this.fullName = fullName;
         this.userName = userName;
         this.emailAddress = emailAddress;
         this.password = password;
+        this.roles = new HashSet<>();
+        this.isAccountNonExpired = true;
+        this.isAccountNonLocked = true;
+        this.isCredentialsNonExpired = true;
+        this.isEnabled = true;
+        this.authorities = getAuthorities();
+
     }
 
+    /**
+     * Constructor to create Account instance while testing does not receive data in JSON.
+     */
     public Account(String fullName, String emailAddress, String userName, String password, UUID id) {
         this.id = id;
         this.fullName = fullName;
         this.userName = userName;
         this.emailAddress = emailAddress;
         this.password = password;
+        this.roles = new HashSet<>();
+        this.isAccountNonExpired = true;
+        this.isAccountNonLocked = true;
+        this.isCredentialsNonExpired = true;
+        this.isEnabled = true;
+        this.authorities = getAuthorities();
     }
 
     public Account() {
+        this.roles = new HashSet<>();
+        this.isAccountNonExpired = true;
+        this.isAccountNonLocked = true;
+        this.isCredentialsNonExpired = true;
+        this.isEnabled = true;
+        this.authorities = getAuthorities();
+
     }
 
     public UUID getId() {
@@ -59,9 +103,11 @@ public class Account {
         return emailAddress;
     }
 
-    public String getPassword() {
-        return password;
-    }
+
+//    public String getPassword() {
+//        return password;
+//    }
+
 
     public void setFullName(String name) {
         this.fullName = name;
@@ -83,8 +129,8 @@ public class Account {
         this.userName = userName;
     }
 
-    public void hashPassword() {
-        this.password = Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString();
+    public void encryptPassword() {
+        this.password = bCryptPasswordEncoder.encode(password);
     }
 
     @Override
@@ -103,6 +149,49 @@ public class Account {
     @Override
     public String toString() {
         return "Account{" + "id=" + id + ", fullName='" + fullName + '\'' + ", userName='" + userName + '\'' + ", emailAddress='" + emailAddress + '\'' + ", password='" + password + '\'' + '}';
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> authList = new HashSet<>();
+        for (AccountRole role : this.roles) {
+            authList.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+        }
+        return authList;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return userName;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return isAccountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return isAccountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return isCredentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void addRole(AccountRole role) {
+        this.roles.add(role);
     }
 }
 

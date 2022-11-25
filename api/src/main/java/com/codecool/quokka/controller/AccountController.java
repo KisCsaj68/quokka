@@ -7,9 +7,11 @@ import com.codecool.quokka.service.account.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -45,26 +47,40 @@ public class AccountController {
     }
 
     @GetMapping
+    // admin endpoint
     public Set<AccountDto> getAllUser() {
         return accountService.getAllAccount();
     }
 
     @GetMapping(path = "{id}")
+    @PreAuthorize("hasRole('ROLE_TRADER')")
     public ResponseEntity getUserById(@PathVariable("id") UUID id) {
-        if (accountService.getAccount(id).isPresent()) {
-            return new ResponseEntity<>(accountService.getAccount(id).get(), HttpStatus.OK);
+        Optional<AccountDto> account = accountService.getAccount(id);
+        if (account.isPresent()) {
+            return new ResponseEntity<>(account.get(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping
-    public void deleteUserById(@RequestBody HashMap<String, String> body) {
-        accountService.deleteAccount(UUID.fromString(body.get("id")));
+    @PreAuthorize("hasRole('ROLE_TRADER')")
+    public ResponseEntity deleteUserById(@RequestBody HashMap<String, String> body) {
+        UUID id = UUID.fromString(body.get("id"));
+        if (accountService.getAccount(id).isPresent()){
+            accountService.deleteAccount(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping(path = "{id}")
-    public AccountDto updateUser(@PathVariable("id") UUID id, @RequestBody HashMap<String, String> fields) {
-        return accountService.updateAccount(id, fields).orElse(null);
+    @PreAuthorize("hasRole('ROLE_TRADER')")
+    public ResponseEntity updateUser(@PathVariable("id") UUID id, @RequestBody HashMap<String, String> fields) {
+        Optional<AccountDto> accountDto = accountService.updateAccount(id, fields);
+        if (accountDto.isPresent()){
+            return new ResponseEntity<>(accountDto.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
