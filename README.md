@@ -45,9 +45,9 @@ It's mission critical state is handled fully in-memory, while every change of th
 ### User management
 - [x] User registration
 - [ ] Change password
-- [ ] Login / Logout
-- [ ] JWT based authentication / authorization
-- [ ] Protected routes
+- [x] Login / Logout
+- [x] JWT based authentication / authorization
+- [x] Protected routes
 
 ### Finance management
 - [x] Market order
@@ -71,7 +71,7 @@ It's mission critical state is handled fully in-memory, while every change of th
 ### Fronend
 - [x] Minimal frontend
 - [ ] Login / Logout
-- [ ] Responsive web design
+- [ ] Responsive web design Tailwind
 
 
 ## Architectural overview
