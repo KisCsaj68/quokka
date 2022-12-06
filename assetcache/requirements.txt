@@ -5,7 +5,7 @@ alpaca-trade-api==2.3.0
 async-timeout==4.0.2
 asynctest==0.13.0
 attrs==22.1.0
-certifi==2022.9.14
+certifi
 charset-normalizer==2.1.1
 deprecation==2.1.0
 falcon==3.1.0
