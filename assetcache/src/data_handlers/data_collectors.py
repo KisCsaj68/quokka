@@ -22,7 +22,7 @@ class DataCollectors:
         self.latest_crypto_ticker: LatestCryptoTicker = \
             LatestCryptoTicker(api, db)
 
-        if auto_start is True:
+        if auto_start:
             self.start_threads()
 
     def start_threads(self) -> None:

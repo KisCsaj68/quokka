@@ -1,6 +1,5 @@
 import falcon
 
-
 from src.data_handlers.data_collectors import DataCollectors
 from src.storages.primitive_json_db import PrimitiveJsonDB
 from src.routes import Ping, AssetNamesRoute, LatestAssetRoute
@@ -27,7 +26,6 @@ class AssetCacheAPI:
     @property
     def app(self) -> falcon.App:
         return self._app
-
 
     def add_routes(self) -> None:
         self._app.add_route("/ping", self.ping)
