@@ -14,7 +14,7 @@
 ## The anatomy of price tracking
 
 A naive approach for OMS would be to poll  `GET /api/v1/asset/{ticker}/price` endpoint for the latest price, to see if the limit order has met the price. 
-This is approach is bad, due to the lossy nature of the polling. No-matter-how fast OMS would poll (like evey 50ms), there could be always an interim peak of price between two consecutive polling, which could have fill the order only if we were so lucky to poll at the exact right time...
+This approach is bad, due to the lossy nature of the polling. No-matter-how fast OMS would poll (like evey 50ms), there could be always an interim peak of price between two consecutive polling, which could have fill the order only if we were so lucky to poll at the exact right time...
 
 So instead of the heavy polling of assetcache, we register individual limit orders with assetcache, and let each incoming price datapoint be checked against the registered price checker. 
 For this to be possible we need very fast datastructures for these assets price-trackers.
