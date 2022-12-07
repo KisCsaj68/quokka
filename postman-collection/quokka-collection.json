@@ -368,7 +368,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"symbol\": \"AAPL\",\n    \"type\": \"LIMIT\",\n    \"limit\": 139,\n    \"qty\": 3\n}",
+							"raw": "{\n    \"symbol\": \"AAPL\",\n    \"type\": \"LIMIT\",\n    \"side\": \"BUY\",\n    \"limit\": 139,\n    \"qty\": 3\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -981,37 +981,37 @@
 	],
 	"variable": [
 		{
-			"id": "378e6ae2-4d38-4bd3-8833-162fcd41001f",
+			"id": "91418960-90b2-4b98-9986-86dad87744c9",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "a33afd47-4150-4c80-912a-d0ac8bdffa91",
+			"id": "4c8da615-7239-4e48-9ec3-a28bf6e56e1d",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "a2041405-1917-4a64-aeb1-11d9f38dace7",
+			"id": "ed14d968-fce3-4801-9b43-6c65816242d8",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "1f969472-f41f-4221-8299-85ce085d0736",
+			"id": "081c5eda-7b9f-4895-9df5-55ae0db6c90e",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "cf133c22-01cd-494e-a429-1939a3a1f151",
+			"id": "ff91a334-4fa1-40cc-a280-5fb9cf47e8a9",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "8ec5a661-9309-4ba2-b4b8-841e65bb15aa",
+			"id": "f5b10e69-f0ad-44dc-9218-6450cf49d24b",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
