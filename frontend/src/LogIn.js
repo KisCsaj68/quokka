@@ -1,10 +1,9 @@
 import Button from "./Button";
-import {api} from "./apiRequest";
-import {useContext} from "react";
-import AuthContext from "./context/AuthProvider";
+import api from "./apiRequest";
+import useAuth from "./hooks/useAuth";
 
 const LogIn = ({userName, passWrd, setPassWrd, setUserName,error}) => {
-    const { setToken } = useContext(AuthContext)
+    const { setToken } = useAuth();
 
     const handleLogin = async (e) => {
         e.preventDefault();
