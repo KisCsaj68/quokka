@@ -110,6 +110,7 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "87d40715-b2b0-44a9-a421-1beb9c1c3ee6",
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -131,8 +132,7 @@
 									"});",
 									""
 								],
-								"type": "text/javascript",
-								"id": "87d40715-b2b0-44a9-a421-1beb9c1c3ee6"
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -141,8 +141,17 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"url": "{{host}}{{api}}/user"
 					},
 					"response": []
@@ -935,37 +944,37 @@
 	],
 	"variable": [
 		{
-			"id": "2534bd3e-3cdd-4c12-b398-6db3095bcef2",
+			"id": "a15f1148-78eb-46f7-be44-e4620672c513",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "1b3bdac7-8af4-400c-b548-adc60ac7d731",
+			"id": "40fd8578-8a26-4d76-9cff-63ab7efb2ca6",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "e5611121-3fb8-4ec9-9a5c-9dd31ae211fa",
+			"id": "cdc981f3-05e3-4745-ad9e-41d1b45cc2c7",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "432fbdb5-d392-45db-ac40-3bf9390a589c",
+			"id": "05d3e017-f594-4143-b325-42f0e0b48f47",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "8d31b06b-8902-433b-9cfb-5e886fa00802",
+			"id": "321ccdf1-03ab-4cff-9d53-2b89974320e6",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "bc300bd3-4b32-4574-9969-40dd1c844c14",
+			"id": "fa35bab1-949b-43e1-aecc-1dd1cbf449f2",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
