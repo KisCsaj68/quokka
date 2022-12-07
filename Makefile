@@ -31,6 +31,10 @@ build: mvn-build docker-build
 up:
 	docker-compose up -d
 
+.PHONY: logs
+logs:
+	docker-compose logs -f
+
 .PHONY: down
 down:
 	docker-compose down
