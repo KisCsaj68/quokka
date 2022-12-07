@@ -98,13 +98,6 @@ public class OrderService {
     private void persistPosition(Position position, Orders order) {
         rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.POSITION_ROUTING_KEY, position);
         storeInMemoryPositions(position, order);
-//        if (!inMemoryPositions.containsKey(order.getAccountId())) {
-//            inMemoryPositions.put(order.getAccountId(), Maps.newConcurrentMap());
-//        }
-//        if (!inMemoryPositions.get(order.getAccountId()).containsKey(order.getSymbol())) {
-//            inMemoryPositions.get(order.getAccountId()).put(order.getSymbol(), Maps.newConcurrentMap());
-//        }
-//        inMemoryPositions.get(order.getAccountId()).get(order.getSymbol()).put(position.getId(), position);
     }
 
     private void storeInMemoryPositions(Position position, Orders order) {
