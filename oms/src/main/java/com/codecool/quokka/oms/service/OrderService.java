@@ -30,7 +30,7 @@ public class OrderService {
     private Map<UUID, Orders> inMemoryOrders;
 
     // Store position by user -> {symbol: {positionId: position}}
-    private Map<UUID, Map<String, Map<Long, Position>>> inMemoryPositions;
+    private Map<UUID, Map<String, Map<UUID, Position>>> inMemoryPositions;
 
     @Value("${quokka.service.assetcache.address}${quokka.service.assetcache.endpoint}")
     private String assetCacheURL;
@@ -52,18 +52,6 @@ public class OrderService {
             case LIMIT -> handleLimitOrder(order);
             case MARKET -> handleMarketOrder(order);
         }
-//        handleMarketOrder();
-//        // Ask the actual price from assetcache port 8000.
-//        Asset asset = restTemplate.getForObject(assetCacheURL + order.getAssetType().toString().toLowerCase() + "/" + order.getSymbol(), Asset.class);
-//        // Fill the price to the order and update the order in DB.
-//        order.setPrice(asset.getOpen());
-//        order.setStatus(OrderStatus.FILLED);
-//        rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
-//        // Create position, send to persister RMQ
-//        Position position = new Position(order.getQuantity(), order.getAccountId(), order.getSymbol(), order.getPrice(), null, new Date());
-//        rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.POSITION_ROUTING_KEY, position);
-        // Store both Entity in-memory
-        //TODO
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
