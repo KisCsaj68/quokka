@@ -1,12 +1,10 @@
 package com.codecool.quokka.model.order;
 
 import com.codecool.quokka.model.assets.AssetType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,7 +17,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Orders implements Serializable {
     @Id
-//    @JsonIgnore
     private UUID id;
 
     @JsonProperty("quantity")
@@ -37,7 +34,7 @@ public class Orders implements Serializable {
     @Enumerated(EnumType.STRING)
     private AssetType assetType;
 
-    @JsonProperty("order_limit")
+    @JsonProperty("limit")
     private BigDecimal orderLimit;
 
     @JsonProperty("symbol")
@@ -83,6 +80,10 @@ public class Orders implements Serializable {
         return orderLimit;
     }
 
+    public void setOrderLimit(BigDecimal orderLimit) {
+        this.orderLimit = orderLimit;
+    }
+
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
@@ -97,10 +98,6 @@ public class Orders implements Serializable {
 
     public void setType(OrderType type) {
         this.type = type;
-    }
-
-    public void setOrderLimit(BigDecimal limit) {
-        this.orderLimit = limit;
     }
 
     public BigDecimal getPrice() {
@@ -137,7 +134,7 @@ public class Orders implements Serializable {
                 ", status=" + status +
                 ", type=" + type +
                 ", assetType=" + assetType +
-                ", orderLimit=" + orderLimit +
+                ", limit=" + orderLimit +
                 ", symbol='" + symbol + '\'' +
                 '}';
     }

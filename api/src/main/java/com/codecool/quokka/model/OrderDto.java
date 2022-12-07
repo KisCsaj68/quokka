@@ -4,6 +4,7 @@ import com.codecool.quokka.model.assets.AssetType;
 import com.codecool.quokka.model.order.Orders;
 import com.codecool.quokka.model.order.OrderStatus;
 import com.codecool.quokka.model.order.OrderType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -12,6 +13,7 @@ public class OrderDto {
     private int quantity;
     private String symbol;
     private OrderType type;
+    @JsonProperty("order_limit")
     private BigDecimal limit;
     private BigDecimal price;
 
