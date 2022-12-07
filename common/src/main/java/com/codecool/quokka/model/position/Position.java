@@ -16,8 +16,7 @@ import java.util.UUID;
 @Setter
 public class Position implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    private UUID id;
 
     private int quantity;
     private UUID userId;
@@ -35,6 +34,7 @@ public class Position implements Serializable {
         this.priceAtBuy = priceAtBuy;
         this.priceAtSell = priceAtSell;
         this.buyAt = today;
+        this.id = UUID.randomUUID();
     }
 
     public int getQuantity() {
@@ -57,11 +57,11 @@ public class Position implements Serializable {
         return priceAtSell;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 }
