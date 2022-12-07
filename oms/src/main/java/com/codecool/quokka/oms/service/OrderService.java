@@ -5,6 +5,8 @@ import com.codecool.quokka.model.mqconfig.Config;
 import com.codecool.quokka.model.order.Orders;
 import com.codecool.quokka.model.order.OrderStatus;
 import com.codecool.quokka.model.position.Position;
+import com.codecool.quokka.oms.dal.OrderDal;
+import com.codecool.quokka.oms.dal.PositionDal;
 import com.google.common.collect.Maps;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Service
 @ConfigurationProperties
@@ -30,6 +31,10 @@ public class OrderService {
 
     private Map<UUID, Orders> inMemoryOrders;
 
+    private OrderDal orderDal;
+
+    private PositionDal positionDal;
+
     // Store position by user -> {symbol: {positionId: position}}
     private Map<UUID, Map<String, Map<UUID, Position>>> inMemoryPositions;
 
@@ -37,11 +42,25 @@ public class OrderService {
     private String assetCacheURL;
 
     @Autowired
-    public OrderService(RabbitTemplate template) {
+    public OrderService(RabbitTemplate template, OrderDal orderDal, PositionDal positionDal) {
         this.rabbitTemplate = template;
         this.inMemoryOrders = new ConcurrentHashMap<>();
         this.inMemoryPositions = new ConcurrentHashMap<>();
         this.restTemplate = new RestTemplate();
+        this.orderDal = orderDal;
+        this.positionDal = positionDal;
+    }
+
+    @PostConstruct
+    public void initializeInMemoryStores() {
+        List<Orders> orders = orderDal.findAllByStatus(OrderStatus.OPEN);
+        orders.stream().forEach(o -> storeLimitOrder(o));
+        List<Position> positions = positionDal.findAllByExitOrderIdIsNull();
+        Set<UUID> orderIds = positions.stream().map(Position::getEntryOrderId).collect(Collectors.toSet());
+        Map<UUID, Orders> ordersByPositions = orderDal.findAllByIdIn(orderIds).stream().collect(Collectors.toMap(o -> o.getId(), o -> o));
+        positions.stream()
+                .forEach(p -> storeInMemoryPositions(p, ordersByPositions.get(p.getEntryOrderId())));
+        System.out.println(inMemoryPositions);
     }
 
     public ResponseEntity createOrder(Orders order) {
@@ -69,15 +88,26 @@ public class OrderService {
         order.setStatus(OrderStatus.FILLED);
         rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
         // Create position and persist db + in-memory
-        Position position = new Position(order.getQuantity(), order.getAccountId(), order.getSymbol(), order.getPrice(), null, new Date());
-        storePosition(position, order);
+        Position position = new Position(order.getQuantity(), order.getAccountId(), order.getSymbol(), order.getPrice(), null, new Date(), order.getId(), null);
+        persistPosition(position, order);
     }
 
     /**
      * Push the Position to RabbitMQ first(for consistency) and stores it in-memory.
      */
-    private void storePosition(Position position, Orders order) {
+    private void persistPosition(Position position, Orders order) {
         rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.POSITION_ROUTING_KEY, position);
+        storeInMemoryPositions(position, order);
+//        if (!inMemoryPositions.containsKey(order.getAccountId())) {
+//            inMemoryPositions.put(order.getAccountId(), Maps.newConcurrentMap());
+//        }
+//        if (!inMemoryPositions.get(order.getAccountId()).containsKey(order.getSymbol())) {
+//            inMemoryPositions.get(order.getAccountId()).put(order.getSymbol(), Maps.newConcurrentMap());
+//        }
+//        inMemoryPositions.get(order.getAccountId()).get(order.getSymbol()).put(position.getId(), position);
+    }
+
+    private void storeInMemoryPositions(Position position, Orders order) {
         if (!inMemoryPositions.containsKey(order.getAccountId())) {
             inMemoryPositions.put(order.getAccountId(), Maps.newConcurrentMap());
         }
