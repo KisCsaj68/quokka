@@ -290,7 +290,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "\n{\n    \"full_name\" : {{name}}\n}",
+							"raw": "\n{\n    \"full_name\" : \"{{name}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -981,37 +981,37 @@
 	],
 	"variable": [
 		{
-			"id": "7a017a1f-c5c2-4ae0-a034-b097ffa0910c",
+			"id": "aa3cac85-6029-4858-b0f9-bd8a2d573e9c",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "1c688ed2-f0d3-42ce-a052-9de7ccd8ea24",
+			"id": "df7102f9-e3fd-44f4-a488-8791f1ce6cc9",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "c072cc74-0e3a-40db-941f-8458984b7cc8",
+			"id": "2483087a-fdd3-4a94-a06e-cfa5b7fb7223",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "a3eb4c3b-219e-4132-bb5e-f994707c74a8",
+			"id": "e1ed569a-fdb2-4daa-8b97-f3f964766891",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "53d4f2f1-edfa-40a7-8e7c-491d0f458561",
+			"id": "ae5316c7-3aac-487c-8529-8317a5a64790",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "9e8f1973-b163-4310-9d08-66baf522d0bb",
+			"id": "5596bfef-d801-4215-9601-7785a7ba6a99",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
