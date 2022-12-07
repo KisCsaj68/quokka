@@ -1,20 +1,21 @@
 import {useEffect, useState} from "react";
-import {assetApi, api} from "./apiRequest";
+import useAxiosPrivate from "./hooks/useAxiosPrivate";
 
 
 const DataView = ({name, assetType}) => {
     const [stockOpen, setStockOpen] = useState(undefined);
     const [stockClose, setStockClose] = useState(undefined);
     const [qty, setQty] = useState(undefined);
+    const privateApi = useAxiosPrivate();
     useEffect(() => {
         const controller = new AbortController();
-        fetchData(controller.signal, name, assetType).then(r => {
+        fetchData(controller.signal, name, assetType, privateApi).then(r => {
             setStockOpen(r.open)
             setStockClose(r.close)
         });
         return () => controller.abort();
 
-    }, [])
+    }, [qty])
     if (stockOpen || stockClose !== undefined) {
         return (
             <tr>
@@ -24,7 +25,7 @@ const DataView = ({name, assetType}) => {
                 <td><input type="number" name="quantity" min="1" onChange={(e) => setQty(e.target.value)}/></td>
                 <td>
                     <button onClick={async () => {
-                        await handleBuy(name, "MARKET", qty, setQty, assetType)
+                        await handleBuy(name, "MARKET", qty, setQty, assetType, privateApi)
                     }}>Buy
                     </button>
                 </td>
@@ -40,11 +41,10 @@ const DataView = ({name, assetType}) => {
 
 }
 
-const fetchData = async (signal, name, type) => {
+const fetchData = async (signal, name, type, privateApi) => {
     try {
         const url = "/api/v1/asset/" + type + "/" + name;
-        const response = await assetApi(url, {signal});
-        console.log(response)
+        const response = await privateApi.get(url, {signal});
         return response.data
 
     } catch (err) {
@@ -53,12 +53,12 @@ const fetchData = async (signal, name, type) => {
     }
 }
 
-const handleBuy = async (name, type, qty, setQty, assetType) => {
+const handleBuy = async (name, type, qty, setQty, assetType, privateApi) => {
     // e.preventDefault();
     const order = {symbol: name, type: type, qty: qty}
     const url = "/api/v1/order/" + assetType;
     try {
-        const response = await api.post(url, order);
+        const response = await privateApi.post(url, order);
         if (response.status > 300) {
             setQty(undefined);
         }
@@ -67,21 +67,5 @@ const handleBuy = async (name, type, qty, setQty, assetType) => {
     }
 }
 
-
-// const StockView = ({name}) => {
-//     const [stockDetails, setStockDetails] = useState(undefined);
-//
-//     useEffect(() => {
-//         getStockDetails(name)
-//             .then(stockDetails => setStockDetails(stockDetails));
-//
-//     }, [name])
-//
-//     if (stockDetails !== undefined) {
-//         return <tr><td>{stockDetails.name}</td><td>{stockDetails.value}</td></tr>;
-//     } else {
-//         return <span>Loading...</span>
-//     }
-// }
 
 export default DataView;
