@@ -20,6 +20,8 @@ It is capable of:
   - registering an order for price tracking
   - connects to an external data provider for tracking the price for the requested assets
 
+- Postman Collection for API testing purpose
+
 Under the hood, Quokka Trading Platfo®m has a high performance order management engine.
 It's mission critical state is handled fully in-memory, while every change of that state will eventually get persisted.
 
@@ -33,6 +35,7 @@ It's mission critical state is handled fully in-memory, while every change of th
 ### Infra/Misc
 - [x] Makefile for automating more complex housekeeping tasks
 - [x] fast multistage dockerbuilds with caching enabled
+- [x] Postman collection (in Git)
 - [ ] helm-chart to run on k8s
 - [ ] Logging
 - [ ] Log shipping (ELK stack)
