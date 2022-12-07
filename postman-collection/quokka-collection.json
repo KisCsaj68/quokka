@@ -46,7 +46,7 @@
 							}
 						}
 					],
-					"_postman_id": "70b087d2-e05d-4980-9f9a-f4af9e2bbf92",
+					"id": "70b087d2-e05d-4980-9f9a-f4af9e2bbf92",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -98,7 +98,7 @@
 							}
 						}
 					],
-					"_postman_id": "883673fb-86c3-4ec0-b31d-ca661db8f0f5",
+					"id": "883673fb-86c3-4ec0-b31d-ca661db8f0f5",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -128,7 +128,7 @@
 							}
 						}
 					],
-					"_postman_id": "c9638173-542f-4ebc-8c1b-57d67e211c41",
+					"id": "c9638173-542f-4ebc-8c1b-57d67e211c41",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -146,7 +146,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "update user",
 					"event": [
 						{
 							"listen": "test",
@@ -169,7 +169,7 @@
 							}
 						}
 					],
-					"_postman_id": "7bbd06ad-ce3b-4079-9232-f95ac7c49734",
+					"id": "7bbd06ad-ce3b-4079-9232-f95ac7c49734",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -230,7 +230,7 @@
 							}
 						}
 					],
-					"_postman_id": "bde27750-f5fa-4f11-b6d6-4c6b0ca91ce2",
+					"id": "bde27750-f5fa-4f11-b6d6-4c6b0ca91ce2",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -258,7 +258,7 @@
 				},
 				{
 					"name": "get stock authenticated",
-					"_postman_id": "3e396ee0-f7b0-4cc8-9461-b4c00f96d695",
+					"id": "3e396ee0-f7b0-4cc8-9461-b4c00f96d695",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -286,7 +286,7 @@
 				},
 				{
 					"name": "login",
-					"_postman_id": "70b7d2e4-42ec-48f7-b0d8-ec6e19176c9a",
+					"id": "70b7d2e4-42ec-48f7-b0d8-ec6e19176c9a",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -311,7 +311,7 @@
 				},
 				{
 					"name": "add makert order",
-					"_postman_id": "08e3a811-e667-4281-9317-d01c1e3a5591",
+					"id": "08e3a811-e667-4281-9317-d01c1e3a5591",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -339,7 +339,7 @@
 				},
 				{
 					"name": "add limit order",
-					"_postman_id": "a48c15a2-8517-4ee0-8326-c23c913eae0a",
+					"id": "a48c15a2-8517-4ee0-8326-c23c913eae0a",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -367,7 +367,7 @@
 				},
 				{
 					"name": "get stock wo auth.",
-					"_postman_id": "269d5f2e-5acd-4dd7-8ec4-40eff2b074e3",
+					"id": "269d5f2e-5acd-4dd7-8ec4-40eff2b074e3",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -379,7 +379,7 @@
 					"response": []
 				}
 			],
-			"_postman_id": "c0f1cc1f-4592-442b-8b05-8d61dfa83144"
+			"id": "c0f1cc1f-4592-442b-8b05-8d61dfa83144"
 		},
 		{
 			"name": "Asset",
@@ -448,7 +448,7 @@
 									}
 								}
 							],
-							"_postman_id": "9f6d9b51-e8cd-4817-aa36-f0f6216626e7",
+							"id": "9f6d9b51-e8cd-4817-aa36-f0f6216626e7",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -530,7 +530,7 @@
 									}
 								}
 							],
-							"_postman_id": "ad816913-0371-45b8-a0f9-2f26a4cf5da4",
+							"id": "ad816913-0371-45b8-a0f9-2f26a4cf5da4",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -551,8 +551,7 @@
 							"response": []
 						}
 					],
-					"_postman_id": "2d4d1c13-c3ec-46fd-b038-f48ca80d9106",
-					"_postman_isSubFolder": true
+					"id": "2d4d1c13-c3ec-46fd-b038-f48ca80d9106"
 				},
 				{
 					"name": "GET_returnSingleItem",
@@ -591,7 +590,7 @@
 									}
 								}
 							],
-							"_postman_id": "d6493f83-e3d0-4441-9224-83a5e00a9a5e",
+							"id": "d6493f83-e3d0-4441-9224-83a5e00a9a5e",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -636,7 +635,7 @@
 									}
 								}
 							],
-							"_postman_id": "693ac079-7ea0-4a6e-9d4b-0598ce073620",
+							"id": "693ac079-7ea0-4a6e-9d4b-0598ce073620",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -648,8 +647,7 @@
 							"response": []
 						}
 					],
-					"_postman_id": "dd8fec9e-2846-42ff-a990-e782959f0efc",
-					"_postman_isSubFolder": true
+					"id": "dd8fec9e-2846-42ff-a990-e782959f0efc"
 				},
 				{
 					"name": "GET_returnMultipleItems",
@@ -711,7 +709,7 @@
 									}
 								}
 							],
-							"_postman_id": "cab2b580-1165-410a-bdb7-c21dcf48be01",
+							"id": "cab2b580-1165-410a-bdb7-c21dcf48be01",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -789,7 +787,7 @@
 									}
 								}
 							],
-							"_postman_id": "faa6184d-910e-4f50-92a9-9aa0809faed2",
+							"id": "faa6184d-910e-4f50-92a9-9aa0809faed2",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -867,7 +865,7 @@
 									}
 								}
 							],
-							"_postman_id": "a7b9f4ec-885d-4f1d-b6d4-6b00c7cf3ab2",
+							"id": "a7b9f4ec-885d-4f1d-b6d4-6b00c7cf3ab2",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -879,11 +877,10 @@
 							"response": []
 						}
 					],
-					"_postman_id": "3123b681-a60f-4fc3-9d2f-5faf440da923",
-					"_postman_isSubFolder": true
+					"id": "3123b681-a60f-4fc3-9d2f-5faf440da923"
 				}
 			],
-			"_postman_id": "f13f230f-9a19-49e3-acd2-6abfb3c48e7a",
+			"id": "f13f230f-9a19-49e3-acd2-6abfb3c48e7a",
 			"auth": {
 				"type": "noauth"
 			},
@@ -935,37 +932,37 @@
 	],
 	"variable": [
 		{
-			"id": "eccc103e-71a3-48ea-be69-79f788495449",
+			"id": "1dd3ddc6-e6cc-443a-a51f-fe49dc504d3a",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "319ac9dc-c628-4e7e-9493-65f9793ece31",
+			"id": "9c2f652e-75c3-4022-8b4c-6a0dc071d244",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "a1097b36-d3e9-4031-9c07-614de3089bdc",
+			"id": "1213e9c2-eb74-4b52-909f-309d4d7e6cbe",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "93b18700-cfd5-495c-8fe9-e829e568ffc4",
+			"id": "f334967e-1913-45e7-91a8-f3a58a1f2133",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "1752c4b7-b17d-4cf9-9ea8-780d2e24fb1b",
+			"id": "dd1e5889-6d31-48a8-bc34-8807269f3188",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "d523d1b8-54a6-41ab-a2b3-e09f5c7af11d",
+			"id": "26360a0e-a878-428a-8941-d47ba98583d1",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
