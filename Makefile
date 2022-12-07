@@ -29,3 +29,8 @@ up:
 
 down:
 	docker-compose down
+
+frontend-build:
+	pushd frontend  && \
+	docker buildx build -t quokka/frontend:$(docker_tag) .  && \
+	popd
