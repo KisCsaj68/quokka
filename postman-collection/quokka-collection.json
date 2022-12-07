@@ -1,0 +1,974 @@
+{
+	"info": {
+		"_postman_id": "4c3b0482-2d56-478e-9347-ed1ea4ab2569",
+		"name": "Quokka",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Add new user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9e216fc6-50f0-418c-803a-489f37cfbd3b",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"id\");",
+									"});",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"fullName\");",
+									"});",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"emailAddress\");",
+									"});",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"userName\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"var jsonData  = JSON.parse(responseBody);",
+									"postman.setGlobalVariable(\"userId\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "70b087d2-e05d-4980-9f9a-f4af9e2bbf92",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"full_name\": \"User Asd\",\n    \"email_address\": \"asd22eeee22@asd.com\",\n    \"user_name\" : \"TestUseeeeer2222\",\n    \"password\" : \"asd\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}{{api}}/user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"id\");",
+									"});",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"fullName\");",
+									"});",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"emailAddress\");",
+									"});",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"userName\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"id": "87d40715-b2b0-44a9-a421-1beb9c1c3ee6"
+							}
+						}
+					],
+					"_postman_id": "883673fb-86c3-4ec0-b31d-ca661db8f0f5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{host}}{{api}}/user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "902955be-cdc3-44be-be8d-53e530d7421a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Test\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "c9638173-542f-4ebc-8c1b-57d67e211c41",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJUZXN0VXNlZWVlZXIyMjIyIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfVFJBREVSIn1dLCJpYXQiOjE2NjkzNjgyMzEsImV4cCI6MTY3MDU0NDAwMH0.8gDIj_kas_CyM5pnE9CS2nw4vHzoIEAssMIJPsN1a64yffNu9FzIfFMdySoL1Lc7AuFoWEfofMTK5ildbhgC7w"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{host}}{{api}}/user/{{userId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f5c781a4-8e8c-4210-85f6-990e13a4466f",
+								"exec": [
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"let name = pm.globals.get(\"name\");",
+									"console.log(name);",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(name);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "7bbd06ad-ce3b-4079-9232-f95ac7c49734",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJUZXN0VXNlZWVlZXIyMjIyIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfVFJBREVSIn1dLCJpYXQiOjE2NjkzNjcwNzEsImV4cCI6MTY3MDU0NDAwMH0.CmCJtEepBnpLkWN6MVyYXeci8fxnc4gwVJSM22ou-x8ipjbdOvq9lJlIlCDdS81h06gPUrpXYA9pNiToG36EvQ"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\n{\n    \n    \"fullName\" : \"UserChanged\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{api}}/user/c328a57e-9f3e-45bd-ab8d-11782a9885e0",
+							"host": [
+								"{{host}}{{api}}"
+							],
+							"path": [
+								"user",
+								"c328a57e-9f3e-45bd-ab8d-11782a9885e0"
+							],
+							"query": [
+								{
+									"key": "newFullName",
+									"value": "User4567",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5dc5a8fb-3a93-4678-9bb2-49e92da29c51",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "bde27750-f5fa-4f11-b6d6-4c6b0ca91ce2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJUZXN0VXNlZWVlZXIyMjIyIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfVFJBREVSIn1dLCJpYXQiOjE2NjkzNjgyMzEsImV4cCI6MTY3MDU0NDAwMH0.8gDIj_kas_CyM5pnE9CS2nw4vHzoIEAssMIJPsN1a64yffNu9FzIfFMdySoL1Lc7AuFoWEfofMTK5ildbhgC7w"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"{{userId}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}{{api}}/user"
+					},
+					"response": []
+				},
+				{
+					"name": "get stock authenticated",
+					"_postman_id": "3e396ee0-f7b0-4cc8-9461-b4c00f96d695",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJUZXN0VXNlZWVlZXIyMjIyIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfVFJBREVSIn1dLCJpYXQiOjE2NzA0MjIyNDcsImV4cCI6MTY3MTU4MDgwMH0.JuUxrYe2CvrpvMB82S_gBGMcHB7_f8dh6cApPLCDH8gjnxjVWV39f-0kNLBO3IAn445B64C6bY2BTDI7PX2gQQ"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_name\" : \"TestUser2222\",\n    \"password\" : \"asd\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}{{api}}/asset/stock"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"_postman_id": "70b7d2e4-42ec-48f7-b0d8-ec6e19176c9a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_name\" : \"TestUseeeeer2222\",\n    \"password\" : \"asd\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}{{api}}/login"
+					},
+					"response": []
+				},
+				{
+					"name": "add makert order",
+					"_postman_id": "08e3a811-e667-4281-9317-d01c1e3a5591",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJUZXN0VXNlZWVlZXIyMjIyIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfVFJBREVSIn1dLCJpYXQiOjE2NzA0MjMzOTcsImV4cCI6MTY3MTU4MDgwMH0.8a_4p8gLCixHPhBWi1PfqXOTqbQ3JXOD6OYzeVizx09C0U8ew-jUhdqyzjm1ryhSOLJKQMUp-Mtv0TbttwHnbA"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"symbol\": \"AAPL\",\n    \"type\": \"MARKET\",\n    \"qty\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}{{api}}/order/stock"
+					},
+					"response": []
+				},
+				{
+					"name": "add limit order",
+					"_postman_id": "a48c15a2-8517-4ee0-8326-c23c913eae0a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJUZXN0VXNlZWVlZXIyMjIyIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfVFJBREVSIn1dLCJpYXQiOjE2NzA0MjIyNDcsImV4cCI6MTY3MTU4MDgwMH0.JuUxrYe2CvrpvMB82S_gBGMcHB7_f8dh6cApPLCDH8gjnxjVWV39f-0kNLBO3IAn445B64C6bY2BTDI7PX2gQQ"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"symbol\": \"AAPL\",\n    \"type\": \"LIMIT\",\n    \"limit\": 139,\n    \"qty\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}{{api}}/order/stock"
+					},
+					"response": []
+				},
+				{
+					"name": "get stock wo auth.",
+					"_postman_id": "269d5f2e-5acd-4dd7-8ec4-40eff2b074e3",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{host}}{{api}}/asset/stock"
+					},
+					"response": []
+				}
+			],
+			"_postman_id": "c0f1cc1f-4592-442b-8b05-8d61dfa83144"
+		},
+		{
+			"name": "Asset",
+			"item": [
+				{
+					"name": "assetPOST",
+					"item": [
+						{
+							"name": "validAssetCryptoAdd",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f9ea6077-e94c-4cfa-9e1f-b19475b5447d",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"Content-Type is present\", function () {\r",
+											"    pm.response.to.have.header(\"Content-Type\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is json\", function () {\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's price is a number\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.price).to.be.a(\"number\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's symbol is a string\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.symbol).to.be.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's type is a string\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.type).to.be.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's id does not exist\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.id).to.be.undefined;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's symbol's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.symbol).to.eql(\"AAA\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's price's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.price).to.eql(0.0);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's type's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.type).to.eql(\"CRYPTO\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"_postman_id": "9f6d9b51-e8cd-4817-aa36-f0f6216626e7",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"symbol\": \"AAA\",\r\n    \"price\": 0.0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_api_url}}/asset/crypto"
+							},
+							"response": []
+						},
+						{
+							"name": "validAssetStockAdd",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f9ea6077-e94c-4cfa-9e1f-b19475b5447d",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"Content-Type is present\", function () {\r",
+											"    pm.response.to.have.header(\"Content-Type\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is json\", function () {\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's price is a number\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.price).to.be.a(\"number\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response json's symbol is a string\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.symbol).to.be.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's type is a string\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.type).to.be.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's id does not exist\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.id).to.be.undefined;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's symbol's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.symbol).to.eql(\"BBB\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's price's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.price).to.eql(0.0);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's type's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.type).to.eql(\"STOCK\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"_postman_id": "ad816913-0371-45b8-a0f9-2f26a4cf5da4",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"symbol\": \"BBB\",\r\n    \"price\": 0.0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_api_url}}/asset/stock"
+							},
+							"response": []
+						}
+					],
+					"_postman_id": "2d4d1c13-c3ec-46fd-b038-f48ca80d9106",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "GET_returnSingleItem",
+					"item": [
+						{
+							"name": "validGetOneCrypto",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "67de6ad6-ce41-47f6-ac25-ceac0424644a",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's symbol's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.symbol).to.eql(\"AAA\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's price's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.price).to.eql(0.0);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's type's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.type).to.eql(\"CRYPTO\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"_postman_id": "d6493f83-e3d0-4441-9224-83a5e00a9a5e",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_api_url}}/asset/crypto/aaa"
+							},
+							"response": []
+						},
+						{
+							"name": "validGetOneStock",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "67de6ad6-ce41-47f6-ac25-ceac0424644a",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's symbol's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.symbol).to.eql(\"BBB\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's price's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.price).to.eql(0.0);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's type's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.type).to.eql(\"STOCK\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"_postman_id": "693ac079-7ea0-4a6e-9d4b-0598ce073620",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_api_url}}/asset/stock/BBB"
+							},
+							"response": []
+						}
+					],
+					"_postman_id": "dd8fec9e-2846-42ff-a990-e782959f0efc",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "GET_returnMultipleItems",
+					"item": [
+						{
+							"name": "Get All Assets",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "4e4d7565-3017-497c-807e-76eb23f188e3",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"Content-Type is present\", function () {\r",
+											"    pm.response.to.have.header(\"Content-Type\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is json\", function () {\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json is an array\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's price is a number\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].price).to.be.a(\"number\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response json's symbol is a string\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].symbol).to.be.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's type is a string\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].type).to.be.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's id does not exist\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].id).to.be.undefined;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response's arr lenth is 2\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.length).to.equal(2);\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"_postman_id": "cab2b580-1165-410a-bdb7-c21dcf48be01",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_api_url}}/asset"
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Stock",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "40b4b928-815f-4c2d-8d99-65be962ca023",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"Content-Type is present\", function () {\r",
+											"    pm.response.to.have.header(\"Content-Type\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is json\", function () {\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json is an array\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's price is a number\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].price).to.be.a(\"number\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response json's symbol is a string\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].symbol).to.be.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's type is a string\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].type).to.be.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's id does not exist\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].id).to.be.undefined;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's symbol's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].symbol).to.eql(\"BBB\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's price's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].price).to.eql(0.0);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's type's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].type).to.eql(\"STOCK\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"_postman_id": "faa6184d-910e-4f50-92a9-9aa0809faed2",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_api_url}}/asset/stock"
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Crypto",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c8bcbce4-17c8-42fc-9b0e-bf848d9fc337",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"Content-Type is present\", function () {\r",
+											"    pm.response.to.have.header(\"Content-Type\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is json\", function () {\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json is an array\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's price is a number\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].price).to.be.a(\"number\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response json's symbol is a string\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].symbol).to.be.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's type is a string\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].type).to.be.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's id does not exist\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].id).to.be.undefined;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's symbol's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].symbol).to.eql(\"AAA\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's price's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].price).to.eql(0.0);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response json's type's value is default\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData[0].type).to.eql(\"CRYPTO\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"_postman_id": "a7b9f4ec-885d-4f1d-b6d4-6b00c7cf3ab2",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_api_url}}/asset/crypto"
+							},
+							"response": []
+						}
+					],
+					"_postman_id": "3123b681-a60f-4fc3-9d2f-5faf440da923",
+					"_postman_isSubFolder": true
+				}
+			],
+			"_postman_id": "f13f230f-9a19-49e3-acd2-6abfb3c48e7a",
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "36bdf665-09ce-4313-b4bd-138d8e466473",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "9e64744f-e6c9-4514-8def-b37c7b141fb8",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "350bf979-9293-4bae-8ab6-128cd4ea3461",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "50ed0cd8-cc41-4bd3-863e-87945901bf1b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "eccc103e-71a3-48ea-be69-79f788495449",
+			"key": "newFullName",
+			"value": "User3456",
+			"type": "string"
+		},
+		{
+			"id": "319ac9dc-c628-4e7e-9493-65f9793ece31",
+			"key": "host",
+			"value": "localhost:8080",
+			"type": "string"
+		},
+		{
+			"id": "a1097b36-d3e9-4031-9c07-614de3089bdc",
+			"key": "api",
+			"value": "/api/v1",
+			"type": "string"
+		},
+		{
+			"id": "93b18700-cfd5-495c-8fe9-e829e568ffc4",
+			"key": "user",
+			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
+			"type": "string"
+		},
+		{
+			"id": "1752c4b7-b17d-4cf9-9ea8-780d2e24fb1b",
+			"key": "name",
+			"value": "User3456",
+			"type": "string"
+		},
+		{
+			"id": "d523d1b8-54a6-41ab-a2b3-e09f5c7af11d",
+			"key": "base_api_url",
+			"value": "localhost:8080/api/v1",
+			"type": "string"
+		}
+	]
+}
