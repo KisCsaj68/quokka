@@ -18,9 +18,3 @@ axios.defaults.headers["Access-Control-Allow-Origin"] = "*";
 export const api = axios.create({
     baseURL: `${BASE_URL}`
 });
-
-export const assetApi = axios.create({
-    baseURL: `${BASE_URL}`
-});
-
-

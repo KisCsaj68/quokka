@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {assetApi, api} from "./apiRequest";
+import {api} from "./apiRequest";
 
 
 const DataView = ({name, assetType}) => {
@@ -14,7 +14,7 @@ const DataView = ({name, assetType}) => {
         });
         return () => controller.abort();
 
-    }, [])
+    }, [qty])
     if (stockOpen || stockClose !== undefined) {
         return (
             <tr>
@@ -43,7 +43,7 @@ const DataView = ({name, assetType}) => {
 const fetchData = async (signal, name, type) => {
     try {
         const url = "/api/v1/asset/" + type + "/" + name;
-        const response = await assetApi(url, {signal});
+        const response = await api(url, {signal});
         console.log(response)
         return response.data
 
@@ -67,21 +67,5 @@ const handleBuy = async (name, type, qty, setQty, assetType) => {
     }
 }
 
-
-// const StockView = ({name}) => {
-//     const [stockDetails, setStockDetails] = useState(undefined);
-//
-//     useEffect(() => {
-//         getStockDetails(name)
-//             .then(stockDetails => setStockDetails(stockDetails));
-//
-//     }, [name])
-//
-//     if (stockDetails !== undefined) {
-//         return <tr><td>{stockDetails.name}</td><td>{stockDetails.value}</td></tr>;
-//     } else {
-//         return <span>Loading...</span>
-//     }
-// }
 
 export default DataView;

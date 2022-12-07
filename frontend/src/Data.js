@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {assetApi} from "./apiRequest";
+import {api} from "./apiRequest";
 import DataView from "./DataView";
 import "./Table.css"
 
@@ -35,7 +35,7 @@ const Data = ({type}) => {
 const fetchSymbols = async (signal, type) => {
     try {
         const url = "/api/v1/asset/" + type;
-        const response = await assetApi(url, {signal});
+        const response = await api(url, {signal});
         console.log(response);
         if (response.status < 300) {
             return response.data
