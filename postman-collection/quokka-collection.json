@@ -375,13 +375,16 @@
 					},
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJUZXN0VXNlZWVlZXIyMjIyIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfVFJBREVSIn1dLCJpYXQiOjE2NzA0MjMzOTcsImV4cCI6MTY3MTU4MDgwMH0.8a_4p8gLCixHPhBWi1PfqXOTqbQ3JXOD6OYzeVizx09C0U8ew-jUhdqyzjm1ryhSOLJKQMUp-Mtv0TbttwHnbA"
-							}
+							"type": "noauth"
 						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"symbol\": \"AAPL\",\n    \"type\": \"MARKET\",\n    \"qty\": 3\n}",
@@ -980,37 +983,37 @@
 	],
 	"variable": [
 		{
-			"id": "1d99ea60-acce-44f4-9705-b10386e7c7c7",
+			"id": "efdfde6b-fc6c-498e-b72c-f15bbd3c9d56",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "019ab226-ab5b-45b9-be95-c27c2a54e670",
+			"id": "0975635a-586f-4c74-afd5-616dc6492a14",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "52c88fb0-4e4a-4e20-807a-a8ba883445f5",
+			"id": "012389c2-a212-491a-aaad-5a09e1a866bd",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "5649fb4c-c9b7-4f46-969d-0d1edfe907d4",
+			"id": "ab90d83a-2707-456f-8315-4ccb2929f021",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "4aa22212-f344-4df8-ba68-4e8f2a56f589",
+			"id": "16290e66-f1af-4941-8933-ab39cc893afe",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "511924f5-a96d-417f-8c3c-8f0dd25fd4a1",
+			"id": "5b17d3c9-c241-4f52-9a0b-ab4dd1781830",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
