@@ -23,6 +23,8 @@ public class Position implements Serializable {
     private String symbol;
     private BigDecimal priceAtBuy;
     private BigDecimal priceAtSell;
+    private UUID entryOrderId;
+    private UUID exitOrderId;
 
     private Date buyAt;
     private Date sellAt;

@@ -34,6 +34,9 @@ public class Orders implements Serializable {
     @Enumerated(EnumType.STRING)
     private AssetType assetType;
 
+    @Enumerated(EnumType.STRING)
+    private OrderSide orderSide;
+
     @JsonProperty("limit")
     private BigDecimal orderLimit;
 
@@ -48,12 +51,13 @@ public class Orders implements Serializable {
         this.id = id;
     }
 
-    public Orders(int quantity, String symbol, UUID accountId, OrderStatus status, OrderType type, BigDecimal orderLimit, BigDecimal price, AssetType assetType) {
+    public Orders(int quantity, String symbol, UUID accountId, OrderStatus status, OrderType type, BigDecimal orderLimit, BigDecimal price, AssetType assetType, OrderSide side) {
         this.quantity = quantity;
         this.symbol = symbol;
         this.accountId = accountId;
         this.status = status;
         this.type = type;
+        this.orderSide = side;
         this.orderLimit = orderLimit;
         this.price = price;
         this.assetType = assetType;
