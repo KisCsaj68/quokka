@@ -54,7 +54,7 @@ It's mission critical state is handled fully in-memory, while every change of th
 
 ### Finance management
 - [x] Market order
-- [ ] Limit order
+- [x] Limit order
 - [x] Open Position
 - [ ] Sell position
 - [ ] Cash deposit - CSD
@@ -68,7 +68,7 @@ It's mission critical state is handled fully in-memory, while every change of th
 ### Persistance
 - [x] write-ahead log persistent in RabbitMQ
 - [x] persister component saves data into relational DB
-- [ ] reload pending orders from DB into in-memory on app start
+- [x] reload pending orders from DB into in-memory on app start
 - [ ] keep and serve pending orders from in-memory
 
 ### Fronend
