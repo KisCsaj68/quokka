@@ -79,11 +79,11 @@ public class AccountService  implements UserDetailsService {
         Account acc = account.get();
         for (String item : fields.keySet()) {
             switch (item) {
-                case "emailAddress":
-                    acc.setEmailAddress(fields.get("emailAddress"));
+                case "email_address":
+                    acc.setEmailAddress(fields.get("email_address"));
                     break;
-                case "fullName":
-                    acc.setFullName(fields.get("fullName"));
+                case "full_name":
+                    acc.setFullName(fields.get("full_name"));
                     break;
                 case "password":
                     String password = Hashing.sha256().hashString(fields.get("password"), StandardCharsets.UTF_8).toString();

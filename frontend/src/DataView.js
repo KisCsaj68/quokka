@@ -55,12 +55,12 @@ const fetchData = async (signal, name, type, privateApi) => {
 
 const handleBuy = async (name, type, qty, setQty, assetType, privateApi) => {
     // e.preventDefault();
-    const order = {symbol: name, type: type, qty: qty}
+    const order = {symbol: name, type: type, qty: qty, side: "BUY"}
     const url = "/api/v1/order/" + assetType;
     try {
         const response = await privateApi.post(url, order);
         if (response.status > 300) {
-            setQty(undefined);
+            setQty("");
         }
     } catch (err) {
         console.log(err)

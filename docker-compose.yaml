@@ -4,10 +4,12 @@ services:
   rabbitmq:
     container_name: rabbitmq
     ports:
-      - "15672:16672"
+      - "15672:15672"
       - "5672:5672"
     image: rabbitmq:3-management
     hostname: quokka-rabbit
+    expose:
+      - "15672"
   postgres:
     container_name: postgres
     ports:
