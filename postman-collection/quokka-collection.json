@@ -67,6 +67,44 @@
 					"response": []
 				},
 				{
+					"name": "get stock wo auth.",
+					"id": "269d5f2e-5acd-4dd7-8ec4-40eff2b074e3",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{host}}{{api}}/asset/stock"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"id": "70b7d2e4-42ec-48f7-b0d8-ec6e19176c9a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_name\" : \"TestUseeeeer2222\",\n    \"password\" : \"asd\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}{{api}}/login"
+					},
+					"response": []
+				},
+				{
 					"name": "Get all user",
 					"event": [
 						{
@@ -134,13 +172,16 @@
 					},
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJUZXN0VXNlZWVlZXIyMjIyIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfVFJBREVSIn1dLCJpYXQiOjE2NjkzNjgyMzEsImV4cCI6MTY3MDU0NDAwMH0.8gDIj_kas_CyM5pnE9CS2nw4vHzoIEAssMIJPsN1a64yffNu9FzIfFMdySoL1Lc7AuFoWEfofMTK5ildbhgC7w"
-							}
+							"type": "noauth"
 						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"url": "{{host}}{{api}}/user/{{userId}}"
 					},
 					"response": []
@@ -285,31 +326,6 @@
 					"response": []
 				},
 				{
-					"name": "login",
-					"id": "70b7d2e4-42ec-48f7-b0d8-ec6e19176c9a",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"user_name\" : \"TestUseeeeer2222\",\n    \"password\" : \"asd\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": "{{host}}{{api}}/login"
-					},
-					"response": []
-				},
-				{
 					"name": "add makert order",
 					"id": "08e3a811-e667-4281-9317-d01c1e3a5591",
 					"protocolProfileBehavior": {
@@ -362,19 +378,6 @@
 							}
 						},
 						"url": "{{host}}{{api}}/order/stock"
-					},
-					"response": []
-				},
-				{
-					"name": "get stock wo auth.",
-					"id": "269d5f2e-5acd-4dd7-8ec4-40eff2b074e3",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": "{{host}}{{api}}/asset/stock"
 					},
 					"response": []
 				}
@@ -932,37 +935,37 @@
 	],
 	"variable": [
 		{
-			"id": "1dd3ddc6-e6cc-443a-a51f-fe49dc504d3a",
+			"id": "2534bd3e-3cdd-4c12-b398-6db3095bcef2",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "9c2f652e-75c3-4022-8b4c-6a0dc071d244",
+			"id": "1b3bdac7-8af4-400c-b548-adc60ac7d731",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "1213e9c2-eb74-4b52-909f-309d4d7e6cbe",
+			"id": "e5611121-3fb8-4ec9-9a5c-9dd31ae211fa",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "f334967e-1913-45e7-91a8-f3a58a1f2133",
+			"id": "432fbdb5-d392-45db-ac40-3bf9390a589c",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "dd1e5889-6d31-48a8-bc34-8807269f3188",
+			"id": "8d31b06b-8902-433b-9cfb-5e886fa00802",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "26360a0e-a878-428a-8941-d47ba98583d1",
+			"id": "bc300bd3-4b32-4574-9969-40dd1c844c14",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
