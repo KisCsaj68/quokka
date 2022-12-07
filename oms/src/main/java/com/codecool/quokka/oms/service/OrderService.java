@@ -49,7 +49,7 @@ public class OrderService {
         // Send open order to persister via RMQ
         rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
         switch (order.getType()) {
-            case LIMIT -> handleLimitOrder();
+            case LIMIT -> handleLimitOrder(order);
             case MARKET -> handleMarketOrder(order);
         }
 //        handleMarketOrder();
@@ -67,7 +67,9 @@ public class OrderService {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    private void handleLimitOrder() {
+    private void handleLimitOrder(Orders order) {
+        rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.LIMIT_ORDER_ROUTING_KEY, order);
+        storeLimitOrder(order);
     }
 
     private void handleMarketOrder(Orders order) {
@@ -77,15 +79,14 @@ public class OrderService {
         order.setPrice(asset.getOpen());
         order.setStatus(OrderStatus.FILLED);
         rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
-
         // Create position and persist db + in-memory
         Position position = new Position(order.getQuantity(), order.getAccountId(), order.getSymbol(), order.getPrice(), null, new Date());
         storePosition(position, order);
     }
 
-   /**
-    * Push the Position to RabbitMQ first(for consistency) and stores it in-memory.
-    */
+    /**
+     * Push the Position to RabbitMQ first(for consistency) and stores it in-memory.
+     */
     private void storePosition(Position position, Orders order) {
         rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.POSITION_ROUTING_KEY, position);
         if (!inMemoryPositions.containsKey(order.getAccountId())) {
@@ -95,5 +96,9 @@ public class OrderService {
             inMemoryPositions.get(order.getAccountId()).put(order.getSymbol(), Maps.newConcurrentMap());
         }
         inMemoryPositions.get(order.getAccountId()).get(order.getSymbol()).put(position.getId(), position);
+    }
+
+    private void storeLimitOrder(Orders order) {
+        inMemoryOrders.put(order.getId(), order);
     }
 }
