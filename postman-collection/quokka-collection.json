@@ -252,13 +252,16 @@
 					},
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJUZXN0VXNlZWVlZXIyMjIyIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfVFJBREVSIn1dLCJpYXQiOjE2NjkzNjcwNzEsImV4cCI6MTY3MDU0NDAwMH0.CmCJtEepBnpLkWN6MVyYXeci8fxnc4gwVJSM22ou-x8ipjbdOvq9lJlIlCDdS81h06gPUrpXYA9pNiToG36EvQ"
-							}
+							"type": "noauth"
 						},
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "\n{\n    \n    \"fullName\" : \"UserChanged\"\n\n}",
@@ -971,37 +974,37 @@
 	],
 	"variable": [
 		{
-			"id": "abebea62-9ce2-47b5-8479-52d6118a28c1",
+			"id": "57e60352-e0fe-484d-bcb6-06fb627832d6",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "63c25028-d643-434d-91de-93d9da5a0acf",
+			"id": "0f780a81-763f-4394-b808-bffe190b365e",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "75fbf881-c4f6-4799-9097-3ce5129fb7a4",
+			"id": "300f11ac-e026-408d-9ad0-194bc8ef76b7",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "796c08a7-f334-4a5b-841a-c52489d31bf9",
+			"id": "265b747b-81e1-4097-87d3-d354e27c69be",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "a71303dd-682e-4dbb-b033-13209081fcfa",
+			"id": "99b5a0ba-04fe-4445-8b43-7932f09e07bb",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "9cbdfc6d-e177-4c46-ac53-5b7436be5c81",
+			"id": "c3dc8f94-d8a3-43f0-83c6-962b0248a3f8",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
