@@ -1,13 +1,15 @@
 import {useEffect, useState} from "react";
-import {api} from "./apiRequest";
+// import {api} from "./apiRequest";
+import useAxiosPrivate from "./hooks/useAxiosPrivate";
 import DataView from "./DataView";
 import "./Table.css"
 
 const Data = ({type}) => {
     const [stocks, setStocks] = useState([]);
+    const privateApi = useAxiosPrivate();
     useEffect(() => {
         const controller = new AbortController();
-        fetchSymbols(controller.signal, type).then(r => setStocks(r))
+        fetchSymbols(controller.signal, type, privateApi).then(r => setStocks(r))
         return () => controller.abort();
     }, [])
 
@@ -32,10 +34,10 @@ const Data = ({type}) => {
     )
 }
 
-const fetchSymbols = async (signal, type) => {
+const fetchSymbols = async (signal, type, privateApi) => {
     try {
         const url = "/api/v1/asset/" + type;
-        const response = await api(url, {signal});
+        const response = await privateApi.get(url, {signal});
         console.log(response);
         if (response.status < 300) {
             return response.data
