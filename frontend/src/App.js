@@ -73,7 +73,7 @@ function App() {
                                setUserName={setUserName}
                                email={email_address}
                                setEmail={setEmail_address}
-                               passWrd={[passWrd]}
+                               passWrd={passWrd}
                                setPassWrd={setPassWrd}
                                error={error}
                            />}
@@ -81,7 +81,7 @@ function App() {
                     <Route path="/login" element={<LogIn
                         userName={userName}
                         setUserName={setUserName}
-                        passWrd={[passWrd]}
+                        passWrd={passWrd}
                         setPassWrd={setPassWrd}
                         error={error}
                         setError={setError}
