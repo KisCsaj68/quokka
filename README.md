@@ -70,7 +70,8 @@ It's mission critical state is handled fully in-memory, while every change of th
 
 ### Fronend
 - [x] Minimal frontend
-- [ ] Login / Logout
+- [x] Login
+- [ ] Logout
 - [ ] Responsive web design Tailwind
 
 
