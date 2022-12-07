@@ -7,7 +7,7 @@ import Data from "./Data";
 import LogIn from "./LogIn";
 import Crypto from "./Crypto";
 import {useState} from "react";
-import {api} from "./apiRequest";
+import api from "./apiRequest";
 import Stock from "./Stock";
 
 function App() {
