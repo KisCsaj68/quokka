@@ -1,9 +1,25 @@
 import Button from "./Button";
-import {Link} from "react-router-dom";
+import {api} from "./apiRequest";
+import {useContext} from "react";
+import AuthContext from "./context/AuthProvider";
 
 const LogIn = ({userName, passWrd, setPassWrd, setUserName,error}) => {
+    const { setToken } = useContext(AuthContext)
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        const data = {user_name: userName, password:passWrd};
+        try {
+            const response = await api.post('/api/v1/login', data);
+            setToken(response.headers['authorization']);
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     return (
-        <form >
+        <form onSubmit={handleLogin} method={"POST"}>
             <div className="logInContainer">
                 <h1>Log in</h1>
                 {error ? <p className={"inputError"}>You already registered. Please log into Your account!</p> : <p>Please fill in this form to log into your Account.</p>}
