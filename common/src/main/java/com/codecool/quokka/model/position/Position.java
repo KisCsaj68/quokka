@@ -29,7 +29,7 @@ public class Position implements Serializable {
     private Date buyAt;
     private Date sellAt;
 
-    public Position(int quantity, UUID userId, String symbol, BigDecimal priceAtBuy, BigDecimal priceAtSell, Date today) {
+    public Position(int quantity, UUID userId, String symbol, BigDecimal priceAtBuy, BigDecimal priceAtSell, Date today, UUID entryOrderId, UUID exitOrderId) {
         this.quantity = quantity;
         this.userId = userId;
         this.symbol = symbol;
@@ -37,6 +37,12 @@ public class Position implements Serializable {
         this.priceAtSell = priceAtSell;
         this.buyAt = today;
         this.id = UUID.randomUUID();
+        this.entryOrderId = entryOrderId;
+        this.exitOrderId = exitOrderId;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public int getQuantity() {
@@ -47,7 +53,7 @@ public class Position implements Serializable {
         return userId;
     }
 
-    public String getAssetId() {
+    public String getSymbol() {
         return symbol;
     }
 
@@ -59,11 +65,35 @@ public class Position implements Serializable {
         return priceAtSell;
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getEntryOrderId() {
+        return entryOrderId;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public UUID getExitOrderId() {
+        return exitOrderId;
+    }
+
+    public Date getBuyAt() {
+        return buyAt;
+    }
+
+    public Date getSellAt() {
+        return sellAt;
+    }
+
+    public void setPriceAtSell(BigDecimal priceAtSell) {
+        this.priceAtSell = priceAtSell;
+    }
+
+    public void setEntryOrderId(UUID entryOrderId) {
+        this.entryOrderId = entryOrderId;
+    }
+
+    public void setExitOrderId(UUID exitOrderId) {
+        this.exitOrderId = exitOrderId;
+    }
+
+    public void setSellAt(Date sellAt) {
+        this.sellAt = sellAt;
     }
 }
