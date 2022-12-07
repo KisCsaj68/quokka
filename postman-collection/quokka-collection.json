@@ -35,9 +35,7 @@
 									"    pm.expect(pm.response.text()).to.include(\"userName\");",
 									"});",
 									"",
-									"pm.test(\"Response time is less than 200ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(200);",
-									"});",
+									"",
 									"",
 									"var jsonData  = JSON.parse(responseBody);",
 									"postman.setGlobalVariable(\"userId\", jsonData.id);"
@@ -55,7 +53,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"full_name\": \"User Asd\",\n    \"email_address\": \"asd22eeee22@asd.com\",\n    \"user_name\" : \"TestUseeeeer2222\",\n    \"password\" : \"asd\"\n\n}",
+							"raw": "{\n    \"full_name\": \"User Asd\",\n    \"email_address\": \"asd22@asd.com\",\n    \"user_name\" : \"TestUser22\",\n    \"password\" : \"asd\"\n\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -983,37 +981,37 @@
 	],
 	"variable": [
 		{
-			"id": "668c53f9-44ce-43f7-a7fd-9913366c258e",
+			"id": "3a0528ac-001d-4415-95d0-245ccc07434c",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "6db51e8f-7e44-4a49-8a60-d67ab90b0704",
+			"id": "5d92165f-c085-4067-a7ce-3076f8d60e96",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "eee01372-78fe-4115-92fa-5b3f6beba13b",
+			"id": "ef3edc3e-9696-4bd4-8419-23f6250b3a0a",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "678985f8-215d-4f7a-b572-d20c71695325",
+			"id": "cde5025d-b61d-4e7a-be32-b92e43f8ac3d",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "db71f244-686f-4deb-a769-8e22c68bb439",
+			"id": "05538aa2-bcde-4f5a-a619-5e9a1024770f",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "b9eed46c-91ca-49c8-bf43-a2fa5e0c14a5",
+			"id": "f1df611f-3f6e-4c6c-ad85-7b0aac9381f3",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
