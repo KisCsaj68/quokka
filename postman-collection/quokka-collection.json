@@ -337,7 +337,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"symbol\": \"AAPL\",\n    \"type\": \"MARKET\",\n    \"qty\": 3\n}",
+							"raw": "{\n    \"symbol\": \"AAPL\",\n    \"type\": \"MARKET\",\n    \"side\": \"BUY\",\n    \"qty\": 3\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -981,37 +981,37 @@
 	],
 	"variable": [
 		{
-			"id": "aa3cac85-6029-4858-b0f9-bd8a2d573e9c",
+			"id": "378e6ae2-4d38-4bd3-8833-162fcd41001f",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "df7102f9-e3fd-44f4-a488-8791f1ce6cc9",
+			"id": "a33afd47-4150-4c80-912a-d0ac8bdffa91",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "2483087a-fdd3-4a94-a06e-cfa5b7fb7223",
+			"id": "a2041405-1917-4a64-aeb1-11d9f38dace7",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "e1ed569a-fdb2-4daa-8b97-f3f964766891",
+			"id": "1f969472-f41f-4221-8299-85ce085d0736",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "ae5316c7-3aac-487c-8529-8317a5a64790",
+			"id": "cf133c22-01cd-494e-a429-1939a3a1f151",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "5596bfef-d801-4215-9601-7785a7ba6a99",
+			"id": "8ec5a661-9309-4ba2-b4b8-841e65bb15aa",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
