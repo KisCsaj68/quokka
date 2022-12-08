@@ -440,8 +440,9 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "POST",
+						"header": [],
+						"url": "http://localhost:9000{{api}}/internal/open-orders"
 					},
 					"response": []
 				}
@@ -999,37 +1000,37 @@
 	],
 	"variable": [
 		{
-			"id": "83cf3cdd-bcb0-4bf6-a011-c79c179179da",
+			"id": "fa589ad7-9f7f-4bfc-a542-591d2eacb9cc",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "e668c620-1eaa-4e6a-b824-811d02438afa",
+			"id": "09dd78d6-b41a-468a-9457-fadacd3c2194",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "c1269b86-8c74-4884-a149-d6b698effcb9",
+			"id": "e4302c82-18e4-44fb-82f9-ddb3cf969d1c",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "f8434ef3-cc5e-4b6f-bdb9-64c2f41941ac",
+			"id": "16d5b647-b5a5-4bd9-a8e2-f29979a168f3",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "9660f04d-1f8c-433b-8b4d-e88e6ea69c66",
+			"id": "c6c2a1bf-2179-41fa-8646-277611ed78b6",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "f4c669b0-ac47-416c-b1f9-2a9ff9d21cd6",
+			"id": "32dd0172-153b-4d3e-a79d-8250830b943a",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
