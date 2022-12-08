@@ -2,6 +2,7 @@ from alpaca_trade_api import REST
 
 from src.data_handlers.collectors import LatestCryptoTicker
 from src.data_handlers.collectors import LatestStockTicker
+from src.data_handlers.rabbit_mq import Consumer
 from src.storages import DotEnvConfig
 from src.storages import PrimitiveJsonDB
 
@@ -17,10 +18,9 @@ class DataCollectors:
             api_version=conf["APCA_API_VERSION"],
             raw_data=True
         )
-        self.latest_stock_ticker: LatestStockTicker = \
-            LatestStockTicker(api, db)
-        self.latest_crypto_ticker: LatestCryptoTicker = \
-            LatestCryptoTicker(api, db)
+        self.latest_stock_ticker = LatestStockTicker(api, db)
+        self.latest_crypto_ticker = LatestCryptoTicker(api, db)
+        self.consumer: Consumer = Consumer(conf)  # TODO: this may have a better place somewhere else!
 
         if auto_start:
             self.start_threads()
@@ -28,3 +28,4 @@ class DataCollectors:
     def start_threads(self) -> None:
         self.latest_stock_ticker.start()
         self.latest_crypto_ticker.start()
+        self.consumer.start()  # TODO: this may have a better place somewhere else!
