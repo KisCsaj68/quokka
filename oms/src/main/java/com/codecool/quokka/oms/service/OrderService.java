@@ -57,7 +57,6 @@ public class OrderService {
         // get open orders from db
         List<Orders> orders = orderDal.findAllByStatus(OrderStatus.OPEN);
         orders.stream().forEach(o -> storeLimitOrder(o));
-
         // get positions from db
         List<Position> positions = positionDal.findAllByExitOrderIdIsNull();
         Set<UUID> orderIds = positions.stream().map(Position::getEntryOrderId).collect(Collectors.toSet());
@@ -68,7 +67,6 @@ public class OrderService {
 
     public ResponseEntity createOrder(Orders order) {
         order.setStatus(OrderStatus.OPEN);
-
         // Send open order to persister via RMQ
         rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
         switch (order.getType()) {
@@ -107,7 +105,6 @@ public class OrderService {
         UUID accountId = order.getAccountId();
         String symbol = order.getSymbol();
         UUID positionId = position.getId();
-
         if (!inMemoryPositions.containsKey(accountId)) {
             inMemoryPositions.put(accountId, Maps.newConcurrentMap());
         }
@@ -119,10 +116,17 @@ public class OrderService {
 
     private void storeLimitOrder(Orders order) {
         UUID accountId = order.getAccountId();
-        if(!inMemoryOrders.containsKey(accountId)) {
+        if (!inMemoryOrders.containsKey(accountId)) {
             inMemoryOrders.put(accountId, Maps.newConcurrentMap());
         }
         inMemoryOrders.get(accountId).put(order.getId(), order);
+    }
 
+    public void pushOrders() {
+        for (UUID accountId : inMemoryOrders.keySet()) {
+            for (Orders order : inMemoryOrders.get(accountId).values()) {
+                rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.LIMIT_ORDER_ROUTING_KEY, order);
+            }
+        }
     }
 }
