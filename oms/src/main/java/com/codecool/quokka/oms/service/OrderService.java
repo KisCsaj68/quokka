@@ -29,13 +29,14 @@ public class OrderService {
     private RabbitTemplate rabbitTemplate;
     private RestTemplate restTemplate;
 
-    private Map<UUID, Orders> inMemoryOrders;
+    // Store open order by userId -> {orderId: order}
+    private Map<UUID, Map<UUID, Orders>> inMemoryOrders;
 
     private OrderDal orderDal;
 
     private PositionDal positionDal;
 
-    // Store position by user -> {symbol: {positionId: position}}
+    // Store position by userId -> {symbol: {positionId: position}}
     private Map<UUID, Map<String, Map<UUID, Position>>> inMemoryPositions;
 
     @Value("${quokka.service.assetcache.address}${quokka.service.assetcache.endpoint}")
@@ -53,19 +54,21 @@ public class OrderService {
 
     @PostConstruct
     public void initializeInMemoryStores() {
+        // get open orders from db
         List<Orders> orders = orderDal.findAllByStatus(OrderStatus.OPEN);
         orders.stream().forEach(o -> storeLimitOrder(o));
+
+        // get positions from db
         List<Position> positions = positionDal.findAllByExitOrderIdIsNull();
         Set<UUID> orderIds = positions.stream().map(Position::getEntryOrderId).collect(Collectors.toSet());
         Map<UUID, Orders> ordersByPositions = orderDal.findAllByIdIn(orderIds).stream().collect(Collectors.toMap(o -> o.getId(), o -> o));
         positions.stream()
                 .forEach(p -> storeInMemoryPositions(p, ordersByPositions.get(p.getEntryOrderId())));
-        System.out.println(inMemoryPositions);
     }
 
     public ResponseEntity createOrder(Orders order) {
-        System.out.println(order);
         order.setStatus(OrderStatus.OPEN);
+
         // Send open order to persister via RMQ
         rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
         switch (order.getType()) {
@@ -101,16 +104,25 @@ public class OrderService {
     }
 
     private void storeInMemoryPositions(Position position, Orders order) {
-        if (!inMemoryPositions.containsKey(order.getAccountId())) {
-            inMemoryPositions.put(order.getAccountId(), Maps.newConcurrentMap());
+        UUID accountId = order.getAccountId();
+        String symbol = order.getSymbol();
+        UUID positionId = position.getId();
+
+        if (!inMemoryPositions.containsKey(accountId)) {
+            inMemoryPositions.put(accountId, Maps.newConcurrentMap());
         }
-        if (!inMemoryPositions.get(order.getAccountId()).containsKey(order.getSymbol())) {
-            inMemoryPositions.get(order.getAccountId()).put(order.getSymbol(), Maps.newConcurrentMap());
+        if (!inMemoryPositions.get(accountId).containsKey(symbol)) {
+            inMemoryPositions.get(accountId).put(symbol, Maps.newConcurrentMap());
         }
-        inMemoryPositions.get(order.getAccountId()).get(order.getSymbol()).put(position.getId(), position);
+        inMemoryPositions.get(accountId).get(symbol).put(positionId, position);
     }
 
     private void storeLimitOrder(Orders order) {
-        inMemoryOrders.put(order.getId(), order);
+        UUID accountId = order.getAccountId();
+        if(!inMemoryOrders.containsKey(accountId)) {
+            inMemoryOrders.put(accountId, Maps.newConcurrentMap());
+        }
+        inMemoryOrders.get(accountId).put(order.getId(), order);
+
     }
 }
