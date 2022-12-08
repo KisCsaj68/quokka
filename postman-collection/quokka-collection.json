@@ -434,7 +434,7 @@
 			"name": "OMS",
 			"item": [
 				{
-					"name": "New Request",
+					"name": "push open orders to RabbitMQ",
 					"id": "28097303-f7de-409c-9567-58060a3cca73",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -1000,37 +1000,37 @@
 	],
 	"variable": [
 		{
-			"id": "fa589ad7-9f7f-4bfc-a542-591d2eacb9cc",
+			"id": "bc9ffd22-8c4a-4234-a5b8-8ea0ba03e914",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "09dd78d6-b41a-468a-9457-fadacd3c2194",
+			"id": "856397a4-8876-4887-b77b-204fa9594fa7",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "e4302c82-18e4-44fb-82f9-ddb3cf969d1c",
+			"id": "175ca7b5-c39f-4b9f-bd0e-b587ba58079e",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "16d5b647-b5a5-4bd9-a8e2-f29979a168f3",
+			"id": "cebd0599-ff15-46f2-b4eb-62164de13b95",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "c6c2a1bf-2179-41fa-8646-277611ed78b6",
+			"id": "ca59f577-a504-4bdb-b742-7b455887a1ca",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "32dd0172-153b-4d3e-a79d-8250830b943a",
+			"id": "52707679-499f-4d62-bd49-aaf0e2ba5f05",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
