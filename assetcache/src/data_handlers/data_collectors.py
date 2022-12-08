@@ -1,3 +1,5 @@
+import json
+
 from alpaca_trade_api import REST
 
 from src.data_handlers.collectors import LatestCryptoTicker
@@ -20,7 +22,7 @@ class DataCollectors:
         )
         self.latest_stock_ticker = LatestStockTicker(api, db)
         self.latest_crypto_ticker = LatestCryptoTicker(api, db)
-        self.consumer: Consumer = Consumer(conf)  # TODO: this may have a better place somewhere else!
+        self.consumer: Consumer = Consumer(conf, 'limit_order_queue', self.callback)  # TODO: this may have a better place somewhere else!
 
         if auto_start:
             self.start_threads()
@@ -29,3 +31,7 @@ class DataCollectors:
         self.latest_stock_ticker.start()
         self.latest_crypto_ticker.start()
         self.consumer.start()  # TODO: this may have a better place somewhere else!
+
+    def callback(self, ch, method, properties, body) -> None:
+        parsed = json.loads(body)
+        print(parsed, flush=True)
