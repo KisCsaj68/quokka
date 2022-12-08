@@ -22,7 +22,6 @@ class AssetCacheAPI:
 
         self.add_routes()
 
-
     @property
     def app(self) -> falcon.App:
         return self._app
@@ -49,4 +48,3 @@ class AssetCacheAPI:
                             self.latest_crypto, suffix="trades")
         self._app.add_route("/api/v1/crypto/{symbol}/quotes",
                             self.latest_crypto, suffix="quotes")
-
