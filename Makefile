@@ -44,3 +44,13 @@ frontend-build:
 	pushd frontend  && \
 	docker buildx build -t quokka/frontend:$(docker_tag) .  && \
 	popd
+
+.PHONY: assetcache-build
+assetcache-build:
+	pushd assetcache  && \
+	docker buildx build -t quokka/assetcache:$(docker_tag) .  && \
+	popd
+
+.PHONY: last-container-logs
+last-container-logs:
+	docker logs -f $$(docker container ls -n 1 -q)
