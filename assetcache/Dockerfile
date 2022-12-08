@@ -1,16 +1,14 @@
 FROM python:3.10.7-slim-buster as build
 
-
-
-WORKDIR /usr/assetcache
-#RUN python -m venv /usr/assetcache/venv
-#ENV PATH="/usr/assetcache/venv/bin:$PATH"
 COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+FROM build AS final
+WORKDIR /usr/assetcache
 COPY wsgi.py .
 COPY src/ src/
 COPY .env .
 COPY PrimitiveJsonDB.json .
-RUN pip install -r requirements.txt
 EXPOSE 8000
 ENTRYPOINT ["gunicorn"]
 CMD ["-b", "0.0.0.0:8000", "wsgi:application"]
