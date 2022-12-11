@@ -48,7 +48,6 @@ public class AssetController {
                                            @PathVariable("assetSymbol") String pathAssetSymbol){
         String newUrl = url + pathAssetType + "/" + pathAssetSymbol;
         Map<String, Object> response = restTemplate.getForObject(newUrl, Map.class);
-
         return new HashMap<>(response);
     }
 

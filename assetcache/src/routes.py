@@ -5,9 +5,7 @@ from typing import Tuple, Dict, Union, Callable
 from falcon import Request
 from falcon import Response
 
-
-from src.data_handlers.collectors.tickers import LatestStockTicker, \
-    LatestCryptoTicker
+from src.cache.streaming_symbol_cache import SymbolCache
 from src.storages.primitive_json_db import PrimitiveJsonDB
 
 
@@ -68,30 +66,20 @@ class LatestAssetRoute:
     DEFAULT_CONTENT_TYPE: str = "application/json"
 
     def __init__(self,
-                 ticker: Union[LatestStockTicker, LatestCryptoTicker]) -> None:
-        self._ticker: Union[LatestStockTicker, LatestCryptoTicker] = ticker
+                 cache: SymbolCache) -> None:
+        self._cache: SymbolCache = cache
 
     def on_get(self, req: Request, resp: Response, symbol: str) -> None:
-        acquire_latest: Callable = self._ticker.get_latest_asset_bar
-        self.make_response(req, resp, symbol, acquire_latest)
-
-    def on_get_bars(self, req: Request, resp: Response, symbol: str) -> None:
-        self.on_get(req, resp, symbol)
+        self.make_response(req, resp, symbol)
 
     def on_get_trades(self, req: Request, resp: Response, symbol: str) -> None:
-        acquire_latest: Callable = self._ticker.get_latest_asset_trade
-        self.make_response(req, resp, symbol, acquire_latest)
+        self.make_response(req, resp, symbol)
 
-    def on_get_quotes(self, req: Request, resp: Response, symbol: str) -> None:
-        acquire_latest: Callable = self._ticker.get_latest_asset_quote
-        self.make_response(req, resp, symbol, acquire_latest)
-
-    def make_response(self, req: Request, resp: Response, symbol: str,
-                      acquire_latest: Callable) -> None:
+    def make_response(self, req: Request, resp: Response, symbol: str) -> None:
         if not self.is_valid(symbol):
             return
         symbol: str = symbol.upper()
-        latest: Dict = acquire_latest(symbol)
+        latest: Dict = {symbol: self._cache[symbol]}
         resp.data, resp.content_length = parse_dict_to_json_bytes(latest)
         resp.content_type = self.DEFAULT_CONTENT_TYPE
 
@@ -104,5 +92,3 @@ class LatestAssetRoute:
         if not symbol.isascii():
             return False
         return True
-
-   

@@ -1,11 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any
 
-from src.data_handlers.collectors import ParseRawStreamToReadableDict, ParseLatestV2ToReadableDict
 from src.storages import DotEnvConfig
 from src.rw_lock import ReadWriteLock
 from alpaca_trade_api import REST
 from alpaca_trade_api.entity_v2 import trade_mapping_v2
+
+from src.utils import ParseRawStreamToReadableDict, ParseLatestV2ToReadableDict
 
 
 class SymbolCache(ABC):
@@ -19,7 +20,7 @@ class SymbolCache(ABC):
                                base_url=conf['APCA_API_BASE_URL'],
                                api_version=conf['APCA_API_VERSION'],
                                raw_data=True)
-        self.set_initial_prices()
+        self._set_initial_prices()
 
     async def on_trade(self, trade):
         trade = self.rename_keys(trade)
@@ -33,6 +34,12 @@ class SymbolCache(ABC):
 
     @ParseRawStreamToReadableDict(trade_mapping_v2)
     def rename_keys(self, raw_trade: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        This method changes the format of the incoming JSON data
+        with the decorator.
+        :param raw_trade:
+        :return: raw_trade
+        """
         return raw_trade
 
     def __getitem__(self, item):
@@ -42,9 +49,13 @@ class SymbolCache(ABC):
         finally:
             self._rw_lock.release_read()
 
-    def set_initial_prices(self) -> None:
+    def _set_initial_prices(self) -> None:
+        """
+        Sets up latest known prices to the cache on creation.
+        :return: None
+        """
         symbols = self._symbols_prices.keys()
-        latest_prices = self.get_latest_price(symbols)
+        latest_prices = self._get_latest_price(symbols)
         self._rw_lock.acquire_write()
         try:
             for k, v in latest_prices.items():
@@ -53,14 +64,20 @@ class SymbolCache(ABC):
             self._rw_lock.release_write()
 
     @abstractmethod
-    def get_latest_price(self, symbols: List[str]) -> Dict[str, Any]:
+    def _get_latest_price(self, symbols: List[str]) -> Dict[str, Any]:
+        """
+        An abstract method
+        Concrete implementors get the latest known prices from REST API.
+        :param symbols:
+        :return:
+        """
         raise NotImplementedError()
 
 
 class StockCache(SymbolCache):
 
     @ParseLatestV2ToReadableDict(trade_mapping_v2)
-    def get_latest_price(self, symbols: List[str]) -> Dict[str, Any]:
+    def _get_latest_price(self, symbols: List[str]) -> Dict[str, Any]:
         return self._trade_api.get_latest_trades(symbols, 'iex')
 
     def __init__(self, symbols: List[str], conf: DotEnvConfig):
@@ -70,7 +87,7 @@ class StockCache(SymbolCache):
 class CryptoCache(SymbolCache):
 
     @ParseLatestV2ToReadableDict(trade_mapping_v2)
-    def get_latest_price(self, symbols: List[str]) -> Dict[str, Any]:
+    def _get_latest_price(self, symbols: List[str]) -> Dict[str, Any]:
         return self._trade_api.get_latest_crypto_trades(symbols, 'CBSE')
 
     def __init__(self, symbols: List[str], conf: DotEnvConfig):

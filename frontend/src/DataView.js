@@ -3,25 +3,22 @@ import useAxiosPrivate from "./hooks/useAxiosPrivate";
 
 
 const DataView = ({name, assetType}) => {
-    const [stockOpen, setStockOpen] = useState(undefined);
-    const [stockClose, setStockClose] = useState(undefined);
+    const [stockPrice, setStockPrice] = useState(undefined);
     const [qty, setQty] = useState(undefined);
     const privateApi = useAxiosPrivate();
     useEffect(() => {
         const controller = new AbortController();
         fetchData(controller.signal, name, assetType, privateApi).then(r => {
-            setStockOpen(r.open)
-            setStockClose(r.close)
+            setStockPrice(r[name])
         });
         return () => controller.abort();
 
     }, [qty])
-    if (stockOpen || stockClose !== undefined) {
+    if (stockPrice !== undefined) {
         return (
             <tr>
                 <td>{name}</td>
-                <td>{stockOpen}</td>
-                <td>{stockOpen < stockClose ? "⬆" : "⬇"}</td>
+                <td>{stockPrice}</td>
                 <td><input type="number" name="quantity" min="1" onChange={(e) => setQty(e.target.value)}/></td>
                 <td>
                     <button onClick={async () => {

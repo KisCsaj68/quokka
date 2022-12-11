@@ -9,7 +9,10 @@ const Data = ({type}) => {
     const privateApi = useAxiosPrivate();
     useEffect(() => {
         const controller = new AbortController();
-        fetchSymbols(controller.signal, type, privateApi).then(r => setStocks(r))
+        fetchSymbols(controller.signal, type, privateApi).then(r => {
+            setStocks(r);
+            console.log(r)
+        })
         return () => controller.abort();
     }, [])
 
@@ -20,14 +23,13 @@ const Data = ({type}) => {
                 <tr>
                     <th><h1>Name</h1></th>
                     <th><h1>Price</h1></th>
-                    <th><h1>Trend</h1></th>
                     <th><h1>Quantity</h1></th>
                     <th><h1></h1></th>
                 </tr>
                 </thead>
                 <tbody>
-                    {stocks.map((name) =>
-                        <DataView key={name} name={name} assetType={type}/>)}
+                {stocks.map((name) =>
+                    <DataView key={name} name={name} assetType={type}/>)}
                 </tbody>
             </table>
         </div>
@@ -38,10 +40,8 @@ const fetchSymbols = async (signal, type, privateApi) => {
     try {
         const url = "/api/v1/asset/" + type;
         const response = await privateApi.get(url, {signal});
-        console.log(response);
         if (response.status < 300) {
-            return response.data
-            ;
+            return response.data;
         }
     } catch (err) {
         console.log(err);
