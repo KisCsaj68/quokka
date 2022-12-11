@@ -974,6 +974,11 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "assecache",
+			"item": [],
+			"id": "61be49ec-fb47-46f5-bd69-c990e467b03d"
 		}
 	],
 	"event": [
@@ -1000,37 +1005,37 @@
 	],
 	"variable": [
 		{
-			"id": "bc9ffd22-8c4a-4234-a5b8-8ea0ba03e914",
+			"id": "163a8fd1-2092-4867-b039-92664967534e",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "856397a4-8876-4887-b77b-204fa9594fa7",
+			"id": "90a0376f-6a88-4bc1-bef5-4c7ce4a6f05f",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "175ca7b5-c39f-4b9f-bd0e-b587ba58079e",
+			"id": "9c9793a0-6542-4dee-8780-60aa2b13d255",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "cebd0599-ff15-46f2-b4eb-62164de13b95",
+			"id": "fb291562-990a-499b-9dcf-2a5bcf282214",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "ca59f577-a504-4bdb-b742-7b455887a1ca",
+			"id": "18955163-cc47-472c-abb2-201da7da5383",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "52707679-499f-4d62-bd49-aaf0e2ba5f05",
+			"id": "dd1bc2fd-df7a-412c-bb92-cd0f088386ab",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
