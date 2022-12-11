@@ -450,6 +450,24 @@
 			"id": "caaf8821-ff30-4551-92e4-049beac037ee"
 		},
 		{
+			"name": "assecache",
+			"item": [
+				{
+					"name": "New Request",
+					"id": "f3128a61-b1bd-4e4d-8f9f-126f59cb7997",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			],
+			"id": "61be49ec-fb47-46f5-bd69-c990e467b03d"
+		},
+		{
 			"name": "Asset",
 			"item": [
 				{
@@ -974,11 +992,6 @@
 					}
 				}
 			]
-		},
-		{
-			"name": "New Folder",
-			"item": [],
-			"id": "61be49ec-fb47-46f5-bd69-c990e467b03d"
 		}
 	],
 	"event": [
@@ -1005,37 +1018,37 @@
 	],
 	"variable": [
 		{
-			"id": "e9c7ea4e-f94b-481f-ad76-5b5c26071f14",
+			"id": "b82d0912-db04-4373-bbbc-68df729e8f43",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "9e349b88-156a-42d4-a7a4-a0563d28cc52",
+			"id": "899eb35b-909a-46ed-be2c-3a3078d53bad",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "ab35ac43-a571-44a0-aa20-549c09e7c537",
+			"id": "b830d786-b2c6-4726-b2f5-c21b8078ae9c",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "10ca363e-e2c9-4e01-805c-7db7bca3cb48",
+			"id": "e3c09f03-fb7f-496a-9671-4aa5e8ee1ebd",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "c513efb7-46d9-461c-9212-38cdd4281073",
+			"id": "2becacec-81be-4590-9603-e606cd3a7074",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "accb9efd-5a03-4e78-92d9-d6950cf8280b",
+			"id": "104150e4-3f55-4b9f-9f17-173501a064e1",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
