@@ -976,7 +976,7 @@
 			]
 		},
 		{
-			"name": "assecache",
+			"name": "New Folder",
 			"item": [],
 			"id": "61be49ec-fb47-46f5-bd69-c990e467b03d"
 		}
@@ -1005,37 +1005,37 @@
 	],
 	"variable": [
 		{
-			"id": "163a8fd1-2092-4867-b039-92664967534e",
+			"id": "e9c7ea4e-f94b-481f-ad76-5b5c26071f14",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "90a0376f-6a88-4bc1-bef5-4c7ce4a6f05f",
+			"id": "9e349b88-156a-42d4-a7a4-a0563d28cc52",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "9c9793a0-6542-4dee-8780-60aa2b13d255",
+			"id": "ab35ac43-a571-44a0-aa20-549c09e7c537",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "fb291562-990a-499b-9dcf-2a5bcf282214",
+			"id": "10ca363e-e2c9-4e01-805c-7db7bca3cb48",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "18955163-cc47-472c-abb2-201da7da5383",
+			"id": "c513efb7-46d9-461c-9212-38cdd4281073",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "dd1bc2fd-df7a-412c-bb92-cd0f088386ab",
+			"id": "accb9efd-5a03-4e78-92d9-d6950cf8280b",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
