@@ -10,7 +10,7 @@ class DataCollectors:
 
     def __init__(self, app_config: PrimitiveJsonDB, conf: DotEnvConfig) -> None:
         self.consumer: Consumer = Consumer(conf, 'limit_order_queue',
-                                           self.callback)  # TODO: this may have a better place somewhere else!
+                                           self.callback)
         self.crypto_cache = CryptoCache(app_config['assets']['crypto'], conf)
         self.stock_cache = StockCache(app_config['assets']['stock'], conf)
 
@@ -24,7 +24,7 @@ class DataCollectors:
 
     def start_threads(self) -> None:
         self.consumer.start()
-        self._stream_client.start()  # TODO: this may have a better place somewhere else!
+        self._stream_client.start()
 
     def callback(self, ch, method, properties, body) -> None:
         parsed = json.loads(body)
