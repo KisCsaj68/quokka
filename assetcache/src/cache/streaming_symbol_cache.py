@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List, Dict, Any
 
 from src.storages import DotEnvConfig
-from src.rw_lock import ReadWriteLock
+from src.utils.rw_lock import ReadWriteLock
 from alpaca_trade_api import REST
 from alpaca_trade_api.entity_v2 import trade_mapping_v2
 
@@ -23,6 +23,12 @@ class SymbolCache(ABC):
         self._set_initial_prices()
 
     async def on_trade(self, trade):
+        """
+        This is a callback method.
+        This method updates the price if a trade pops in each incoming trade.
+        :param trade:
+        :return:
+        """
         trade = self.rename_keys(trade)
         symbol = trade['symbol']
         price = trade['price']
@@ -42,10 +48,16 @@ class SymbolCache(ABC):
         """
         return raw_trade
 
-    def __getitem__(self, item):
+    def __getitem__(self, symbol):
+        """
+        Magic method to get the actual price of a symbol.
+        price = my_cache[symbol]
+        :param symbol: 
+        :return: 
+        """
         self._rw_lock.acquire_read()
         try:
-            return self._symbols_prices[item]
+            return self._symbols_prices[symbol]
         finally:
             self._rw_lock.release_read()
 
