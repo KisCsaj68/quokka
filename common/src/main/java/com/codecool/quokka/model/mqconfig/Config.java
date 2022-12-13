@@ -10,6 +10,7 @@ public class Config {
 
     public static final String ORDER_QUEUE = "order_queue";
     public static final String LIMIT_ORDER_QUEUE = "limit_order_queue";
+    public static final String FILLED_ORDER_QUEUE = "filled_order_queue";
     public static final String POSITION_QUEUE = "position_queue";
     public static final String EXCHANGE = "oms_exchange";
     public static final String ORDER_ROUTING_KEY = "order_routingKey";
