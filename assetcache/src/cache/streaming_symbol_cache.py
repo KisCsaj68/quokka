@@ -1,12 +1,14 @@
+import threading
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any
 
 from src.storages import DotEnvConfig
+from src.utils.convert import rename_keys
 from src.utils.rw_lock import ReadWriteLock
 from alpaca_trade_api import REST
 from alpaca_trade_api.entity_v2 import trade_mapping_v2
 
-from src.utils import ParseRawStreamToReadableDict, ParseLatestV2ToReadableDict
+from src.utils import ParseLatestV2ToReadableDict
 
 
 class SymbolCache(ABC):
@@ -20,33 +22,28 @@ class SymbolCache(ABC):
                                base_url=conf['APCA_API_BASE_URL'],
                                api_version=conf['APCA_API_VERSION'],
                                raw_data=True)
-        self._set_initial_prices()
+        self.initialized = True
+        # this mas still cause issues with blocking the worker...
+        # threading.Thread(target=self._set_initial_prices()).start()
 
     async def on_trade(self, trade):
+        if not self.initialized:
+            return
         """
         This is a callback method.
-        This method updates the price if a trade pops in each incoming trade.
+        This method updates the price on each incoming datapoints.
         :param trade:
         :return:
         """
-        trade = self.rename_keys(trade)
+        print(trade)
+        trade = rename_keys(trade)
         symbol = trade['symbol']
         price = trade['price']
-        self._rw_lock.acquire_write()
         try:
+            self._rw_lock.acquire_write()
             self._symbols_prices[symbol] = price
         finally:
             self._rw_lock.release_write()
-
-    @ParseRawStreamToReadableDict(trade_mapping_v2)
-    def rename_keys(self, raw_trade: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        This method changes the format of the incoming JSON data
-        with the decorator.
-        :param raw_trade:
-        :return: raw_trade
-        """
-        return raw_trade
 
     def __getitem__(self, symbol):
         """
@@ -55,8 +52,8 @@ class SymbolCache(ABC):
         :param symbol: 
         :return: 
         """
-        self._rw_lock.acquire_read()
         try:
+            self._rw_lock.acquire_read()
             return self._symbols_prices[symbol]
         finally:
             self._rw_lock.release_read()
@@ -68,12 +65,13 @@ class SymbolCache(ABC):
         """
         symbols = self._symbols_prices.keys()
         latest_prices = self._get_latest_price(symbols)
-        self._rw_lock.acquire_write()
         try:
+            self._rw_lock.acquire_write()
             for k, v in latest_prices.items():
                 self._symbols_prices[k] = v['price']
         finally:
             self._rw_lock.release_write()
+            self.initialized = True
 
     @abstractmethod
     def _get_latest_price(self, symbols: List[str]) -> Dict[str, Any]:

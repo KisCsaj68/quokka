@@ -2,7 +2,7 @@ from uuid import UUID
 
 
 class PriceTracker:
-    def __init__(self, symbol: str, limit_price: float, order_id: UUID, account_id: UUID):
+    def __init__(self, symbol: str = None, limit_price: float = None, order_id: UUID = None, account_id: UUID = None):
         """
         This model contains information about the limit sell/buy orders from OMS.
         These trackers are kept in / managed by the price_tracker_manager.
@@ -20,4 +20,10 @@ class PriceTracker:
     def __lt__(self, other):
         return self.limit_price < other.limit_price
 
+    def __repr__(self):
+        return f'Pt(acc: {self.account_id}, o_id: {self.order_id}, lp: {self.limit_price}, s: {self.symbol},' \
+               f'fp: {self.filled_price})'
 
+    @staticmethod
+    def of(price: float):
+        return PriceTracker(limit_price=price)

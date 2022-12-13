@@ -1,9 +1,10 @@
-FROM python:3.10.7-slim-buster as build
+FROM python:3.10.8-slim-buster as build
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 FROM build AS final
+RUN apt-get update && apt-get install -y procps
 WORKDIR /usr/assetcache
 COPY wsgi.py .
 COPY env.py .
@@ -12,4 +13,4 @@ COPY src/ src/
 COPY .env .
 EXPOSE 8000
 ENTRYPOINT ["gunicorn"]
-CMD ["-b", "0.0.0.0:8000", "--workers=1" ,"wsgi:application"]
+CMD ["-b", "0.0.0.0:8000", "--workers=1", "--threads=1","wsgi:application"]
