@@ -1,4 +1,3 @@
-import json
 from threading import Thread
 from time import sleep
 
@@ -8,6 +7,7 @@ from src.storages import DotEnvConfig
 import jsonpickle
 
 
+# class Producer:
 class Producer(Thread):
     def __init__(self, conf: DotEnvConfig, queue: str, exchange: str, routing_key: str):
         super().__init__(daemon=True)
@@ -22,10 +22,9 @@ class Producer(Thread):
 
     def produce(self, message):
         message = jsonpickle.encode(message)
-        print(message)
         self.channel.basic_publish(exchange=self.exchange, routing_key=self.routing_key, body=message)
 
     def run(self):
         while True:
             self.connection.process_data_events()
-            sleep(1)
+            sleep(15)

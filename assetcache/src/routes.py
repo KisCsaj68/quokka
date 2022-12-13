@@ -1,6 +1,6 @@
 import json
 
-from typing import Tuple, Dict, Union, Callable
+from typing import Tuple, Dict
 
 from falcon import Request
 from falcon import Response

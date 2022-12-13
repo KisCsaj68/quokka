@@ -1,4 +1,3 @@
-import threading
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any
 
@@ -35,7 +34,6 @@ class SymbolCache(ABC):
         :param trade:
         :return:
         """
-        print(trade)
         trade = rename_keys(trade)
         symbol = trade['symbol']
         price = trade['price']

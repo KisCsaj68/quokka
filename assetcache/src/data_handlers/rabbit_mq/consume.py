@@ -1,6 +1,5 @@
 from typing import Callable
 import pika
-import json
 from threading import Thread
 from src.storages import DotEnvConfig
 

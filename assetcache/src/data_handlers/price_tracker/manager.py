@@ -35,7 +35,6 @@ class Container:
         order: Dict = json.loads(body)
         symbol = order['symbol']
         price_tracker = PriceTracker(symbol, order['limit'], order['id'], order['accountId'])
-        print(price_tracker)
         try:
             self._rw_lock.acquire_write()
             if not self._container.get(symbol):
@@ -53,7 +52,6 @@ class Container:
                     print(order['orderSide'])
                     raise ValueError()
             symbol_sorted_list.add(price_tracker)
-            print(symbol_sorted_list, flush=True)
         finally:
             self._rw_lock.release_write()
 

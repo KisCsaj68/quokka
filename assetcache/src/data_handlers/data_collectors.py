@@ -1,4 +1,3 @@
-import json
 from typing import Callable
 
 from src.data_handlers.price_tracker import PriceTrackerManager
@@ -6,8 +5,6 @@ from src.data_handlers.rabbit_mq import Consumer, Producer
 from src.data_handlers.streaming_client import StreamClient
 from src.storages import DotEnvConfig, PrimitiveJsonDB
 from src.cache import CryptoCache, StockCache
-from src.utils import ParseRawStreamToReadableDict
-from alpaca_trade_api.entity_v2 import trade_mapping_v2
 
 
 class DataCollectors:
@@ -40,7 +37,6 @@ class DataCollectors:
         self._producer.start()
 
     def on_message_from_streaming_client(self, *callbacks: Callable) -> Callable:
-        # @ParseRawStreamToReadableDict(trade_mapping_v2)
         async def outer(trade):
             for fn in callbacks:
                 await fn(trade)
