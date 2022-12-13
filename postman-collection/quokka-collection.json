@@ -349,6 +349,37 @@
 					"response": []
 				},
 				{
+					"name": "add market order BTCUSB buy",
+					"id": "9d722ec6-8b71-438b-9cea-99f03932f4a2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"symbol\": \"AAPL\",\n    \"type\": \"MARKET\",\n    \"side\": \"BUY\",\n    \"qty\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}{{api}}/order/stock"
+					},
+					"response": []
+				},
+				{
 					"name": "add limit order",
 					"id": "a48c15a2-8517-4ee0-8326-c23c913eae0a",
 					"protocolProfileBehavior": {
@@ -1030,37 +1061,37 @@
 	],
 	"variable": [
 		{
-			"id": "b6b33a92-0734-4925-97e3-44279368cbbc",
+			"id": "98c54e55-a37e-48bd-a443-2da0b0fb2dac",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "cce91810-260e-40f7-9202-6435075bc153",
+			"id": "d76068b9-e0c2-4495-b72b-68849a85adcc",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "f01998c3-4e70-4ba9-9ae6-237edd052b7a",
+			"id": "96060ca0-aca3-4af1-b0fc-a14461bddccb",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "5c6b1d47-6727-44f5-85a8-2fcf1add7b55",
+			"id": "5ce47ffb-c25c-4389-aa51-4289734f46f2",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "f9bfe2f1-ae2b-4076-97f0-27b18c04fc78",
+			"id": "573abb32-997c-4ea2-af19-470fc8c2d8f6",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "7be66482-dc16-4ad7-b07b-acae9decc87f",
+			"id": "f2a93be7-79a7-4d43-ae9c-491ba9a6fca9",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
