@@ -13,9 +13,10 @@ public class Config {
     public static final String FILLED_ORDER_QUEUE = "filled_order_queue";
     public static final String POSITION_QUEUE = "position_queue";
     public static final String EXCHANGE = "oms_exchange";
-    public static final String ORDER_ROUTING_KEY = "order_routingKey";
-    public static final String LIMIT_ORDER_ROUTING_KEY = "limit_order_routingKey";
-    public static final String POSITION_ROUTING_KEY = "position_routingKey";
+    public static final String ORDER_ROUTING_KEY = "order_routing_key";
+    public static final String LIMIT_ORDER_ROUTING_KEY = "limit_order_routing_key";
+    public static final String FILLED_ORDER_ROUTING_KEY = "filled_order_routing_key";
+    public static final String POSITION_ROUTING_KEY = "position_routing_key";
 
     public static TopicExchange exchange() {
         return new TopicExchange(EXCHANGE);
@@ -25,10 +26,12 @@ public class Config {
         Queue orderQueue = new Queue(ORDER_QUEUE);
         Queue limitOrderQueue = new Queue(LIMIT_ORDER_QUEUE);
         Queue positionQueue = new Queue(POSITION_QUEUE);
+        Queue filledOrderQueue = new Queue(FILLED_ORDER_QUEUE);
         return new Declarables(
                 orderQueue,
                 positionQueue,
                 limitOrderQueue,
+                filledOrderQueue,
                 topicExchange,
                 BindingBuilder
                         .bind(orderQueue)
@@ -36,6 +39,9 @@ public class Config {
                 BindingBuilder
                         .bind(limitOrderQueue)
                         .to(topicExchange).with(LIMIT_ORDER_ROUTING_KEY),
+                BindingBuilder
+                        .bind(filledOrderQueue)
+                        .to(topicExchange).with(FILLED_ORDER_ROUTING_KEY),
                 BindingBuilder
                         .bind(positionQueue)
                         .to(topicExchange).with(POSITION_ROUTING_KEY));
