@@ -15,7 +15,6 @@ class PriceTrackerManager:
         self.crypto_container = Container(self._producer)
         self.stock_container = Container(self._producer)
 
-
     def on_message_from_rabbit(self, ch, method, properties, body) -> None:
         self.stock_container.on_message_from_rabbit(body)
         self.crypto_container.on_message_from_rabbit(body)
@@ -34,7 +33,8 @@ class Container:
         # TODO: add FIFO buffer for non-blocking behaviour
         order: Dict = json.loads(body)
         symbol = order['symbol']
-        price_tracker = PriceTracker(symbol, order['limit'], order['id'], order['accountId'])
+        price_tracker = PriceTracker(symbol, order['limit'], order['id'], order['accountId'],
+                                     sell_position_id=order['sell_position_id'])
         try:
             self._rw_lock.acquire_write()
             if not self._container.get(symbol):
@@ -61,6 +61,7 @@ class Container:
         symbol = trade['symbol']
         trade_price = trade['price']
         filled_pts = []
+        # Fake PriceTracker need to be created so that sorted containers can check the index it would land on.
         fake_pt = PriceTracker.of(trade_price)
         try:
             self._rw_lock.acquire_write()
@@ -75,7 +76,7 @@ class Container:
 
     def _handle_buy_side(self, buy_side_list: SortedList, fake_pt: PriceTracker, trade_price: float):
         # use bisect_left to get the index
-        # fullfil price_trackers between index and end of list
+        # fulfill price_trackers between index and end of list
         filled_price_trackers = []
         start_index = buy_side_list.bisect_left(fake_pt)
         pop_sequence = len(buy_side_list) - start_index

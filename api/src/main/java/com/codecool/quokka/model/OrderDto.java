@@ -22,7 +22,10 @@ public class OrderDto {
     @JsonProperty("side")
     private OrderSide orderSide;
 
-    public OrderDto(int qty, String symbol, OrderType type, BigDecimal limit, BigDecimal price, AssetType assetType, OrderSide orderSide) {
+    @JsonProperty("sell_position_id")
+    private UUID sellPositionId;
+
+    public OrderDto(int qty, String symbol, OrderType type, BigDecimal limit, BigDecimal price, AssetType assetType, OrderSide orderSide, UUID sellPositionId) {
         this.quantity = qty;
         this.symbol = symbol;
         this.type = type;
@@ -30,6 +33,7 @@ public class OrderDto {
         this.price = price;
         this.assetType = assetType;
         this.orderSide = orderSide;
+        this.sellPositionId = sellPositionId;
     }
 
     public int getQuantity() {
@@ -56,8 +60,12 @@ public class OrderDto {
         return assetType;
     }
 
+    public UUID getSellPositionId() {
+        return sellPositionId;
+    }
+
     public Orders toEntity(UUID accountId) {
-        return new Orders(this.getQuantity(), this.getSymbol(), accountId, OrderStatus.OPEN, this.getType(), this.getLimit(), this.getPrice(), this.getAssetType(), this.orderSide());
+        return new Orders(this.getQuantity(), this.getSymbol(), accountId, OrderStatus.OPEN, this.getType(), this.getLimit(), this.getPrice(), this.getAssetType(), this.orderSide(), this.getSellPositionId());
     }
 
     private OrderSide orderSide() {
