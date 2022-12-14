@@ -28,6 +28,7 @@ RUN --mount=type=cache,target=/root/.m2 mvn clean package -DskipTests
 
 ARG JAVA_IMAGE_VERSION
 FROM openjdk:${JAVA_IMAGE_VERSION}-jdk-slim
+RUN apt-get update && apt-get install -y curl
 COPY --from=builder /oms/target/oms-0.0.1-SNAPSHOT-jar-with-dependencies.jar /
 ENTRYPOINT ["java"]
 CMD ["-jar","./oms-0.0.1-SNAPSHOT-jar-with-dependencies.jar"]

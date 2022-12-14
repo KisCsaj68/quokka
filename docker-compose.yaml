@@ -38,8 +38,15 @@ services:
     container_name: oms
     ports:
       - "9000:9000"
+    healthcheck:
+      test: curl -q http://localhost:9000/healthz
+      interval: 2s
+      timeout: 40s
+      retries: 20
     image: quokka/oms
     depends_on:
+      persister:
+        condition: service_started
       rabbitmq:
         condition: service_healthy
       postgres:
@@ -50,6 +57,8 @@ services:
       - "8000:8000"
     image: quokka/assetcache
     depends_on:
+      oms:
+        condition: service_healthy
       rabbitmq:
         condition: service_healthy
   persister:
