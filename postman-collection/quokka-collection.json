@@ -496,14 +496,15 @@
 			"name": "assecache",
 			"item": [
 				{
-					"name": "New Request",
+					"name": "get BTCUSD price",
 					"id": "f3128a61-b1bd-4e4d-8f9f-126f59cb7997",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": "http://localhost:8000{{api}}/crypto/BTCUSD"
 					},
 					"response": []
 				}
@@ -1061,37 +1062,37 @@
 	],
 	"variable": [
 		{
-			"id": "3a20eeb5-556c-4cc8-af54-be356a337ace",
+			"id": "db9c7b68-72c2-4f76-889c-38e8dc6ab78c",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "79de8bf1-d95e-4a86-bd8a-ba58bf4d2014",
+			"id": "7c270b6d-151f-448b-8942-2818080fe773",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "8fd19e7b-21c2-411b-b957-e2c4674aad0b",
+			"id": "434a7c0c-aeea-4ffc-844d-afb70846fa4c",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "75084c8c-ca12-4131-b11c-48c569d93a30",
+			"id": "beccf30d-873f-414d-8ef5-1d7b85d23708",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "eab00b88-8556-43db-b77d-6a94292eb59b",
+			"id": "86646170-36e5-48d6-b804-a810f92ded7b",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "29d206d8-f0e8-4462-aa43-a4e4bf1071fd",
+			"id": "8734ed0d-7d4e-42b1-819b-9c2aed16c15a",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
