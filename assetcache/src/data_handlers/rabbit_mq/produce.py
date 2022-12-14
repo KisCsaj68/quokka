@@ -17,7 +17,7 @@ class Producer(Thread):
         self.exchange = exchange
         self.channel = self.connection.channel()
         self.channel.exchange_declare(exchange=self.exchange, exchange_type='topic', durable=True)
-        self.channel.queue_declare(queue=queue)
+        self.channel.queue_declare(queue=queue, durable=True)
         self.channel.queue_bind(exchange=exchange, queue=queue, routing_key=self.routing_key)
 
     def produce(self, message):
