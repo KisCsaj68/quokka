@@ -1,21 +1,32 @@
-FROM maven:3.8.6 as builder
+ARG MVN_VERSION=3.8.6
+ARG JAVA_IMAGE_VERSION=17.0.1
+FROM maven:${MVN_VERSION} as dependencies
 
-USER root
+# go-offline using the pom.xml
+COPY ./common/pom.xml /common/pom.xml
+COPY ./api/pom.xml /api/pom.xml
+
+WORKDIR /common
+RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
+
+WORKDIR /api
+RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
+
+ARG MVN_VERSION
+ARG JAVA_IMAGE_VERSION
+FROM dependencies as builder
+
 COPY ./common /common
 COPY ./api /api
 
 WORKDIR /common
-# go-offline using the pom.xml
-RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
 RUN --mount=type=cache,target=/root/.m2 mvn clean install
 
 WORKDIR /api
-# go-offline using the pom.xml
-RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
 RUN --mount=type=cache,target=/root/.m2 mvn clean package -DskipTests
 
-
-FROM openjdk:17.0.1-jdk-slim
+ARG JAVA_IMAGE_VERSION
+FROM openjdk:${JAVA_IMAGE_VERSION}-jdk-slim
 COPY --from=builder /api/target/api-0.0.1-SNAPSHOT-jar-with-dependencies.jar /
 ENTRYPOINT ["java"]
 CMD ["-jar","./api-0.0.1-SNAPSHOT-jar-with-dependencies.jar"]
