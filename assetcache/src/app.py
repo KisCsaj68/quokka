@@ -14,10 +14,10 @@ class AssetCacheAPI:
         self.ping: Ping = Ping()
         self.asset_names: AssetNamesRoute = AssetNamesRoute(db)
         self.latest_stock: LatestAssetRoute = LatestAssetRoute(
-            self.collectors.stock_cache
+            self.collectors.stock_cache, 'STOCK'
         )
         self.latest_crypto: LatestAssetRoute = LatestAssetRoute(
-            self.collectors.crypto_cache
+            self.collectors.crypto_cache, 'CRYPTO'
         )
 
         self.add_routes()

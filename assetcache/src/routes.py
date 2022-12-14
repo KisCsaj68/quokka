@@ -66,7 +66,8 @@ class LatestAssetRoute:
     DEFAULT_CONTENT_TYPE: str = "application/json"
 
     def __init__(self,
-                 cache: SymbolCache) -> None:
+                 cache: SymbolCache, asset_type: str) -> None:
+        self.asset_type = asset_type
         self._cache: SymbolCache = cache
 
     def on_get(self, req: Request, resp: Response, symbol: str) -> None:
@@ -79,7 +80,7 @@ class LatestAssetRoute:
         if not self.is_valid(symbol):
             return
         symbol: str = symbol.upper()
-        latest: Dict = {symbol: self._cache[symbol]}
+        latest: Dict = {'price': self._cache[symbol], 'symbol': symbol, 'type': self.asset_type}
         resp.data, resp.content_length = parse_dict_to_json_bytes(latest)
         resp.content_type = self.DEFAULT_CONTENT_TYPE
 
