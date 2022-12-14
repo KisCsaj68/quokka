@@ -7,7 +7,9 @@ import com.codecool.quokka.model.order.OrderStatus;
 import com.codecool.quokka.model.position.Position;
 import com.codecool.quokka.oms.dal.OrderDal;
 import com.codecool.quokka.oms.dal.PositionDal;
+import com.codecool.quokka.oms.model.FilledOrder;
 import com.google.common.collect.Maps;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -77,20 +80,22 @@ public class OrderService {
     }
 
     private void handleLimitOrder(Orders order) {
-        rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.LIMIT_ORDER_ROUTING_KEY, order);
         storeLimitOrder(order);
+        rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.LIMIT_ORDER_ROUTING_KEY, order);
     }
 
     private void handleMarketOrder(Orders order) {
         // Ask the actual price from assetcache port 8000.
         Asset asset = restTemplate.getForObject(assetCacheURL + order.getAssetType().toString().toLowerCase() + "/" + order.getSymbol(), Asset.class);
         // Fill the price to the order and update the order in DB.
-        order.setPrice(asset.getOpen());
+        order.setPrice(asset.getPrice());
         order.setStatus(OrderStatus.FILLED);
         rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
         // Create position and persist db + in-memory
-        Position position = new Position(order.getQuantity(), order.getAccountId(), order.getSymbol(), order.getPrice(), null, new Date(), order.getId(), null);
-        persistPosition(position, order);
+        switch (order.getOrderSide()) {
+            case BUY -> handleBuy(order);
+            case SELL -> handleSell(order);
+        }
     }
 
     /**
@@ -120,6 +125,37 @@ public class OrderService {
             inMemoryOrders.put(accountId, Maps.newConcurrentMap());
         }
         inMemoryOrders.get(accountId).put(order.getId(), order);
+    }
+
+    @RabbitListener(queues = Config.FILLED_ORDER_QUEUE)
+    public void fillLimitOrder(FilledOrder filledOrder) {
+        Orders order = inMemoryOrders.get(filledOrder.getAccountId()).get(filledOrder.getOrderId());
+        if (order == null) {
+            // TODO: add logger
+            System.out.println("order not found in the in memory store. Order: " + filledOrder + "; in-memory-store: " + inMemoryOrders);
+            return;
+        }
+        order.setStatus(OrderStatus.FILLED);
+        order.setPrice(BigDecimal.valueOf(filledOrder.getFilledPrice()));
+        rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
+        inMemoryOrders.get(filledOrder.getAccountId()).remove(order.getId());
+        switch (order.getOrderSide()) {
+            case BUY -> handleBuy(order);
+            case SELL -> handleSell(order);
+        }
+    }
+
+    private void handleSell(Orders order) {
+        Position position = inMemoryPositions.get(order.getAccountId()).get(order.getSymbol()).remove(order.getSellPositionId());
+        position.setExitOrderId(order.getId());
+        position.setPriceAtSell(order.getPrice());
+        position.setSellAt(new Date());
+        rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.POSITION_ROUTING_KEY, position);
+    }
+
+    private void handleBuy(Orders order) {
+        Position position = new Position(order.getQuantity(), order.getAccountId(), order.getSymbol(), order.getPrice(), null, new Date(), order.getId(), null);
+        persistPosition(position, order);
     }
 
     public void pushOrders() {
