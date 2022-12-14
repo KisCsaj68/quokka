@@ -23,10 +23,15 @@ public class Orders implements Serializable {
     private int quantity;
 
     private UUID accountId;
+
+    @JsonProperty("sell_position_id")
+    private UUID sellPositionId;
+
     private BigDecimal price;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
     @JsonProperty("type")
     @Enumerated(EnumType.STRING)
     private OrderType type;
@@ -51,7 +56,7 @@ public class Orders implements Serializable {
         this.id = id;
     }
 
-    public Orders(int quantity, String symbol, UUID accountId, OrderStatus status, OrderType type, BigDecimal orderLimit, BigDecimal price, AssetType assetType, OrderSide side) {
+    public Orders(int quantity, String symbol, UUID accountId, OrderStatus status, OrderType type, BigDecimal orderLimit, BigDecimal price, AssetType assetType, OrderSide side, UUID sellPositionId) {
         this.quantity = quantity;
         this.symbol = symbol;
         this.accountId = accountId;
@@ -62,6 +67,7 @@ public class Orders implements Serializable {
         this.price = price;
         this.assetType = assetType;
         this.id = UUID.randomUUID();
+        this.sellPositionId = sellPositionId;
     }
 
     public int getQuantity() {
@@ -128,17 +134,31 @@ public class Orders implements Serializable {
         this.symbol = symbol;
     }
 
+    public UUID getSellPositionId() {
+        return sellPositionId;
+    }
+
+    public void setSellPositionId(UUID sellPositionId) {
+        this.sellPositionId = sellPositionId;
+    }
+
+    public OrderSide getOrderSide() {
+        return orderSide;
+    }
+
     @Override
     public String toString() {
         return "Orders{" +
                 "id=" + id +
                 ", quantity=" + quantity +
                 ", accountId=" + accountId +
+                ", sellPositionId=" + sellPositionId +
                 ", price=" + price +
                 ", status=" + status +
                 ", type=" + type +
                 ", assetType=" + assetType +
-                ", limit=" + orderLimit +
+                ", orderSide=" + orderSide +
+                ", orderLimit=" + orderLimit +
                 ", symbol='" + symbol + '\'' +
                 '}';
     }

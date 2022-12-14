@@ -33,7 +33,7 @@ up:
 
 .PHONY: logs
 logs:
-	docker-compose logs -f
+	docker-compose logs -f --since 5s
 
 .PHONY: down
 down:
@@ -44,3 +44,25 @@ frontend-build:
 	pushd frontend  && \
 	docker buildx build -t quokka/frontend:$(docker_tag) .  && \
 	popd
+
+.PHONY: assetcache-build
+assetcache-build:
+	pushd assetcache  && \
+	docker buildx build -t quokka/assetcache:$(docker_tag) .  && \
+	popd
+
+.PHONY: oms-build
+oms-build:
+	docker buildx build -t quokka/oms:$(docker_tag) . -f oms/Dockerfile
+
+.PHONY: api-build
+api-build:
+	docker buildx build -t quokka/api:$(docker_tag) . -f api/Dockerfile
+
+.PHONY: persister-build
+persister-build:
+	docker buildx build -t quokka/persister:$(docker_tag) . -f persister/Dockerfile
+
+.PHONY: last-container-logs
+last-container-logs:
+	docker logs -f $$(docker container ls -n 1 -q)

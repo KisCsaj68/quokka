@@ -56,20 +56,20 @@ It's mission critical state is handled fully in-memory, while every change of th
 - [x] Market order
 - [x] Limit order
 - [x] Open Position
-- [ ] Sell position
+- [x] Sell position
 - [ ] Cash deposit - CSD
 - [ ] Cash withdrawal - CSW
 
 ### Asset management
 - [x] API request based connection to Alpaca
-- [ ] Stream based connection to Alpaca
-- [ ] Price trackers for limit order settlement
+- [x] Stream based connection to Alpaca
+- [x] Price trackers for limit order settlement
 
 ### Persistance
 - [x] write-ahead log persistent in RabbitMQ
 - [x] persister component saves data into relational DB
 - [x] reload pending orders from DB into in-memory on app start
-- [ ] keep and serve pending orders from in-memory
+- [x] keep and serve pending orders from in-memory
 
 ### Fronend
 - [x] Minimal frontend

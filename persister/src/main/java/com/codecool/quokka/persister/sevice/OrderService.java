@@ -26,7 +26,7 @@ public class OrderService {
     @RabbitListener(queues = Config.ORDER_QUEUE)
     public void addNewOrder(Orders order) {
         if (orderDal.findById(order.getId()).isPresent()) {
-            orderDal.updatePriceById(order.getPrice(), order.getId(), order.getStatus());
+            orderDal.updatePriceById(order.getPrice(), order.getId(), order.getStatus(), order.getSellPositionId());
             return;
         }
         orderDal.save(order);

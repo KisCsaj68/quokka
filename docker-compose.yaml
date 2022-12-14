@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   rabbitmq:
     container_name: rabbitmq
@@ -10,6 +8,11 @@ services:
     hostname: quokka-rabbit
     expose:
       - "15672"
+    healthcheck:
+      test: rabbitmq-diagnostics check_running
+      interval: 5s
+      timeout: 60s
+      retries: 10
   postgres:
     container_name: postgres
     ports:
@@ -35,22 +38,36 @@ services:
     container_name: oms
     ports:
       - "9000:9000"
+    healthcheck:
+      test: curl -q http://localhost:9000/healthz
+      interval: 2s
+      timeout: 40s
+      retries: 20
     image: quokka/oms
     depends_on:
-      - postgres
-      - rabbitmq
+      persister:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_started
   assetcache:
     container_name: assetcache
     ports:
       - "8000:8000"
     image: quokka/assetcache
     depends_on:
-      - rabbitmq
+      oms:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
   persister:
     container_name: persister
     ports:
       - "9001:9001"
     image: quokka/persister
     depends_on:
-      - rabbitmq
-      - postgres
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_started

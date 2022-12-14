@@ -3,4 +3,4 @@
 pip install --upgrade pip
 pip install -e .
 
-gunicorn wsgi:application
+gunicorn --workers=1 wsgi:application

@@ -15,6 +15,6 @@ public interface OrderDal extends CrudRepository<Orders, UUID> {
 
     @Modifying
     @Transactional
-    @Query("update Orders o set o.price= :price, o.status= :status where o.id= :id")
-    void updatePriceById(@Param("price") BigDecimal price, @Param("id") UUID id, @Param("status") OrderStatus status);
+    @Query("update Orders o set o.price= :price, o.status= :status, o.sellPositionId= :sellPositionId where o.id= :id")
+    void updatePriceById(@Param("price") BigDecimal price , @Param("id") UUID id, @Param("status") OrderStatus status, @Param("sellPositionId") UUID sellPositionId);
 }
