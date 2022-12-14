@@ -53,7 +53,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"full_name\": \"User Asd\",\n    \"email_address\": \"asd222@asd.com\",\n    \"user_name\" : \"TestUser222\",\n    \"password\" : \"asd\"\n\n}",
+							"raw": "{\n    \"full_name\": \"User Asd\",\n    \"email_address\": \"asd22233@asd.com\",\n    \"user_name\" : \"TestUser22233\",\n    \"password\" : \"asd\"\n\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1061,37 +1061,37 @@
 	],
 	"variable": [
 		{
-			"id": "1da81d3c-e213-401e-b1ab-942c95245034",
+			"id": "3a20eeb5-556c-4cc8-af54-be356a337ace",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "e93af0ae-013e-428d-93f0-c00f0b2929f9",
+			"id": "79de8bf1-d95e-4a86-bd8a-ba58bf4d2014",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "face5788-f95a-40a2-9923-17c8cd7edb5e",
+			"id": "8fd19e7b-21c2-411b-b957-e2c4674aad0b",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "713e7756-4011-4dd3-a327-72afbcc2842c",
+			"id": "75084c8c-ca12-4131-b11c-48c569d93a30",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "6e5ef1af-34db-4b06-a98b-59646063f50f",
+			"id": "eab00b88-8556-43db-b77d-6a94292eb59b",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "6e6eaebf-6bd2-423b-9fcb-7defbd6d353f",
+			"id": "29d206d8-f0e8-4462-aa43-a4e4bf1071fd",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
