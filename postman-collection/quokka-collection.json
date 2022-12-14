@@ -368,14 +368,14 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"symbol\": \"AAPL\",\n    \"type\": \"MARKET\",\n    \"side\": \"BUY\",\n    \"qty\": 3\n}",
+							"raw": "{\n    \"symbol\": \"BTCUSD\",\n    \"type\": \"MARKET\",\n    \"side\": \"BUY\",\n    \"qty\": 3\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "{{host}}{{api}}/order/stock"
+						"url": "{{host}}{{api}}/order/crypto"
 					},
 					"response": []
 				},
@@ -1061,37 +1061,37 @@
 	],
 	"variable": [
 		{
-			"id": "1ccdb0be-659a-4ddc-9fed-3844a7c8ae7e",
+			"id": "533550a7-1de0-4e05-8079-849865ca015a",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "9d54178f-3a58-4038-96ba-c41b79fa3c18",
+			"id": "2b87fba3-5567-45b6-9efb-b498bff0fded",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "e1fabe03-d4b3-4c6f-84d5-eeb328289950",
+			"id": "e309fe21-4d6f-42d6-bccb-ed53ab19502d",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "35f3bddb-9731-48d1-8148-cd6c1fa46681",
+			"id": "fe630526-3c90-4f38-99fc-dfbbde9e89d5",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "9dbca760-2c0c-416a-bd14-fba35d68a5f1",
+			"id": "09441249-9cb6-4ced-89f7-52bf092112a0",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "b57a8923-2fa5-4336-9a07-f942fae55861",
+			"id": "b28af0e0-8757-4e01-96cf-7dcf5a6abcc1",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
