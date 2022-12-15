@@ -35,20 +35,19 @@ public class FinController {
     @PostMapping(path = "stock")
     @PreAuthorize("hasRole('TRADER')")
     public ResponseEntity createNewStockOrder(@RequestBody OrderDto data, @RequestHeader("Authorization") String token) {
-        Orders actualOrders = data.toEntity(tokenEncoder.getUserId(token));
-        actualOrders.setAssetType(AssetType.STOCK);
-        //post request to OMS / marketOrder
-        HttpEntity<Orders> request = new HttpEntity<>(actualOrders);
-        ResponseEntity orderCreateResponse = restTemplate.postForObject(url, request, ResponseEntity.class);
-        return orderCreateResponse;
+        return this.createOrder(data, token, AssetType.STOCK);
     }
 
     @PostMapping(path = "crypto")
     @PreAuthorize("hasRole('TRADER')")
     public ResponseEntity createNewCryptoOrder(@RequestBody OrderDto data, @RequestHeader("Authorization") String token) {
+        return this.createOrder(data, token, AssetType.CRYPTO);
+    }
+
+    private ResponseEntity createOrder(OrderDto data, String token, AssetType type) {
         Orders actualOrders = data.toEntity(tokenEncoder.getUserId(token));
-        actualOrders.setAssetType(AssetType.CRYPTO);
-        //post request to OMS / marketOrder
+        actualOrders.setAssetType(type);
+        // post request to OMS
         HttpEntity<Orders> request = new HttpEntity<>(actualOrders);
         ResponseEntity orderCreateResponse = restTemplate.postForObject(url, request, ResponseEntity.class);
         return orderCreateResponse;
