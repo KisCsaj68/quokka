@@ -39,7 +39,7 @@ services:
     ports:
       - "9000:9000"
     healthcheck:
-      test: curl -q http://localhost:9000/healthz
+      test: curl -s http://localhost:9000/healthz
       interval: 2s
       timeout: 40s
       retries: 20
@@ -71,3 +71,18 @@ services:
         condition: service_healthy
       postgres:
         condition: service_started
+  prometheus:
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    image: prom/prometheus:latest
+    volumes:
+      - "./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "./volumes/prometheus_data:/prometheus"
+  grafana:
+    container_name: grafana
+    ports:
+      - "4000:3000"
+    image: grafana/grafana-oss
+    volumes:
+      - "./volumes/grafana_storage:/var/lib/grafana"
