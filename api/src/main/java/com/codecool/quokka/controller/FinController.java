@@ -4,6 +4,8 @@ import com.codecool.quokka.model.OrderDto;
 import com.codecool.quokka.model.assets.AssetType;
 import com.codecool.quokka.model.order.Orders;
 import com.codecool.quokka.utils.TokenEncoder;
+import io.prometheus.client.Counter;
+import io.prometheus.client.Histogram;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -19,7 +21,15 @@ import java.util.UUID;
 @RequestMapping("/api/v1/order")
 @ConfigurationProperties
 public class FinController {
-    public static final UUID ACCOUNT_ID = UUID.fromString("a1521309-f533-460a-a9fc-3028b0efc79b");
+    private static final Counter order_request = Counter.build().namespace("quokka").subsystem("api")
+            .name("order_request")
+            .labelNames("operation", "asset_type")
+            .help("total number of order placement").register();
+
+    private static final Histogram order_request_time_duration = Histogram.build().namespace("quokka").subsystem("api")
+            .name("order_request_time_duration")
+            .labelNames("operation", "asset_type")
+            .help("total elapsed time from request to response").register();
     private RestTemplate restTemplate = new RestTemplate();
 
     private final TokenEncoder tokenEncoder;
@@ -35,13 +45,29 @@ public class FinController {
     @PostMapping(path = "stock")
     @PreAuthorize("hasRole('TRADER')")
     public ResponseEntity createNewStockOrder(@RequestBody OrderDto data, @RequestHeader("Authorization") String token) {
-        return this.createOrder(data, token, AssetType.STOCK);
+        order_request.labels("write", "stock").inc();
+        Histogram.Timer timer = order_request_time_duration.labels("write", "stock").startTimer();
+        try {
+
+            return this.createOrder(data, token, AssetType.STOCK);
+        }
+        finally {
+            timer.observeDuration();
+        }
     }
 
     @PostMapping(path = "crypto")
     @PreAuthorize("hasRole('TRADER')")
     public ResponseEntity createNewCryptoOrder(@RequestBody OrderDto data, @RequestHeader("Authorization") String token) {
-        return this.createOrder(data, token, AssetType.CRYPTO);
+        order_request.labels("write", "crypto").inc();
+        Histogram.Timer timer = order_request_time_duration.labels("write", "crypto").startTimer();
+        try {
+
+            return this.createOrder(data, token, AssetType.CRYPTO);
+        }
+        finally {
+            timer.observeDuration();
+        }
     }
 
     private ResponseEntity createOrder(OrderDto data, String token, AssetType type) {
