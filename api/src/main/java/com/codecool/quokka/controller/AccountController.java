@@ -30,7 +30,7 @@ public class AccountController {
 
     private static final Histogram user_request_time_duration = Histogram.build().namespace("quokka").subsystem("api")
             .name("user_request_time_duration")
-            .labelNames("operation", "controller")
+            .labelNames("operation")
             .help("total elapsed time from request to response").register();
 
     private static final String a = user_request_time_duration.describe().get(0).name;
@@ -45,7 +45,7 @@ public class AccountController {
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity addUser(@RequestBody Account account) {
         user_request.labels("create").inc();
-        Histogram.Timer timer = user_request_time_duration.labels("create", "operation").startTimer();
+        Histogram.Timer timer = user_request_time_duration.labels("create").startTimer();
         try {
             if (accountService.getAccountByEmail(account.getEmailAddress())) {
                 return new ResponseEntity<>("Email occupied", HttpStatus.BAD_REQUEST);
