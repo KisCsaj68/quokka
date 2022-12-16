@@ -1,26 +1,35 @@
 package com.codecool.quokka.controller;
 
-import com.codecool.quokka.model.assets.AssetType;
-import com.codecool.quokka.model.assets.Asset;
-import com.codecool.quokka.model.assets.AssetDto;
-import com.codecool.quokka.service.assets.AssetService;
-import com.codecool.quokka.utils.Utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.prometheus.client.Counter;
+import io.prometheus.client.Histogram;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RequestMapping("/api/v1/asset")
 @RestController
 @ConfigurationProperties
 public class AssetController {
+
+    private static final Counter asset_request = Counter.build().namespace("quokka"). subsystem("api")
+            .name("asset_request")
+            .labelNames("operation")
+            .help("total number of asset requests").register();
+
+    public static final Histogram asset_request_time_duration = Histogram.build().namespace("quokka"). subsystem("api")
+            .name("asset_request_time_duration")
+            .labelNames("operation")
+            .help("total elapsed time from request to response")
+
+            .register();
     private RestTemplate restTemplate = new RestTemplate();
     private ObjectMapper mapper = new ObjectMapper();
 
@@ -29,72 +38,39 @@ public class AssetController {
     @GetMapping( "{type}")
     @PreAuthorize("hasRole('TRADER')")
     public List<String> getAssets(@PathVariable("type") String type) throws JsonProcessingException {
-        String newUrl = url + type;
-        String response = restTemplate.getForObject(newUrl, String.class);
-        JsonNode jsonNode = mapper.readTree(response);
-        JsonNode jsonNode1 = jsonNode.get(type);
-        List<String> list = new ArrayList<>();
-        for (Iterator<JsonNode> it = jsonNode1.elements(); it.hasNext(); ) {
-            JsonNode item = it.next();
-            list.add(item.asText());
+        asset_request.labels("read_all").inc();
+        Histogram.Timer timer = asset_request_time_duration.labels("read_all").startTimer();
+        try {
+            String newUrl = url + type;
+            String response = restTemplate.getForObject(newUrl, String.class);
+            JsonNode jsonNode = mapper.readTree(response);
+            JsonNode jsonNode1 = jsonNode.get(type);
+            List<String> list = new ArrayList<>();
+            for (Iterator<JsonNode> it = jsonNode1.elements(); it.hasNext(); ) {
+                JsonNode item = it.next();
+                list.add(item.asText());
+            }
+            return list;
         }
-        return list;
-
+        finally {
+            timer.observeDuration();
+        }
     }
 
     @GetMapping("{assetType}/{assetSymbol}")
     @PreAuthorize("hasRole('TRADER')")
     public Map<String,Object> getAssetData(@PathVariable("assetType") String pathAssetType,
                                            @PathVariable("assetSymbol") String pathAssetSymbol){
-        String newUrl = url + pathAssetType + "/" + pathAssetSymbol;
-        Map<String, Object> response = restTemplate.getForObject(newUrl, Map.class);
-        return new HashMap<>(response);
+        asset_request.labels("read").inc();
+        Histogram.Timer timer = asset_request_time_duration.labels("read").startTimer();
+        try {
+            String newUrl = url + pathAssetType + "/" + pathAssetSymbol;
+            Map<String, Object> response = restTemplate.getForObject(newUrl, Map.class);
+            return new HashMap<>(response);
+        }
+        finally {
+            timer.observeDuration();
+        }
     }
 
-//    @GetMapping
-//    public Set<AssetDto> getAllAsset() {
-//        return this.assetService.getAllAsset();
-//    }
-//
-//    @GetMapping("{assetType}")
-//    public Set<AssetDto> getAllAssetByType(@PathVariable("assetType") String pathAssetType) {
-//        AssetType assetType = Utils.assetTypeParser(pathAssetType);
-//        if (assetType == null) {
-//            return null;
-//        }
-//        return this.assetService.getAllByType(assetType);
-//    }
-//
-//    @PostMapping(path = "{assetType}")
-//    public @ResponseBody AssetDto addAssetByType(@PathVariable("assetType") String pathAssetType,
-//                                                 @RequestBody Asset asset) {
-//        AssetType assetType = Utils.assetTypeParser(pathAssetType);
-//        if (assetType == null) {
-//            return null;
-//        }
-//        asset.setType(assetType);
-//        return this.assetService.addAsset(asset);
-//    }
-//
-//    @GetMapping(path = "{assetType}/{assetSymbol}")
-//    public @ResponseBody AssetDto getAssetBySymbol(@PathVariable("assetType") String pathAssetType,
-//                                                   @PathVariable("assetSymbol") String pathAssetSymbol) {
-//        AssetType assetType = Utils.assetTypeParser(pathAssetType);
-//        if (assetType == null) {
-//            return null;
-//        }
-//        pathAssetSymbol = pathAssetSymbol.toUpperCase();
-//        return this.assetService.getAssetBySymbol(pathAssetSymbol, assetType);
-//    }
-//
-//    @DeleteMapping(path = "{assetType}/{assetSymbol}")
-//    public @ResponseBody AssetDto deleteAssetBySymbol(@PathVariable("assetType") String pathAssetType,
-//                                                      @PathVariable("assetSymbol") String pathAssetSymbol) {
-//        AssetType assetType = Utils.assetTypeParser(pathAssetType);
-//        if (assetType == null) {
-//            return null;
-//        }
-//        pathAssetSymbol = pathAssetSymbol.toUpperCase();
-//        return this.assetService.deleteAssetBySymbol(pathAssetSymbol, assetType);
-//    }
 }
