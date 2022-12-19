@@ -73,11 +73,9 @@ public class OrderService {
         Metrics.ORDER_REQUEST.labels("order_request").inc();
         order.setStatus(OrderStatus.OPEN);
         // Send open order to persister via RMQ
-        Histogram.Timer timer = histogram.labels("send_order_to_queue").startTimer();
-        try {
+
+        try (Histogram.Timer ignored = histogram.labels("send_order_to_queue").startTimer()){
             rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
-        } finally {
-            timer.observeDuration();
         }
         switch (order.getType()) {
             case LIMIT -> handleLimitOrder(order);
@@ -87,31 +85,25 @@ public class OrderService {
     }
 
     private void handleLimitOrder(Orders order) {
-        Histogram.Timer queue_timer = Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION.labels("send_order_to_queue").startTimer();
         storeLimitOrder(order, Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION);
-        try {
+        try (Histogram.Timer ignored = Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION.labels("send_order_to_queue").startTimer()){
             rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.LIMIT_ORDER_ROUTING_KEY, order);
-        } finally {
-            queue_timer.observeDuration();
         }
     }
 
     private void handleMarketOrder(Orders order) {
-        Histogram.Timer marketTimer = Metrics.MARKET_ORDER_REQUEST_TIME_DURATION.labels("update_order").startTimer();
-        try {
+        Asset asset = null;
+
+        try (Histogram.Timer ignored = Metrics.MARKET_ORDER_REQUEST_TIME_DURATION.labels("update_order").startTimer()){
             // Ask the actual price from assetcache port 8000.
-            Asset asset = restTemplate.getForObject(assetCacheURL + order.getAssetType().toString().toLowerCase() + "/" + order.getSymbol(), Asset.class);
+            asset = restTemplate.getForObject(assetCacheURL + order.getAssetType().toString().toLowerCase() + "/" + order.getSymbol(), Asset.class);
             // Fill the price to the order and update the order in DB.
-            order.setPrice(asset.getPrice());
-            order.setStatus(OrderStatus.FILLED);
-        } finally {
-            marketTimer.observeDuration();
         }
-        Histogram.Timer marketTimerQueue = Metrics.MARKET_ORDER_REQUEST_TIME_DURATION.labels("send_updated_order_to_queue").startTimer();
-        try {
+        order.setPrice(asset.getPrice());
+        order.setStatus(OrderStatus.FILLED);
+
+        try (Histogram.Timer ignored = Metrics.MARKET_ORDER_REQUEST_TIME_DURATION.labels("send_updated_order_to_queue").startTimer()){
             rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
-        } finally {
-            marketTimerQueue.observeDuration();
         }
         // Create position and persist db + in-memory
         switch (order.getOrderSide()) {
@@ -124,21 +116,18 @@ public class OrderService {
      * Push the Position to RabbitMQ first(for consistency) and stores it in-memory.
      */
     private void persistPosition(Position position, Orders order, Histogram histogram) {
-        Histogram.Timer queueTimer = histogram.labels("send_position_to_queue").startTimer();
-        try {
+
+        try (Histogram.Timer ignored = histogram.labels("send_position_to_queue").startTimer()){
             rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.POSITION_ROUTING_KEY, position);
-        } finally {
-            queueTimer.observeDuration();
         }
         storeInMemoryPositions(position, order, histogram);
     }
 
     private void storeInMemoryPositions(Position position, Orders order, Histogram histogram) {
-        Histogram.Timer timer = histogram.labels("persist_position_in_memory").startTimer();
-        try {
-            UUID accountId = order.getAccountId();
-            String symbol = order.getSymbol();
-            UUID positionId = position.getId();
+        UUID accountId = order.getAccountId();
+        String symbol = order.getSymbol();
+        UUID positionId = position.getId();
+        try (Histogram.Timer timer = histogram.labels("persist_position_in_memory").startTimer()){
             if (!inMemoryPositions.containsKey(accountId)) {
                 inMemoryPositions.put(accountId, Maps.newConcurrentMap());
             }
@@ -146,21 +135,17 @@ public class OrderService {
                 inMemoryPositions.get(accountId).put(symbol, Maps.newConcurrentMap());
             }
             inMemoryPositions.get(accountId).get(symbol).put(positionId, position);
-        } finally {
-            timer.observeDuration();
         }
     }
 
     private void storeLimitOrder(Orders order, Histogram histogram) {
-        Histogram.Timer timer = histogram.labels("persist_limit_order_in_memory").startTimer();
-        try {
+
+        try (Histogram.Timer timer = histogram.labels("persist_limit_order_in_memory").startTimer()){
             UUID accountId = order.getAccountId();
             if (!inMemoryOrders.containsKey(accountId)) {
                 inMemoryOrders.put(accountId, Maps.newConcurrentMap());
             }
             inMemoryOrders.get(accountId).put(order.getId(), order);
-        } finally {
-            timer.observeDuration();
         }
     }
 
@@ -175,10 +160,10 @@ public class OrderService {
             System.out.println("order not found in the in memory store. Order: " + filledOrder + "; in-memory-store: " + inMemoryOrders);
             return;
         }
-        try (Histogram.Timer ignored = Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION.labels("update_order").startTimer()) {
-            order.setStatus(OrderStatus.FILLED);
-            order.setPrice(BigDecimal.valueOf(filledOrder.getFilledPrice()));
-        }
+        order.setStatus(OrderStatus.FILLED);
+        order.setPrice(BigDecimal.valueOf(filledOrder.getFilledPrice()));
+//        try (Histogram.Timer ignored = Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION.labels("update_order").startTimer()) {
+//        }
         try (Histogram.Timer ignored = Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION.labels("send_updated_order_to_queue").startTimer()) {
             rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
         }
@@ -196,11 +181,11 @@ public class OrderService {
         try (Histogram.Timer ignored = histogram.labels("get_position_from_memory").startTimer()) {
             position = inMemoryPositions.get(order.getAccountId()).get(order.getSymbol()).remove(order.getSellPositionId());
         }
-        try (Histogram.Timer ignored = histogram.labels("update_position").startTimer()) {
-            position.setExitOrderId(order.getId());
-            position.setPriceAtSell(order.getPrice());
-            position.setSellAt(new Date());
-        }
+        position.setExitOrderId(order.getId());
+        position.setPriceAtSell(order.getPrice());
+        position.setSellAt(new Date());
+//        try (Histogram.Timer ignored = histogram.labels("update_position").startTimer()) {
+//        }
         try (Histogram.Timer ignored = histogram.labels("send_position_to_queue").startTimer()) {
             rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.POSITION_ROUTING_KEY, position);
         }
