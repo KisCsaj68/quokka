@@ -2,6 +2,7 @@ package com.codecool.quokka.oms.service;
 
 import com.codecool.quokka.model.assets.Asset;
 import com.codecool.quokka.model.mqconfig.Config;
+import com.codecool.quokka.model.order.OrderType;
 import com.codecool.quokka.model.order.Orders;
 import com.codecool.quokka.model.order.OrderStatus;
 import com.codecool.quokka.model.position.Position;
@@ -199,7 +200,9 @@ public class OrderService {
     public void pushOrders() {
         for (UUID accountId : inMemoryOrders.keySet()) {
             for (Orders order : inMemoryOrders.get(accountId).values()) {
-                rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.LIMIT_ORDER_ROUTING_KEY, order);
+                if (order.getType() == OrderType.LIMIT && order.getStatus() == OrderStatus.OPEN) {
+                    rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.LIMIT_ORDER_ROUTING_KEY, order);
+                }
             }
         }
     }
