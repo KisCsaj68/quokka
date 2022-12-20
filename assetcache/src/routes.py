@@ -4,6 +4,8 @@ from typing import Tuple, Dict
 
 from falcon import Request
 from falcon import Response
+from prometheus_client import multiprocess
+from prometheus_client import generate_latest, CollectorRegistry, CONTENT_TYPE_LATEST, Gauge, Counter
 
 from src.cache.streaming_symbol_cache import SymbolCache
 from src.storages.primitive_json_db import PrimitiveJsonDB
@@ -93,3 +95,12 @@ class LatestAssetRoute:
         if not symbol.isascii():
             return False
         return True
+
+
+class Metrics:
+    def on_get(self, req: Request, resp: Response):
+        registry = CollectorRegistry()
+        multiprocess.MultiProcessCollector(registry)
+        data = generate_latest(registry)
+        resp.data, resp.content_length = parse_dict_to_json_bytes(data)
+        resp.content_type = CONTENT_TYPE_LATEST
