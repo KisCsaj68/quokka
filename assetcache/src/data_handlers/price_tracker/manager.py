@@ -33,7 +33,7 @@ class Container:
         # TODO: add FIFO buffer for non-blocking behaviour
         order: Dict = json.loads(body)
         symbol = order['symbol']
-        price_tracker = PriceTracker(symbol, order['limit'], order['id'], order['accountId'],
+        price_tracker = PriceTracker(symbol, order['limit'], order['id'], order['account'],
                                      sell_position_id=order['sell_position_id'])
         try:
             self._rw_lock.acquire_write()
