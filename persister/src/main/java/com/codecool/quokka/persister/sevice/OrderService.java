@@ -5,6 +5,8 @@ import com.codecool.quokka.model.order.Orders;
 import com.codecool.quokka.model.position.Position;
 import com.codecool.quokka.persister.dal.OrderDal;
 import com.codecool.quokka.persister.dal.PositionDal;
+import com.codecool.quokka.persister.metrics.Metrics;
+import io.prometheus.client.Histogram;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +27,21 @@ public class OrderService {
 
     @RabbitListener(queues = Config.ORDER_QUEUE)
     public void addNewOrder(Orders order) {
-        if (orderDal.findById(order.getId()).isPresent()) {
-            orderDal.updatePriceById(order.getPrice(), order.getId(), order.getStatus(), order.getSellPositionId());
-            return;
+        Metrics.PERSIST_REQUEST.labels("order").inc();
+        try (Histogram.Timer ignored = Metrics.PERSIST_TIME_DURATION.labels("order").startTimer()) {
+            if (orderDal.findById(order.getId()).isPresent()) {
+                orderDal.updatePriceById(order.getPrice(), order.getId(), order.getStatus(), order.getSellPositionId());
+                return;
+            }
+            orderDal.save(order);
         }
-        orderDal.save(order);
     }
 
     @RabbitListener(queues = Config.POSITION_QUEUE)
     public void addNewPosition(Position position) {
-        positionDal.save(position);
+        Metrics.PERSIST_REQUEST.labels("position").inc();
+        try (Histogram.Timer ignored = Metrics.PERSIST_TIME_DURATION.labels("position").startTimer()) {
+            positionDal.save(position);
+        }
     }
 }
