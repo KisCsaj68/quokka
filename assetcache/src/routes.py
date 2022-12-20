@@ -19,20 +19,6 @@ def parse_dict_to_json_bytes(dictionary: dict) -> Tuple[bytes, int]:
     return byte_json, len(byte_json)
 
 
-class Ping:
-    DEFAULT_CONTENT_TYPE: str = "application/json"
-    __slots__ = ("data", "content_length")
-
-    def __init__(self) -> None:
-        message: Dict[str, str] = {"Ping": "Hi from AssetCacheProxy v1"}
-        self.data, self.content_length = parse_dict_to_json_bytes(message)
-
-    def on_get(self, req: Request, resp: Response) -> None:
-        resp.data = self.data
-        resp.content_length = self.content_length
-        resp.content_type = self.DEFAULT_CONTENT_TYPE
-
-
 class AssetNamesRoute:
     DEFAULT_CONTENT_TYPE: str = "application/json"
 
@@ -76,6 +62,7 @@ class LatestAssetRoute:
         self.make_response(req, resp, symbol)
 
     def on_get_trades(self, req: Request, resp: Response, symbol: str) -> None:
+        print(req.path, flush=True)
         self.make_response(req, resp, symbol)
 
     def make_response(self, req: Request, resp: Response, symbol: str) -> None:
@@ -102,5 +89,5 @@ class Metrics:
         registry = CollectorRegistry()
         multiprocess.MultiProcessCollector(registry)
         data = generate_latest(registry)
-        resp.data, resp.content_length = parse_dict_to_json_bytes(data)
+        resp.data, resp.content_length = data, len(data)
         resp.content_type = CONTENT_TYPE_LATEST
