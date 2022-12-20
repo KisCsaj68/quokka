@@ -8,6 +8,7 @@ from alpaca_trade_api import REST
 from alpaca_trade_api.entity_v2 import trade_mapping_v2
 
 from src.utils import ParseLatestV2ToReadableDict
+from src.metrics import STREAM_TRADE_TOTAL, CACHE_UPDATE_PRICE, CACHE_READ_PRICE, CACHE_INIT_PRICE
 
 
 class SymbolCache(ABC):
@@ -26,22 +27,24 @@ class SymbolCache(ABC):
         # threading.Thread(target=self._set_initial_prices()).start()
 
     async def on_trade(self, trade):
-        if not self.initialized:
-            return
         """
         This is a callback method.
         This method updates the price on each incoming datapoints.
         :param trade:
         :return:
         """
-        trade = rename_keys(trade)
-        symbol = trade['symbol']
-        price = trade['price']
-        try:
-            self._rw_lock.acquire_write()
-            self._symbols_prices[symbol] = price
-        finally:
-            self._rw_lock.release_write()
+        STREAM_TRADE_TOTAL.labels(self._get_metric_label()).inc()
+        if not self.initialized:
+            return
+        with CACHE_UPDATE_PRICE.labels(self._get_metric_label()).time():
+            trade = rename_keys(trade)
+            symbol = trade['symbol']
+            price = trade['price']
+            try:
+                self._rw_lock.acquire_write()
+                self._symbols_prices[symbol] = price
+            finally:
+                self._rw_lock.release_write()
 
     def __getitem__(self, symbol):
         """
@@ -50,26 +53,28 @@ class SymbolCache(ABC):
         :param symbol: 
         :return: 
         """
-        try:
-            self._rw_lock.acquire_read()
-            return self._symbols_prices[symbol]
-        finally:
-            self._rw_lock.release_read()
+        with CACHE_READ_PRICE.labels(self._get_metric_label()).time():
+            try:
+                self._rw_lock.acquire_read()
+                return self._symbols_prices[symbol]
+            finally:
+                self._rw_lock.release_read()
 
     def _set_initial_prices(self) -> None:
         """
         Sets up latest known prices to the cache on creation.
         :return: None
         """
-        symbols = self._symbols_prices.keys()
-        latest_prices = self._get_latest_price(symbols)
-        try:
-            self._rw_lock.acquire_write()
-            for k, v in latest_prices.items():
-                self._symbols_prices[k] = v['price']
-        finally:
-            self._rw_lock.release_write()
-            self.initialized = True
+        with CACHE_INIT_PRICE.labels(self._get_metric_label()).time():
+            symbols = self._symbols_prices.keys()
+            latest_prices = self._get_latest_price(symbols)
+            try:
+                self._rw_lock.acquire_write()
+                for k, v in latest_prices.items():
+                    self._symbols_prices[k] = v['price']
+            finally:
+                self._rw_lock.release_write()
+                self.initialized = True
 
     @abstractmethod
     def _get_latest_price(self, symbols: List[str]) -> Dict[str, Any]:
@@ -81,8 +86,15 @@ class SymbolCache(ABC):
         """
         raise NotImplementedError()
 
+    @abstractmethod
+    def _get_metric_label(self):
+        raise NotImplementedError()
+
 
 class StockCache(SymbolCache):
+
+    def _get_metric_label(self):
+        return 'stock'
 
     @ParseLatestV2ToReadableDict(trade_mapping_v2)
     def _get_latest_price(self, symbols: List[str]) -> Dict[str, Any]:
@@ -93,6 +105,9 @@ class StockCache(SymbolCache):
 
 
 class CryptoCache(SymbolCache):
+
+    def _get_metric_label(self):
+        return 'crypto'
 
     @ParseLatestV2ToReadableDict(trade_mapping_v2)
     def _get_latest_price(self, symbols: List[str]) -> Dict[str, Any]:
