@@ -21,7 +21,11 @@ class PriceTracker:
         self.filled_price: float = None
 
     def __lt__(self, other):
-        return self.limit_price < other.limit_price
+        try:
+
+            return self.limit_price < other.limit_price
+        except TypeError as e:
+            print(e, self, other)
 
     def __repr__(self):
         return f'Pt(acc: {self.account_id}, o_id: {self.order_id}, lp: {self.limit_price}, s: {self.symbol},' \
