@@ -492,7 +492,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:8000{{api}}/crypto/BTCUSD"
+						"url": "http://localhost:8000{{api}}/crypto/BTCUSD/trades"
 					},
 					"response": []
 				},
@@ -1076,37 +1076,37 @@
 	],
 	"variable": [
 		{
-			"id": "c3c8c9d1-cc01-4ca7-b16d-2c4e469b897b",
+			"id": "7e992aea-01d1-4f93-b38c-0c4abe9d0c04",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "a136bf2d-bf9c-453f-98ff-5e771920d2d3",
+			"id": "6379aa14-2032-4620-96aa-566fe7396f5d",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "73f2d9b3-070f-4e31-bac5-b7b14550f3f0",
+			"id": "50b15e56-f4c2-4f09-a6a9-5f9c5ea600e3",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "d53e978e-ad50-4e1b-b363-359ddf8f91a9",
+			"id": "93bb2e10-2805-46e6-8df1-456b98cc8d29",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "3f0ceea4-93a9-479f-9d97-3c15dd5bfaae",
+			"id": "14c5ee29-2ce9-43cf-87c0-0d1b7f1d6659",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "6689ec66-8b30-40a2-90b3-abcf469758e6",
+			"id": "b4cd53ae-3ef1-4117-8a24-c1e1c70e0776",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
