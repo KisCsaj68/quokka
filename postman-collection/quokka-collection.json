@@ -510,7 +510,7 @@
 					"response": []
 				},
 				{
-					"name": "get BTCUSD price Copy",
+					"name": "get AAPL price",
 					"id": "61312ce8-3f89-413a-b171-084fa6154d1f",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -518,7 +518,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:8000{{api}}/crypto/BTCUSD"
+						"url": "http://localhost:8000{{api}}/stock/AAPL"
 					},
 					"response": []
 				}
@@ -1076,37 +1076,37 @@
 	],
 	"variable": [
 		{
-			"id": "7e992aea-01d1-4f93-b38c-0c4abe9d0c04",
+			"id": "7fe8a832-5166-4c25-832f-d6d2375da52f",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "6379aa14-2032-4620-96aa-566fe7396f5d",
+			"id": "7f8c6eb6-8c7b-44ec-a3fa-514282f7c694",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "50b15e56-f4c2-4f09-a6a9-5f9c5ea600e3",
+			"id": "450377b7-ef60-4f47-8875-754a9a350d90",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "93bb2e10-2805-46e6-8df1-456b98cc8d29",
+			"id": "65da1633-75b4-430c-a335-8eec61bd4046",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "14c5ee29-2ce9-43cf-87c0-0d1b7f1d6659",
+			"id": "f05d2705-2892-44db-86f3-52faeedfcf47",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "b4cd53ae-3ef1-4117-8a24-c1e1c70e0776",
+			"id": "96d43a26-05f5-46bb-b1b5-e169278d4c4f",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
