@@ -1076,37 +1076,37 @@
 	],
 	"variable": [
 		{
-			"id": "2c9ac7e1-4b51-4b4a-afb9-637e003b1082",
+			"id": "c3c8c9d1-cc01-4ca7-b16d-2c4e469b897b",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "53c6cb25-01b6-43af-badd-30d2e48aba20",
+			"id": "a136bf2d-bf9c-453f-98ff-5e771920d2d3",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "91234da1-cd61-4b19-8de5-f5518e27f2eb",
+			"id": "73f2d9b3-070f-4e31-bac5-b7b14550f3f0",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "7141f3ac-ab58-4ba0-a285-4b7e05c2eab8",
+			"id": "d53e978e-ad50-4e1b-b363-359ddf8f91a9",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "018ec51c-bf58-4007-a3a0-0daa74486c78",
+			"id": "3f0ceea4-93a9-479f-9d97-3c15dd5bfaae",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "2e8b937a-d6b1-46d3-8e5e-e6bedc23fffb",
+			"id": "6689ec66-8b30-40a2-90b3-abcf469758e6",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
