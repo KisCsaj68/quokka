@@ -35,3 +35,4 @@ yarl
 pika
 sortedcontainers
 jsonpickle
+prometheus-client

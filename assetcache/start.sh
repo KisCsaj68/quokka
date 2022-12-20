@@ -1,6 +1,8 @@
 #!/bin/bash
 
-pip install --upgrade pip
-pip install -e .
+source .env
 
-gunicorn --workers=1 wsgi:application
+mkdir -p $PROMETHEUS_MULTIPROC_DIR
+rm -f "$PROMETHEUS_MULTIPROC_DIR/*"
+
+gunicorn wsgi:application
