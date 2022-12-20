@@ -495,6 +495,32 @@
 						"url": "http://localhost:8000{{api}}/crypto/BTCUSD"
 					},
 					"response": []
+				},
+				{
+					"name": "Prometheus metrics",
+					"id": "ed3e26bb-3d78-4917-b8ef-054611e447f5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8000/metrics"
+					},
+					"response": []
+				},
+				{
+					"name": "get BTCUSD price Copy",
+					"id": "61312ce8-3f89-413a-b171-084fa6154d1f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8000{{api}}/crypto/BTCUSD"
+					},
+					"response": []
 				}
 			],
 			"id": "61be49ec-fb47-46f5-bd69-c990e467b03d"
@@ -1050,37 +1076,37 @@
 	],
 	"variable": [
 		{
-			"id": "7e2d6c1d-ceba-4bd3-b051-159b08557791",
+			"id": "5c64c7cb-6a7a-4981-b352-a9e4ccf27f40",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "63cd3466-bd8f-4ea2-9e7b-511410ad83e9",
+			"id": "9155bc42-7b36-4404-80c7-7665aebb695b",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "cd020b33-49d6-4418-8ddc-5823eb75a062",
+			"id": "453fc343-455d-45fe-97ef-629ac01a5a09",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "da0bcad2-8006-4f4f-8357-53a20c23e3ff",
+			"id": "6dfa3617-fb7e-4f98-be12-4e041af6e43d",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "f19212e6-c037-4056-9def-675f61640ab2",
+			"id": "7807a148-2363-4813-8680-c88e5f26401e",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "6f5a9b28-6601-4ef3-9f7f-763754063b4e",
+			"id": "03305e43-5f53-41bc-9321-e7b9dfada9f9",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
