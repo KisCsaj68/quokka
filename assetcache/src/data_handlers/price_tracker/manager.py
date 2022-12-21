@@ -8,18 +8,18 @@ from src.utils.rw_lock import ReadWriteLock
 from src.utils.convert import rename_keys
 from src.storages import DotEnvConfig
 from src.metrics import MANAGER_PRICE_TRACKER_TOTAL, MANAGER_STORE_PRICE_TRACKER, MANAGER_MATCH_PRICE_TRACKER, \
-                        MANAGER_STORED_PRICE_TRACKER
+    MANAGER_STORED_PRICE_TRACKER
 
 
 class PriceTrackerManager:
     def __init__(self, conf: DotEnvConfig, producer: Producer):
         self._producer = producer
-        self.crypto_container = Container(self._producer, 'stock')
-        self.stock_container = Container(self._producer, 'crypto')
+        self.crypto_container = Container(self._producer, 'crypto')
+        self.stock_container = Container(self._producer, 'stock')
 
     def on_message_from_rabbit(self, ch, method, properties, body) -> None:
         order: Dict = json.loads(body)
-        MANAGER_PRICE_TRACKER_TOTAL.labels(order['asset_type']).inc()
+        MANAGER_PRICE_TRACKER_TOTAL.labels(order['asset_type'].lower()).inc()
         if order['asset_type'] == 'CRYPTO':
             self.crypto_container.on_message_from_rabbit(order)
         else:
@@ -41,7 +41,7 @@ class Container:
         symbol = order['symbol']
         price_tracker = PriceTracker(symbol, order['limit'], order['id'], order['account'],
                                      sell_position_id=order['sell_position_id'])
-        with MANAGER_STORE_PRICE_TRACKER.labels(order['asset_type']).time():
+        with MANAGER_STORE_PRICE_TRACKER.labels(order['asset_type'].lower()).time():
             try:
                 self._rw_lock.acquire_write()
                 if not self._container.get(symbol):
@@ -81,7 +81,8 @@ class Container:
                 filled_pts += self._handle_sell_side(buy_sell_tuple[self.SELL_INDEX], fake_pt, trade_price)
             finally:
                 self._rw_lock.release_write()
-            self._send_to_rabbit_mq(filled_pts)
+            if filled_pts:
+                self._send_to_rabbit_mq(filled_pts)
 
     def _handle_buy_side(self, buy_side_list: SortedList, fake_pt: PriceTracker, trade_price: float):
         with MANAGER_MATCH_PRICE_TRACKER.labels('match_buy_side', self._asset_type).time():
