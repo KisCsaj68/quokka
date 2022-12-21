@@ -1107,37 +1107,37 @@
 	],
 	"variable": [
 		{
-			"id": "fc51a20a-30f8-4e66-bcb7-52138f7c56fc",
+			"id": "3d199c98-1232-4eed-ad13-b12949bebde2",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "f0ab93ef-845a-4073-ba0c-44bebd85089a",
+			"id": "409cd3d4-a49e-436b-adbe-0dd954faf5eb",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "7dbda396-3cb5-47f5-8819-4cdfaa32ccb4",
+			"id": "2c49ad96-a9ca-4674-8ae7-1f1c97ffb08b",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "eca5a4c1-085d-46b5-8c38-40a472fafc65",
+			"id": "c55534b4-96c3-4b6d-8e8c-7258bc243210",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "7b24c345-88cd-4615-9679-4b157649dfae",
+			"id": "83b0c070-41ec-4bcb-964a-f2eb2fbe4d87",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "c0c2c4dc-7819-4f1f-80aa-bad06b668747",
+			"id": "5be3e2c2-2042-47a4-9f33-ba77ed295315",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
