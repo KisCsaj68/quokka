@@ -71,7 +71,7 @@ public class OrderService {
     }
 
     public ResponseEntity createOrder(Orders order, Histogram histogram) {
-        Metrics.ORDER_REQUEST.labels("order_request").inc();
+        Metrics.ORDER_REQUEST.labels(order.getType().toString().toLowerCase()).inc();
         order.setStatus(OrderStatus.OPEN);
         // Send open order to persister via RMQ
 

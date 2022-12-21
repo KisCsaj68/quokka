@@ -6,7 +6,7 @@ import io.prometheus.client.Histogram;
 public interface Metrics {
     Counter ORDER_REQUEST = Counter.build().namespace("quokka").subsystem("oms")
             .name("order_request")
-            .labelNames("request")
+            .labelNames("order_type")
             .help("total number of order placement").register();
 
     Histogram LIMIT_ORDER_REQUEST_TIME_DURATION = Histogram.build().namespace("quokka").subsystem("oms")
