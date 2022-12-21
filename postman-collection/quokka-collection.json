@@ -380,7 +380,7 @@
 					"response": []
 				},
 				{
-					"name": "add limit order",
+					"name": "add limit order crypto",
 					"id": "a48c15a2-8517-4ee0-8326-c23c913eae0a",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -399,7 +399,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"symbol\": \"BTCUSD\",\n    \"type\": \"LIMIT\",\n    \"side\": \"BUY\",\n    \"limit\": 17900,\n    \"qty\": 3\n}",
+							"raw": "{\n    \"symbol\": \"BTCUSD\",\n    \"type\": \"LIMIT\",\n    \"side\": \"BUY\",\n    \"limit\": 16500,\n    \"qty\": 3\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1107,37 +1107,37 @@
 	],
 	"variable": [
 		{
-			"id": "dfb4e2dc-00c0-488d-b79f-6101351d3762",
+			"id": "fc51a20a-30f8-4e66-bcb7-52138f7c56fc",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "b69fa392-75a5-4266-9888-46627ad16779",
+			"id": "f0ab93ef-845a-4073-ba0c-44bebd85089a",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "042e7197-5cd1-42f7-b154-e3d8f6e6a62e",
+			"id": "7dbda396-3cb5-47f5-8819-4cdfaa32ccb4",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "097b14b1-2565-426f-bdf1-dc08ed96fb92",
+			"id": "eca5a4c1-085d-46b5-8c38-40a472fafc65",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "885d9904-7404-4828-a6a4-e87e21615b79",
+			"id": "7b24c345-88cd-4615-9679-4b157649dfae",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "c877e590-a767-4766-81df-7840b105e113",
+			"id": "c0c2c4dc-7819-4f1f-80aa-bad06b668747",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
