@@ -411,6 +411,37 @@
 					"response": []
 				},
 				{
+					"name": "add limit order stock",
+					"id": "3a73a493-ace0-4ae1-8ac2-53e0963f49ca",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"symbol\": \"BTCUSD\",\n    \"type\": \"LIMIT\",\n    \"side\": \"BUY\",\n    \"limit\": 17900,\n    \"qty\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}{{api}}/order/crypto"
+					},
+					"response": []
+				},
+				{
 					"name": "Delete user",
 					"event": [
 						{
@@ -1076,37 +1107,37 @@
 	],
 	"variable": [
 		{
-			"id": "e692224e-dbd5-4b27-99b5-2e6733f59487",
+			"id": "dfb4e2dc-00c0-488d-b79f-6101351d3762",
 			"key": "newFullName",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "b04da261-aeca-4a62-b400-1621c7216f46",
+			"id": "b69fa392-75a5-4266-9888-46627ad16779",
 			"key": "host",
 			"value": "localhost:8080",
 			"type": "string"
 		},
 		{
-			"id": "d908b3aa-5bc9-4d81-8a65-3766fef89525",
+			"id": "042e7197-5cd1-42f7-b154-e3d8f6e6a62e",
 			"key": "api",
 			"value": "/api/v1",
 			"type": "string"
 		},
 		{
-			"id": "6f690cb8-f7e9-4c3d-90b4-5027986353f5",
+			"id": "097b14b1-2565-426f-bdf1-dc08ed96fb92",
 			"key": "user",
 			"value": "/user/b462290f-4006-4d71-8a39-e956e245ede8",
 			"type": "string"
 		},
 		{
-			"id": "fbf81052-93d3-4813-8adc-4446f4369395",
+			"id": "885d9904-7404-4828-a6a4-e87e21615b79",
 			"key": "name",
 			"value": "User3456",
 			"type": "string"
 		},
 		{
-			"id": "a36a00bc-bc45-45d6-98cb-35836c3e1a5e",
+			"id": "c877e590-a767-4766-81df-7840b105e113",
 			"key": "base_api_url",
 			"value": "localhost:8080/api/v1",
 			"type": "string"
