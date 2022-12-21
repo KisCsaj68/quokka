@@ -62,7 +62,6 @@ class LatestAssetRoute:
         self.make_response(req, resp, symbol)
 
     def on_get_trades(self, req: Request, resp: Response, symbol: str) -> None:
-        print(req.path, flush=True)
         self.make_response(req, resp, symbol)
 
     def make_response(self, req: Request, resp: Response, symbol: str) -> None:
