@@ -39,9 +39,9 @@ It's mission critical state is handled fully in-memory, while every change of th
 - [ ] helm-chart to run on k8s
 - [ ] Logging
 - [ ] Log shipping (ELK stack)
-- [ ] Visibility
-    - [ ] prometheus metrics
-    - [ ] grafana dashboard
+- [x] Visibility
+    - [x] prometheus metrics
+    - [x] grafana dashboard
 
 
 
