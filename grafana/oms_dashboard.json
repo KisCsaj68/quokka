@@ -33,7 +33,6 @@
         "type": "prometheus",
         "uid": "iJ9nup5Vk"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -88,12 +87,12 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 11,
         "w": 24,
         "x": 0,
         "y": 0
       },
-      "id": 2,
+      "id": 6,
       "options": {
         "legend": {
           "calcs": [],
@@ -113,8 +112,8 @@
             "uid": "iJ9nup5Vk"
           },
           "editorMode": "builder",
-          "expr": "rate(quokka_oms_order_request_total[$__rate_interval])",
-          "legendFormat": "__auto",
+          "expr": "rate(quokka_oms_order_request_total{order_type=~\"$order_type\"}[$__rate_interval])",
+          "legendFormat": "{{order_type}}",
           "range": true,
           "refId": "A"
         }
@@ -182,10 +181,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 17,
         "w": 12,
         "x": 0,
-        "y": 9
+        "y": 11
       },
       "id": 4,
       "options": {
@@ -276,10 +275,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 17,
         "w": 12,
         "x": 12,
-        "y": 9
+        "y": 11
       },
       "id": 3,
       "options": {
@@ -316,16 +315,47 @@
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "iJ9nup5Vk"
+        },
+        "definition": "label_values(quokka_oms_order_request_total,order_type)",
+        "hide": 0,
+        "includeAll": true,
+        "multi": false,
+        "name": "order_type",
+        "options": [],
+        "query": {
+          "query": "label_values(quokka_oms_order_request_total,order_type)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "OMS",
   "uid": "PUrvgU54k",
-  "version": 6,
+  "version": 13,
   "weekStart": ""
 }

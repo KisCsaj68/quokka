@@ -24,10 +24,24 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 5,
   "links": [],
   "liveNow": false,
   "panels": [
+    {
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 9,
+      "panels": [],
+      "repeat": "resource",
+      "repeatDirection": "h",
+      "title": "Persist $resource",
+      "type": "row"
+    },
     {
       "datasource": {
         "type": "prometheus",
@@ -43,7 +57,6 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -53,9 +66,9 @@
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "smooth",
+            "lineInterpolation": "linear",
             "lineWidth": 1,
-            "pointSize": 3,
+            "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
@@ -82,18 +95,17 @@
                 "value": 80
               }
             ]
-          },
-          "unit": "ops"
+          }
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
-        "w": 24,
+        "h": 8,
+        "w": 12,
         "x": 0,
-        "y": 0
+        "y": 1
       },
-      "id": 4,
+      "id": 6,
       "options": {
         "legend": {
           "calcs": [],
@@ -106,7 +118,6 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "9.3.1",
       "targets": [
         {
           "datasource": {
@@ -114,14 +125,13 @@
             "uid": "iJ9nup5Vk"
           },
           "editorMode": "builder",
-          "expr": "max by(operation) (rate(quokka_api_user_request_total{operation=~\"$operation\"}[$__rate_interval]))",
-          "format": "time_series",
-          "legendFormat": "{{operation}}",
+          "expr": "max by(resource) (rate(quokka_persister_requests_total{resource=~\"$resource\"}[$__rate_interval]))",
+          "legendFormat": "{{resource}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Request rate",
+      "title": "Persist $resource rate",
       "type": "timeseries"
     },
     {
@@ -129,6 +139,7 @@
         "type": "prometheus",
         "uid": "iJ9nup5Vk"
       },
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -145,22 +156,14 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 24,
+        "h": 9,
+        "w": 12,
         "x": 0,
         "y": 9
       },
       "id": 2,
       "options": {
         "calculate": false,
-        "calculation": {
-          "xBuckets": {
-            "mode": "size"
-          },
-          "yBuckets": {
-            "mode": "size"
-          }
-        },
         "cellGap": 1,
         "color": {
           "exponent": 0.5,
@@ -169,7 +172,7 @@
           "reverse": false,
           "scale": "exponential",
           "scheme": "Oranges",
-          "steps": 92
+          "steps": 64
         },
         "exemplars": {
           "color": "rgba(255,0,255,0.7)"
@@ -185,7 +188,7 @@
         },
         "tooltip": {
           "show": true,
-          "yHistogram": true
+          "yHistogram": false
         },
         "yAxis": {
           "axisPlacement": "left",
@@ -201,17 +204,15 @@
             "uid": "iJ9nup5Vk"
           },
           "editorMode": "builder",
-          "exemplar": false,
-          "expr": "sum(rate(quokka_api_user_request_time_duration_bucket{operation=~\"$operation\"}[1m])) by(le)",
+          "expr": "sum by(le) (rate(quokka_persister_persist_time_duration_bucket{resource=~\"$resource\"}[1m]))",
           "format": "heatmap",
-          "instant": false,
           "interval": "10s",
           "legendFormat": "{{le}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Account CRUD latency",
+      "title": "Persist $resource latency",
       "type": "heatmap"
     }
   ],
@@ -223,40 +224,40 @@
     "list": [
       {
         "current": {
-          "selected": true,
-          "text": "All",
-          "value": "$__all"
+          "selected": false,
+          "text": "order",
+          "value": "order"
         },
         "datasource": {
           "type": "prometheus",
           "uid": "iJ9nup5Vk"
         },
-        "definition": "label_values(quokka_api_user_request_time_duration_bucket,operation)",
+        "definition": "label_values(quokka_persister_persist_time_duration_bucket,resource)",
         "hide": 0,
         "includeAll": true,
-        "multi": false,
-        "name": "operation",
+        "multi": true,
+        "name": "resource",
         "options": [],
         "query": {
-          "query": "label_values(quokka_api_user_request_time_duration_bucket,operation)",
+          "query": "label_values(quokka_persister_persist_time_duration_bucket,resource)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 1,
+        "sort": 0,
         "type": "query"
       }
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Api",
-  "uid": "lY3Cqt5Vz",
-  "version": 14,
+  "title": "Persister",
+  "uid": "FdmyD_cVk",
+  "version": 17,
   "weekStart": ""
 }
