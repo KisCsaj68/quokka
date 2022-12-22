@@ -2,6 +2,8 @@ from prometheus_client import Histogram, Counter, Gauge
 
 buckets = [0.000001, 0.000003, 0.000005, 0.000007, 0.00001, 0.00002, 0.00003, 0.00004,
            0.00005, 0.0001, 0.0003, 0.0005, 0.001]
+api_buckets = [0.000009, 0.00001, 0.00002, 0.00003, 0.00004,
+               0.00005, 0.00007, 0.00009, 0.0001, 0.0003, 0.0005, 0.0007, 0.0009, 0.001, 0.003, 0.005]
 
 # Stream metrics
 STREAM_TRADE_TOTAL = Counter(namespace='quokka', subsystem='assetcache', name='stream_trade_total',
@@ -39,3 +41,11 @@ MANAGER_STORED_PRICE_TRACKER = Gauge(namespace='quokka', subsystem='assetcache',
                                      labelnames=['asset_type'],
                                      documentation='Measures the number of price trackers stored in-memory',
                                      )
+# API metrics
+API_REQUEST_TOTAL = Counter(namespace='quokka', subsystem='assetcache', name='api_request_total',
+                            labelnames=['path', 'http_method'],
+                            documentation='total number of received API requests')
+API_RESPONSE = Histogram(namespace='quokka', subsystem='assetcache', name='api_response_duration',
+                         labelnames=['path', 'http_method', 'asset_type'],
+                         documentation='total elapsed time from request to response',
+                         buckets=api_buckets)

@@ -5,10 +5,11 @@ from typing import Tuple, Dict
 from falcon import Request
 from falcon import Response
 from prometheus_client import multiprocess
-from prometheus_client import generate_latest, CollectorRegistry, CONTENT_TYPE_LATEST, Gauge, Counter
+from prometheus_client import generate_latest, CollectorRegistry, CONTENT_TYPE_LATEST
 
 from src.cache.streaming_symbol_cache import SymbolCache
 from src.storages.primitive_json_db import PrimitiveJsonDB
+from src.metrics import API_RESPONSE, API_REQUEST_TOTAL
 
 
 def parse_dict_to_json_bytes(dictionary: dict) -> Tuple[bytes, int]:
@@ -35,19 +36,25 @@ class AssetNamesRoute:
         )
 
     def on_get(self, req: Request, resp: Response) -> None:
-        resp.data = self.asset_data
-        resp.content_length = self.asset_length
-        resp.content_type = self.DEFAULT_CONTENT_TYPE
+        API_REQUEST_TOTAL.labels(req.uri_template, req.method).inc()
+        with API_RESPONSE.labels(req.uri_template, req.method, 'all').time():
+            resp.data = self.asset_data
+            resp.content_length = self.asset_length
+            resp.content_type = self.DEFAULT_CONTENT_TYPE
 
     def on_get_crypto(self, req: Request, resp: Response) -> None:
-        resp.data = self.crypto_data
-        resp.content_length = self.crypto_length
-        resp.content_type = self.DEFAULT_CONTENT_TYPE
+        API_REQUEST_TOTAL.labels(req.uri_template, req.method).inc()
+        with API_RESPONSE.labels(req.uri_template, req.method, 'crypto').time():
+            resp.data = self.crypto_data
+            resp.content_length = self.crypto_length
+            resp.content_type = self.DEFAULT_CONTENT_TYPE
 
     def on_get_stock(self, req: Request, resp: Response) -> None:
-        resp.data = self.stock_data
-        resp.content_length = self.stock_length
-        resp.content_type = self.DEFAULT_CONTENT_TYPE
+        API_REQUEST_TOTAL.labels(req.uri_template, req.method).inc()
+        with API_RESPONSE.labels(req.uri_template, req.method, 'stock').time():
+            resp.data = self.stock_data
+            resp.content_length = self.stock_length
+            resp.content_type = self.DEFAULT_CONTENT_TYPE
 
 
 class LatestAssetRoute:
@@ -59,10 +66,14 @@ class LatestAssetRoute:
         self._cache: SymbolCache = cache
 
     def on_get(self, req: Request, resp: Response, symbol: str) -> None:
-        self.make_response(req, resp, symbol)
+        API_REQUEST_TOTAL.labels(req.uri_template, req.method).inc()
+        with API_RESPONSE.labels(req.uri_template, req.method, self.asset_type).time():
+            self.make_response(req, resp, symbol)
 
     def on_get_trades(self, req: Request, resp: Response, symbol: str) -> None:
-        self.make_response(req, resp, symbol)
+        API_REQUEST_TOTAL.labels(req.uri_template, req.method).inc()
+        with API_RESPONSE.labels(req.uri_template, req.method, self.asset_type).time():
+            self.make_response(req, resp, symbol)
 
     def make_response(self, req: Request, resp: Response, symbol: str) -> None:
         if not self.is_valid(symbol):
