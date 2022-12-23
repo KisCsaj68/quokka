@@ -15,8 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/api/v1/order")
 @ConfigurationProperties
@@ -48,10 +46,8 @@ public class FinController {
         order_request.labels("write", "stock").inc();
         Histogram.Timer timer = order_request_time_duration.labels("write", "stock").startTimer();
         try {
-
             return this.createOrder(data, token, AssetType.STOCK);
-        }
-        finally {
+        } finally {
             timer.observeDuration();
         }
     }
@@ -62,10 +58,8 @@ public class FinController {
         order_request.labels("write", "crypto").inc();
         Histogram.Timer timer = order_request_time_duration.labels("write", "crypto").startTimer();
         try {
-
             return this.createOrder(data, token, AssetType.CRYPTO);
-        }
-        finally {
+        } finally {
             timer.observeDuration();
         }
     }
