@@ -1,4 +1,7 @@
+import functools
 import json
+import time
+from timeit import default_timer
 
 from typing import Tuple, Dict
 
@@ -20,6 +23,37 @@ def parse_dict_to_json_bytes(dictionary: dict) -> Tuple[bytes, int]:
     return byte_json, len(byte_json)
 
 
+def get_response_code_family(response: Response) -> str:
+    http_code = int(response.status[:3])
+    if 100 <= http_code < 200:
+        return 'INFORMATIONAL'
+    elif 200 <= http_code < 300:
+        return 'SUCCESSFUL'
+    elif 300 <= http_code < 400:
+        return 'REDIRECTION'
+    elif 400 <= http_code < 500:
+        return 'CLIENT_ERROR'
+    return 'SERVER_ERROR'
+
+
+def with_metrics(asset_type: str = None):
+    def decorator(func):
+        def wrapper(s, request, response, *args, **kwargs):
+            _asset_type = asset_type
+            if not asset_type:
+                _asset_type = s.asset_type
+            start = default_timer()
+            func(s, request, response, *args, **kwargs)
+            API_REQUEST_TOTAL.labels(request.uri_template, request.method, get_response_code_family(response)).inc()
+            API_RESPONSE.labels(request.uri_template, request.method, _asset_type,
+                                get_response_code_family(response)).observe(max(default_timer() - start, 0))
+            print(request.uri_template, request.method, get_response_code_family(response))
+
+        return wrapper
+
+    return decorator
+
+
 class AssetNamesRoute:
     DEFAULT_CONTENT_TYPE: str = "application/json"
 
@@ -35,26 +69,23 @@ class AssetNamesRoute:
             {"stock": db["assets"]["stock"]}
         )
 
+    @with_metrics('all')
     def on_get(self, req: Request, resp: Response) -> None:
-        API_REQUEST_TOTAL.labels(req.uri_template, req.method).inc()
-        with API_RESPONSE.labels(req.uri_template, req.method, 'all').time():
-            resp.data = self.asset_data
-            resp.content_length = self.asset_length
-            resp.content_type = self.DEFAULT_CONTENT_TYPE
+        resp.data = self.asset_data
+        resp.content_length = self.asset_length
+        resp.content_type = self.DEFAULT_CONTENT_TYPE
 
+    @with_metrics('crypto')
     def on_get_crypto(self, req: Request, resp: Response) -> None:
-        API_REQUEST_TOTAL.labels(req.uri_template, req.method).inc()
-        with API_RESPONSE.labels(req.uri_template, req.method, 'crypto').time():
-            resp.data = self.crypto_data
-            resp.content_length = self.crypto_length
-            resp.content_type = self.DEFAULT_CONTENT_TYPE
+        resp.data = self.crypto_data
+        resp.content_length = self.crypto_length
+        resp.content_type = self.DEFAULT_CONTENT_TYPE
 
+    @with_metrics('stock')
     def on_get_stock(self, req: Request, resp: Response) -> None:
-        API_REQUEST_TOTAL.labels(req.uri_template, req.method).inc()
-        with API_RESPONSE.labels(req.uri_template, req.method, 'stock').time():
-            resp.data = self.stock_data
-            resp.content_length = self.stock_length
-            resp.content_type = self.DEFAULT_CONTENT_TYPE
+        resp.data = self.stock_data
+        resp.content_length = self.stock_length
+        resp.content_type = self.DEFAULT_CONTENT_TYPE
 
 
 class LatestAssetRoute:
@@ -65,15 +96,13 @@ class LatestAssetRoute:
         self.asset_type = asset_type
         self._cache: SymbolCache = cache
 
+    @with_metrics()
     def on_get(self, req: Request, resp: Response, symbol: str) -> None:
-        API_REQUEST_TOTAL.labels(req.uri_template, req.method).inc()
-        with API_RESPONSE.labels(req.uri_template, req.method, self.asset_type).time():
-            self.make_response(req, resp, symbol)
+        self.make_response(req, resp, symbol)
 
+    @with_metrics()
     def on_get_trades(self, req: Request, resp: Response, symbol: str) -> None:
-        API_REQUEST_TOTAL.labels(req.uri_template, req.method).inc()
-        with API_RESPONSE.labels(req.uri_template, req.method, self.asset_type).time():
-            self.make_response(req, resp, symbol)
+        self.make_response(req, resp, symbol)
 
     def make_response(self, req: Request, resp: Response, symbol: str) -> None:
         if not self.is_valid(symbol):

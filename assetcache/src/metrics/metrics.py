@@ -43,9 +43,9 @@ MANAGER_STORED_PRICE_TRACKER = Gauge(namespace='quokka', subsystem='assetcache',
                                      )
 # API metrics
 API_REQUEST_TOTAL = Counter(namespace='quokka', subsystem='assetcache', name='api_request_total',
-                            labelnames=['path', 'http_method'],
+                            labelnames=['path', 'http_method', 'response_code'],
                             documentation='total number of received API requests')
 API_RESPONSE = Histogram(namespace='quokka', subsystem='assetcache', name='api_response_duration',
-                         labelnames=['path', 'http_method', 'asset_type'],
+                         labelnames=['path', 'http_method', 'asset_type', 'response_code'],
                          documentation='total elapsed time from request to response',
                          buckets=api_buckets)
