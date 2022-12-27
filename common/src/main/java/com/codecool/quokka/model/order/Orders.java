@@ -13,7 +13,6 @@ import java.util.UUID;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class Orders implements Serializable {
     @Id
@@ -22,6 +21,7 @@ public class Orders implements Serializable {
     @JsonProperty("quantity")
     private int quantity;
 
+    @JsonProperty("account")
     private UUID accountId;
 
     @JsonProperty("sell_position_id")
@@ -36,9 +36,12 @@ public class Orders implements Serializable {
     @Enumerated(EnumType.STRING)
     private OrderType type;
 
+
+    @JsonProperty("asset_type")
     @Enumerated(EnumType.STRING)
     private AssetType assetType;
 
+    @JsonProperty("side")
     @Enumerated(EnumType.STRING)
     private OrderSide orderSide;
 
@@ -68,6 +71,10 @@ public class Orders implements Serializable {
         this.assetType = assetType;
         this.id = UUID.randomUUID();
         this.sellPositionId = sellPositionId;
+    }
+
+    public Orders() {
+        this.id = UUID.randomUUID();
     }
 
     public int getQuantity() {
@@ -145,6 +152,8 @@ public class Orders implements Serializable {
     public OrderSide getOrderSide() {
         return orderSide;
     }
+
+
 
     @Override
     public String toString() {

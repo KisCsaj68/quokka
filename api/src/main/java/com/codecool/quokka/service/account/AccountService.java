@@ -6,7 +6,6 @@ import com.codecool.quokka.dao.account.AccountDao;
 import com.codecool.quokka.model.account.AccountDto;
 import com.codecool.quokka.model.role.AccountRole;
 import com.google.common.hash.Hashing;
-import org.checkerframework.checker.nullness.Opt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,13 +24,12 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class AccountService  implements UserDetailsService {
+public class AccountService implements UserDetailsService {
 
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", Pattern.CASE_INSENSITIVE);
 
     private final AccountDao accountDao;
     private final AccountRoleDao accountRoleDao;
-
 
     @Autowired
     public AccountService(AccountDao accountDao, AccountRoleDao accountRoleDao) {
@@ -44,11 +42,9 @@ public class AccountService  implements UserDetailsService {
         Optional<AccountRole> role = accountRoleDao.getAccountRoleByName("TRADER");
         if (role.isPresent()) {
             account.addRole(role.get());
-        }
-        else {
+        } else {
             AccountRole newRole = new AccountRole("TRADER", "Trading");
             account.addRole(newRole);
-
         }
         Account accnt = accountDao.saveAndFlush(account);
         return AccountDto.from(accnt);

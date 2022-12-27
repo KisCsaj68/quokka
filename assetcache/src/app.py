@@ -2,7 +2,7 @@ import falcon
 
 from src.data_handlers import DataCollectors
 from src.storages.primitive_json_db import PrimitiveJsonDB
-from src.routes import Ping, AssetNamesRoute, LatestAssetRoute
+from src.routes import AssetNamesRoute, LatestAssetRoute, Metrics
 
 
 class AssetCacheAPI:
@@ -11,7 +11,6 @@ class AssetCacheAPI:
         self._app: falcon.App = falcon.App(cors_enable=True)
         self.collectors: DataCollectors = collectors
 
-        self.ping: Ping = Ping()
         self.asset_names: AssetNamesRoute = AssetNamesRoute(db)
         self.latest_stock: LatestAssetRoute = LatestAssetRoute(
             self.collectors.stock_cache, 'STOCK'
@@ -19,6 +18,7 @@ class AssetCacheAPI:
         self.latest_crypto: LatestAssetRoute = LatestAssetRoute(
             self.collectors.crypto_cache, 'CRYPTO'
         )
+        self.metrics = Metrics()
 
         self.add_routes()
 
@@ -27,7 +27,7 @@ class AssetCacheAPI:
         return self._app
 
     def add_routes(self) -> None:
-        self._app.add_route("/ping", self.ping)
+        self._app.add_route("/metrics", self.metrics)
         self._app.add_route("/api/v1/assets", self.asset_names)
 
         self._app.add_route("/api/v1/stock", self.asset_names, suffix="stock")

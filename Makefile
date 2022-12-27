@@ -66,3 +66,7 @@ persister-build:
 .PHONY: last-container-logs
 last-container-logs:
 	docker logs -f $$(docker container ls -n 1 -q)
+
+.PHONY: download-dashboards
+download-dashboards:
+	./scripts/download_dashboards.sh

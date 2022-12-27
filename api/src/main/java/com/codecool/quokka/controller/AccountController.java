@@ -4,16 +4,15 @@ import com.codecool.quokka.model.account.Account;
 
 import com.codecool.quokka.model.account.AccountDto;
 import com.codecool.quokka.service.account.AccountService;
+import io.prometheus.client.Counter;
+import io.prometheus.client.Histogram;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/user")
 @RestController
 public class AccountController {
-
     private AccountService accountService;
 
     @Autowired
@@ -67,7 +65,7 @@ public class AccountController {
     @PreAuthorize("hasRole('ROLE_TRADER')")
     public ResponseEntity deleteUserById(@RequestBody HashMap<String, String> body) {
         UUID id = UUID.fromString(body.get("id"));
-        if (accountService.getAccount(id).isPresent()){
+        if (accountService.getAccount(id).isPresent()) {
             accountService.deleteAccount(id);
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -78,7 +76,7 @@ public class AccountController {
     @PreAuthorize("hasRole('ROLE_TRADER')")
     public ResponseEntity updateUser(@PathVariable("id") UUID id, @RequestBody HashMap<String, String> fields) {
         Optional<AccountDto> accountDto = accountService.updateAccount(id, fields);
-        if (accountDto.isPresent()){
+        if (accountDto.isPresent()) {
             return new ResponseEntity<>(accountDto.get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

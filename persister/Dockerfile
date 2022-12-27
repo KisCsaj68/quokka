@@ -3,11 +3,11 @@ ARG JAVA_IMAGE_VERSION=17.0.1
 FROM maven:${MVN_VERSION} as dependencies
 
 # go-offline using the pom.xml
-COPY ./common/pom.xml /common/pom.xml
+COPY ./common /common
 COPY ./persister/pom.xml /persister/pom.xml
 
 WORKDIR /common
-RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
+RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline install
 
 WORKDIR /persister
 RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
@@ -16,11 +16,7 @@ ARG MVN_VERSION
 ARG JAVA_IMAGE_VERSION
 FROM dependencies as builder
 
-COPY ./common /common
 COPY ./persister /persister
-
-WORKDIR /common
-RUN --mount=type=cache,target=/root/.m2 mvn clean install
 
 WORKDIR /persister
 RUN --mount=type=cache,target=/root/.m2 mvn clean package -DskipTests

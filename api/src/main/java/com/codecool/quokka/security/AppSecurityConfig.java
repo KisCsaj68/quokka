@@ -45,7 +45,6 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        System.out.println("Hello security configproperties" + url);
         http
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -56,6 +55,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers(HttpMethod.GET, "/api/v1/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/user").permitAll()
+                .antMatchers(HttpMethod.GET, "/metrics").permitAll()
                 .antMatchers("/", "index", "/static/css/", "/static/js/", "/webjars/**/").permitAll()
                 .anyRequest()
                 .authenticated();
