@@ -29,12 +29,101 @@
   "liveNow": false,
   "panels": [
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "iJ9nup5Vk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 15,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "iJ9nup5Vk"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.99, sum by(le) (rate(quokka_api_request_time_duration_bucket{path=~\"$path\", http_method=~\"$method\", response_code=~\"$response\"}[5m])))",
+          "format": "time_series",
+          "legendFormat": "P99",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "iJ9nup5Vk"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.95, sum by(le) (rate(quokka_api_request_time_duration_bucket{path=~\"$path\", http_method=~\"$method\", response_code=~\"$response\"}[5m])))",
+          "hide": false,
+          "legendFormat": "P95",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "iJ9nup5Vk"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.50, sum by(le) (rate(quokka_api_request_time_duration_bucket{path=~\"$path\", http_method=~\"$method\", response_code=~\"$response\"}[5m])))",
+          "hide": false,
+          "legendFormat": "P50",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "Order request percentiles",
+      "type": "gauge"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 8
       },
       "id": 11,
       "panels": [],
@@ -103,7 +192,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 1
+        "y": 9
       },
       "id": 6,
       "options": {
@@ -125,7 +214,7 @@
             "uid": "iJ9nup5Vk"
           },
           "editorMode": "builder",
-          "expr": "max by(path, http_method, response_code) (rate(quokka_api_request_time_duration_sum{path=~\"$path\", http_method=~\"$method\", response_code=~\"$response\"}[$__rate_interval]))",
+          "expr": "max by(path, http_method, response_code) (rate(quokka_api_request_total{path=~\"$path\", http_method=~\"$method\", response_code=~\"$response\"}[$__rate_interval]))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -160,7 +249,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 1
+        "y": 9
       },
       "id": 7,
       "options": {
@@ -222,7 +311,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 9
+        "y": 17
       },
       "id": 9,
       "panels": [],
@@ -290,7 +379,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 10
+        "y": 18
       },
       "id": 13,
       "options": {
@@ -347,7 +436,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 10
+        "y": 18
       },
       "id": 4,
       "options": {
@@ -446,14 +535,14 @@
           "type": "prometheus",
           "uid": "iJ9nup5Vk"
         },
-        "definition": "label_values(quokka_assetcache_api_response_duration_bucket, http_method)",
+        "definition": "label_values({__name__=~ \"quokka_assetcache_api_response_duration_bucket|quokka_api_request_time_duration_bucket|quokka_assetcache_api_request_total|quokka_api_request_total\"},http_method)",
         "hide": 0,
         "includeAll": true,
         "multi": false,
         "name": "method",
         "options": [],
         "query": {
-          "query": "label_values(quokka_assetcache_api_response_duration_bucket, http_method)",
+          "query": "label_values({__name__=~ \"quokka_assetcache_api_response_duration_bucket|quokka_api_request_time_duration_bucket|quokka_assetcache_api_request_total|quokka_api_request_total\"},http_method)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -472,14 +561,14 @@
           "type": "prometheus",
           "uid": "iJ9nup5Vk"
         },
-        "definition": "label_values({__name__=~ \"quokka_assetcache_api_response_duration_bucket|quokka_api_request_time_duration_bucket\"},response_code)",
+        "definition": "label_values({__name__=~ \"quokka_assetcache_api_response_duration_bucket|quokka_api_request_time_duration_bucket|quokka_assetcache_api_request_total|quokka_api_request_total\"},response_code)",
         "hide": 0,
         "includeAll": true,
         "multi": false,
         "name": "response",
         "options": [],
         "query": {
-          "query": "label_values({__name__=~ \"quokka_assetcache_api_response_duration_bucket|quokka_api_request_time_duration_bucket\"},response_code)",
+          "query": "label_values({__name__=~ \"quokka_assetcache_api_response_duration_bucket|quokka_api_request_time_duration_bucket|quokka_assetcache_api_request_total|quokka_api_request_total\"},response_code)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -498,6 +587,6 @@
   "timezone": "",
   "title": "Requests by endpoints",
   "uid": "3B6hzmp4k",
-  "version": 17,
+  "version": 24,
   "weekStart": ""
 }
