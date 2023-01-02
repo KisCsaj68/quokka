@@ -10,6 +10,7 @@ import com.codecool.quokka.oms.dal.OrderDal;
 import com.codecool.quokka.oms.dal.PositionDal;
 import com.codecool.quokka.oms.metrics.Metrics;
 import com.codecool.quokka.oms.model.FilledOrder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -23,7 +24,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.SerializationUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
@@ -51,20 +51,24 @@ public class OrderService {
     // Store position by userId -> {symbol: {positionId: position}}
     private Map<UUID, Map<String, Map<UUID, Position>>> inMemoryPositions;
 
-    ConnectionFactory factory = new ConnectionFactory();
-    Channel channel = null;
+    private ConnectionFactory factory;
+    private Channel channel;
+    private ObjectMapper mapper;
 
     @Value("${quokka.service.assetcache.address}${quokka.service.assetcache.endpoint}")
     private String assetCacheURL;
 
     @Autowired
-    public OrderService(RabbitTemplate template, OrderDal orderDal, PositionDal positionDal) {
+    public OrderService(RabbitTemplate template, OrderDal orderDal, PositionDal positionDal, ObjectMapper mapper, ConnectionFactory factory) {
         this.rabbitTemplate = template;
         this.inMemoryOrders = new ConcurrentHashMap<>();
         this.inMemoryPositions = new ConcurrentHashMap<>();
         this.restTemplate = new RestTemplate();
         this.orderDal = orderDal;
         this.positionDal = positionDal;
+        this.mapper = mapper;
+        this.factory = factory;
+
     }
 
     @PostConstruct
@@ -100,7 +104,8 @@ public class OrderService {
         Metrics.ORDER_REQUEST.labels(order.getType().toString().toLowerCase()).inc();
         order.setStatus(OrderStatus.OPEN);
         // Send open order to persister via RMQ
-        byte[] data = SerializationUtils.serialize(order);
+//        byte[] data = SerializationUtils.serialize(order);
+        byte[] data = mapper.writeValueAsBytes(order);
         try (Histogram.Timer ignored = histogram.labels("send_order_to_queue").startTimer()) {
             channel.basicPublish(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, null, data);
 //            rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
@@ -112,10 +117,11 @@ public class OrderService {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    private void handleLimitOrder(Orders order) {
+    private void handleLimitOrder(Orders order) throws IOException {
         storeLimitOrder(order, Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION);
+        byte[] data = mapper.writeValueAsBytes(order);
         try (Histogram.Timer ignored = Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION.labels("send_order_to_queue").startTimer()) {
-            rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.LIMIT_ORDER_ROUTING_KEY, order);
+            channel.basicPublish(Config.EXCHANGE, Config.LIMIT_ORDER_ROUTING_KEY, null, data);
         }
     }
 
@@ -128,7 +134,7 @@ public class OrderService {
         }
         order.setPrice(asset.getPrice());
         order.setStatus(OrderStatus.FILLED);
-        byte[] data = SerializationUtils.serialize(order);
+        byte[] data = mapper.writeValueAsBytes(order);
         try (Histogram.Timer ignored = Metrics.MARKET_ORDER_REQUEST_TIME_DURATION.labels("send_updated_order_to_queue").startTimer()) {
             channel.basicPublish(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, null, data);
 //            rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
@@ -144,7 +150,7 @@ public class OrderService {
      * Push the Position to RabbitMQ first(for consistency) and stores it in-memory.
      */
     private void persistPosition(Position position, Orders order, Histogram histogram) throws IOException {
-        byte[] data = SerializationUtils.serialize(position);
+        byte[] data = mapper.writeValueAsBytes(position);
         try (Histogram.Timer ignored = histogram.labels("send_position_to_queue").startTimer()) {
             channel.basicPublish(Config.EXCHANGE, Config.POSITION_ROUTING_KEY, null, data);
 //            rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.POSITION_ROUTING_KEY, position);
@@ -185,15 +191,16 @@ public class OrderService {
         }
         if (order == null) {
             // TODO: add logger
-            System.out.println("order not found in the in memory store. Order: " + filledOrder + "; in-memory-store: " + inMemoryOrders);
+            System.out.println("order not found in the in memory store. Order: " + filledOrder);
             return;
         }
         order.setStatus(OrderStatus.FILLED);
         order.setPrice(BigDecimal.valueOf(filledOrder.getFilledPrice()));
-//        try (Histogram.Timer ignored = Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION.labels("update_order").startTimer()) {
-//        }
+
+        byte[] data = mapper.writeValueAsBytes(order);
         try (Histogram.Timer ignored = Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION.labels("send_updated_order_to_queue").startTimer()) {
-            rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
+            channel.basicPublish(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, null, data);
+//            rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
         }
         try (Histogram.Timer ignored = Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION.labels("store_updated_order_in_memory").startTimer()) {
             inMemoryOrders.get(filledOrder.getAccountId()).remove(order.getId());
@@ -214,7 +221,7 @@ public class OrderService {
         position.setSellAt(new Date());
 //        try (Histogram.Timer ignored = histogram.labels("update_position").startTimer()) {
 //        }
-        byte[] data = SerializationUtils.serialize(position);
+        byte[] data = mapper.writeValueAsBytes(position);
         try (Histogram.Timer ignored = histogram.labels("send_position_to_queue").startTimer()) {
             channel.basicPublish(Config.EXCHANGE, Config.POSITION_ROUTING_KEY, null, data);
         }
@@ -225,11 +232,13 @@ public class OrderService {
         persistPosition(position, order, histogram);
     }
 
-    public void pushOrders() {
+    public void pushOrders() throws IOException {
         for (UUID accountId : inMemoryOrders.keySet()) {
             for (Orders order : inMemoryOrders.get(accountId).values()) {
                 if (order.getType() == OrderType.LIMIT && order.getStatus() == OrderStatus.OPEN) {
-                    rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.LIMIT_ORDER_ROUTING_KEY, order);
+                    byte[] data = mapper.writeValueAsBytes(order);
+                    channel.basicPublish(Config.EXCHANGE, Config.LIMIT_ORDER_ROUTING_KEY, null, data);
+//                    rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.LIMIT_ORDER_ROUTING_KEY, order);
                 }
             }
         }
