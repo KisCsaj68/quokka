@@ -24,7 +24,7 @@ scrape_configs:
       - targets: ["persister:9001"]
 
   - job_name: "rabbitmq"
-    metrics_path: /
+    metrics_path: /metrics
     static_configs:
       - targets: ["rabbitmq:15692"]
 
