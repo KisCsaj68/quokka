@@ -17,6 +17,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,11 +29,13 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @ConfigurationProperties
 public class OrderService {
 
+    private static final int BATCH_SIZE = 1000;
     private RabbitTemplate rabbitTemplate;
     private RestTemplate restTemplate;
 
@@ -61,13 +65,54 @@ public class OrderService {
     @PostConstruct
     public void initializeInMemoryStores() {
         // get open orders from db
-        List<Orders> orders = orderDal.findAllByStatus(OrderStatus.OPEN);
+        List<Orders> orders = new ArrayList<>();
+        Slice<Orders> ordersSlice = orderDal.findAllByStatus(OrderStatus.OPEN, PageRequest.of(0, BATCH_SIZE));
+        orders.addAll(ordersSlice.getContent());
+
+        while (ordersSlice.hasNext()) {
+            System.out.println("orders"+ " " +orders.size());
+            ordersSlice = orderDal.findAllByStatus(OrderStatus.OPEN, ordersSlice.nextPageable());
+            orders.addAll(ordersSlice.getContent());
+        }
         orders.stream().forEach(o -> storeLimitOrder(o, Metrics.INITIALIZE_MEMORY_TIME_DURATION));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // get positions from db
-        List<Position> positions = positionDal.findAllByExitOrderIdIsNull();
-        Set<UUID> orderIds = positions.stream().map(Position::getEntryOrderId).collect(Collectors.toSet());
-        Map<UUID, Orders> ordersByPositions = orderDal.findAllByIdIn(orderIds).stream().collect(Collectors.toMap(o -> o.getId(), o -> o));
-        positions.stream().forEach(p -> storeInMemoryPositions(p, ordersByPositions.get(p.getEntryOrderId()), Metrics.INITIALIZE_MEMORY_TIME_DURATION));
+        Slice<Position> positionSlice = positionDal.findAllByExitOrderIdIsNull(PageRequest.of(0, BATCH_SIZE));
+        List<Position> positions = new ArrayList<>();
+        Set<UUID> orderIds = new HashSet<>();
+        positions.addAll(positionSlice.getContent());
+        orderIds.addAll(positionSlice.getContent().stream().map(Position::getEntryOrderId).collect(Collectors.toSet()));
+        while (positionSlice.hasNext()) {
+            System.out.println("Positions" + " " + positions.size());
+            positionSlice = positionDal.findAllByExitOrderIdIsNull(positionSlice.nextPageable());
+            positions.addAll(positionSlice.getContent());
+            orderIds.addAll(positionSlice.getContent().stream().map(Position::getEntryOrderId).collect(Collectors.toSet()));
+        }
+
+        positions.stream().forEach(p -> storeInMemoryPositions(p, Metrics.INITIALIZE_MEMORY_TIME_DURATION));
     }
 
     public ResponseEntity createOrder(Orders order, Histogram histogram) {
@@ -116,17 +161,17 @@ public class OrderService {
     /**
      * Push the Position to RabbitMQ first(for consistency) and stores it in-memory.
      */
-    private void persistPosition(Position position, Orders order, Histogram histogram) {
+    private void persistPosition(Position position, Histogram histogram) {
 
         try (Histogram.Timer ignored = histogram.labels("send_position_to_queue").startTimer()){
             rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.POSITION_ROUTING_KEY, position);
         }
-        storeInMemoryPositions(position, order, histogram);
+        storeInMemoryPositions(position, histogram);
     }
 
-    private void storeInMemoryPositions(Position position, Orders order, Histogram histogram) {
-        UUID accountId = order.getAccountId();
-        String symbol = order.getSymbol();
+    private void storeInMemoryPositions(Position position, Histogram histogram) {
+        UUID accountId = position.getUserId();
+        String symbol = position.getSymbol();
         UUID positionId = position.getId();
         try (Histogram.Timer timer = histogram.labels("persist_position_in_memory").startTimer()){
             if (!inMemoryPositions.containsKey(accountId)) {
@@ -194,7 +239,7 @@ public class OrderService {
 
     private void handleBuy(Orders order, Histogram histogram) {
         Position position = new Position(order.getQuantity(), order.getAccountId(), order.getSymbol(), order.getPrice(), null, new Date(), order.getId(), null);
-        persistPosition(position, order, histogram);
+        persistPosition(position, histogram);
     }
 
     public void pushOrders() {
