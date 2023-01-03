@@ -4,6 +4,7 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+      - "15692:15692"
     image: rabbitmq:3-management
     hostname: quokka-rabbit
     expose:

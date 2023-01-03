@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequestMapping("/api/v1/order")
@@ -23,7 +25,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity createStockOrder(@RequestBody Orders data) {
+    public ResponseEntity createStockOrder(@RequestBody Orders data) throws IOException {
         Histogram histogram = null;
         switch (data.getType()) {
             case MARKET -> histogram = Metrics.MARKET_ORDER_REQUEST_TIME_DURATION;

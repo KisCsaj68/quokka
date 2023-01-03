@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/api/v1/internal")
 public class InternalController {
@@ -18,7 +20,7 @@ public class InternalController {
     }
 
     @PostMapping(path = "open-orders")
-    public void pushOrders() {
+    public void pushOrders() throws IOException {
         orderService.pushOrders();
     }
 }

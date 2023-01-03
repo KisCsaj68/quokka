@@ -47,7 +47,6 @@ def with_metrics(asset_type: str = None):
             API_REQUEST_TOTAL.labels(request.uri_template, request.method, get_response_code_family(response)).inc()
             API_RESPONSE.labels(request.uri_template, request.method, _asset_type,
                                 get_response_code_family(response)).observe(max(default_timer() - start, 0))
-            print(request.uri_template, request.method, get_response_code_family(response))
 
         return wrapper
 
