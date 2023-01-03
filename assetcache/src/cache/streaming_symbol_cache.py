@@ -1,3 +1,4 @@
+import threading
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any
 
@@ -24,7 +25,7 @@ class SymbolCache(ABC):
                                raw_data=True)
         self.initialized = True
         # this mas still cause issues with blocking the worker...
-        # threading.Thread(target=self._set_initial_prices()).start()
+        threading.Thread(target=self._set_initial_prices()).start()
 
     async def on_trade(self, trade):
         """

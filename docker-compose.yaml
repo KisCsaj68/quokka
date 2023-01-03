@@ -42,8 +42,8 @@ services:
     healthcheck:
       test: curl -s http://localhost:9000/healthz
       interval: 2s
-      timeout: 40s
-      retries: 20
+      timeout: 10s
+      retries: 100
     image: quokka/oms
     depends_on:
       persister:
