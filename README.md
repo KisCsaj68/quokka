@@ -125,3 +125,20 @@ Backend:
 ### Spring profiles
 There are two spring profiles available. the default, and a dev profile.
 If you want to run the application in your IDE locally, please activate the `dev` profile (like this: https://www.baeldung.com/spring-profiles#4-jvm-system-parameter or any other preferred ways)
+
+
+### To run the application
+After you cloned the github repository, you need to do some initial setup. First you need to create an account to be able to receive data from Alpaca streaming.<br>Please register here: Create your Trading API account After registration you will receive the following important data: APCA_API_KEY_ID, APCA_API_SECRET_KEY.
+<br>You need to create a ".env" file in the assetcache/src folder with the following data:<br>
+export APCA_API_KEY_ID={ID you received} <br>
+export APCA_API_SECRET_KEY={secret key you received} <br>
+export APCA_API_BASE_URL="https://paper-api.alpaca.markets/" <br>
+export APCA_API_VERSION={actual version} <br>
+export APCA_API_STREAM_URL="https://stream.data.alpaca.markets" <br>
+export RABBITMQ_URL="amqp://guest:guest@rabbitmq:5672" <br>
+export EXCHANGE="oms_exchange" <br>
+export ROUTING_KEY="filled_order_routing_key" <br>
+export QUEUE="filled_order_queue" <br>
+export PROMETHEUS_MULTIPROC_DIR="/tmp/metrics" <br>
+
+Those setup will allows you to connect to Alpaca streaming, and use the predefined RabbitMQ queues in the application.
