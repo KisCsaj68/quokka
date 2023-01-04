@@ -1,4 +1,4 @@
-import threading
+from threading import Thread
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any
 
@@ -12,9 +12,10 @@ from src.utils import ParseLatestV2ToReadableDict
 from src.metrics import STREAM_TRADE_TOTAL, CACHE_UPDATE_PRICE, CACHE_READ_PRICE, CACHE_INIT_PRICE
 
 
-class SymbolCache(ABC):
+class SymbolCache(ABC, Thread):
 
     def __init__(self, symbols: List[str], conf: DotEnvConfig):
+        super().__init__(daemon=True)
         self._rw_lock = ReadWriteLock()
         self._symbols_prices = {s: None for s in symbols}
         self._conf = conf
@@ -25,7 +26,7 @@ class SymbolCache(ABC):
                                raw_data=True)
         self.initialized = True
         # this mas still cause issues with blocking the worker...
-        threading.Thread(target=self._set_initial_prices()).start()
+#         threading.Thread(target=self._set_initial_prices()).start()
 
     async def on_trade(self, trade):
         """
@@ -76,6 +77,9 @@ class SymbolCache(ABC):
             finally:
                 self._rw_lock.release_write()
                 self.initialized = True
+    def run(self):
+        self._set_initial_prices()
+
 
     @abstractmethod
     def _get_latest_price(self, symbols: List[str]) -> Dict[str, Any]:

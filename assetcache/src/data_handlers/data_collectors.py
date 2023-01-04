@@ -32,6 +32,8 @@ class DataCollectors:
         self.start_threads()
 
     def start_threads(self) -> None:
+        self.crypto_cache.start()
+        self.stock_cache.start()
         self.consumer.start()
         self._stream_client.start()
         self._producer.start()
