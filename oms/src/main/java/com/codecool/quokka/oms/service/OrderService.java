@@ -194,7 +194,7 @@ public class OrderService {
     /**
      * Push the Position to RabbitMQ first(for consistency) and stores it in-memory.
      */
-    private void persistPosition(Position position, Orders order, Histogram histogram) throws IOException {
+    private void persistPosition(Position position, Histogram histogram) throws IOException {
         byte[] data = mapper.writeValueAsBytes(position);
         try (Histogram.Timer ignored = histogram.labels("send_position_to_queue").startTimer()) {
             channel.basicPublish(Config.EXCHANGE, Config.POSITION_ROUTING_KEY, null, data);
