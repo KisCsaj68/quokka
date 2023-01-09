@@ -25,6 +25,19 @@ It is capable of:
 Under the hood, Quokka Trading Platfo®m has a high performance order management engine.
 It's mission critical state is handled fully in-memory, while every change of that state will eventually get persisted.
 
+## Grafana dashboards:
+## OMS
+### Handle Market order(rate, duration)
+![market_order](./prometheus/images/oms_market_order.png)
+### Limit order(rate, duration)
+![market_order](./prometheus/images/oms_limit_order.png)
+
+## Assetcache
+### Read_Write in-memory storage
+![market_order](./prometheus/images/assetcache_r_w.png)
+
+### Handle price tracker(case of limit orders)
+![market_order](./prometheus/images/assetcache_price_tracker.png)
 
 ## Feature progress:
 ### Architecture
