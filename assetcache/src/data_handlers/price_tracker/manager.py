@@ -12,10 +12,10 @@ from src.metrics import MANAGER_PRICE_TRACKER_TOTAL, MANAGER_STORE_PRICE_TRACKER
 
 
 class PriceTrackerManager:
-    def __init__(self, conf: DotEnvConfig, producer: Producer):
-        self._producer = producer
-        self.crypto_container = Container(self._producer, 'crypto')
-        self.stock_container = Container(self._producer, 'stock')
+    def __init__(self, conf: DotEnvConfig):
+        self.crypto_container = Container(Producer(conf, conf['QUEUE'], conf['EXCHANGE'], conf['ROUTING_KEY']),
+                                          'crypto')
+        self.stock_container = Container(Producer(conf, conf['QUEUE'], conf['EXCHANGE'], conf['ROUTING_KEY']), 'stock')
 
     def on_message_from_rabbit(self, ch, method, properties, body) -> None:
         order: Dict = json.loads(body)
@@ -24,6 +24,10 @@ class PriceTrackerManager:
             self.crypto_container.on_message_from_rabbit(order)
         else:
             self.stock_container.on_message_from_rabbit(order)
+
+    def start_producer_threads(self):
+        self.stock_container.start_producer_thread()
+        self.crypto_container.start_producer_thread()
 
 
 class Container:
@@ -35,6 +39,9 @@ class Container:
         self._rw_lock = ReadWriteLock()
         self._container: Dict[str, Tuple[SortedList[PriceTracker], SortedList[PriceTracker]]] = {}
         self._asset_type = asset_type
+
+    def start_producer_thread(self):
+        self._producer.start()
 
     def on_message_from_rabbit(self, order) -> None:
         # TODO: add FIFO buffer for non-blocking behaviour
@@ -101,7 +108,7 @@ class Container:
     def _handle_sell_side(self, sell_side_list: SortedList, fake_pt: PriceTracker, trade_price: float):
         with MANAGER_MATCH_PRICE_TRACKER.labels('match_sell_side', self._asset_type).time():
             # use bisect_right to get the index
-            # fullfil price_trackers between 0 and above index
+            # fulfill price_trackers between 0 and above index
             filled_price_trackers = []
             index_till = sell_side_list.bisect_right(fake_pt)
             for _ in range(index_till):
@@ -112,7 +119,9 @@ class Container:
             return filled_price_trackers
 
     def _send_to_rabbit_mq(self, filled_orders: List[PriceTracker]):
-        with MANAGER_MATCH_PRICE_TRACKER.labels('push_to_rabbit', self._asset_type).time():
+        try:
             for filled_order in filled_orders:
-                self._producer.produce(filled_order)
+                with MANAGER_MATCH_PRICE_TRACKER.labels('push_to_rabbit', self._asset_type).time():
+                    self._producer.produce(filled_order)
+        finally:
             MANAGER_STORED_PRICE_TRACKER.labels(self._asset_type).dec(len(filled_orders))

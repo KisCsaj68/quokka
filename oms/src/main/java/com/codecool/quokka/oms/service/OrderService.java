@@ -83,34 +83,10 @@ public class OrderService {
         orders.addAll(ordersSlice.getContent());
 
         while (ordersSlice.hasNext()) {
-            System.out.println("orders"+ " " +orders.size());
             ordersSlice = orderDal.findAllByStatus(OrderStatus.OPEN, ordersSlice.nextPageable());
             orders.addAll(ordersSlice.getContent());
         }
         orders.stream().forEach(o -> storeLimitOrder(o, Metrics.INITIALIZE_MEMORY_TIME_DURATION));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         // get positions from db
         Slice<Position> positionSlice = positionDal.findAllByExitOrderIdIsNull(PageRequest.of(0, BATCH_SIZE));
@@ -119,7 +95,6 @@ public class OrderService {
         positions.addAll(positionSlice.getContent());
         orderIds.addAll(positionSlice.getContent().stream().map(Position::getEntryOrderId).collect(Collectors.toSet()));
         while (positionSlice.hasNext()) {
-            System.out.println("Positions" + " " + positions.size());
             positionSlice = positionDal.findAllByExitOrderIdIsNull(positionSlice.nextPageable());
             positions.addAll(positionSlice.getContent());
             orderIds.addAll(positionSlice.getContent().stream().map(Position::getEntryOrderId).collect(Collectors.toSet()));
@@ -149,11 +124,9 @@ public class OrderService {
         Metrics.ORDER_REQUEST.labels(order.getType().toString().toLowerCase()).inc();
         order.setStatus(OrderStatus.OPEN);
         // Send open order to persister via RMQ
-//        byte[] data = SerializationUtils.serialize(order);
         byte[] data = mapper.writeValueAsBytes(order);
         try (Histogram.Timer ignored = histogram.labels("send_order_to_queue").startTimer()) {
             channel.basicPublish(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, null, data);
-//            rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
         }
         switch (order.getType()) {
             case LIMIT -> handleLimitOrder(order);
@@ -172,17 +145,19 @@ public class OrderService {
 
     private void handleMarketOrder(Orders order) throws IOException {
         Asset asset = null;
-        try (Histogram.Timer ignored = Metrics.MARKET_ORDER_REQUEST_TIME_DURATION.labels("update_order").startTimer()) {
+        try (Histogram.Timer ignored = Metrics.MARKET_ORDER_REQUEST_TIME_DURATION.labels("get_price_via_api").startTimer()) {
             // Ask the actual price from assetcache port 8000.
             asset = restTemplate.getForObject(assetCacheURL + order.getAssetType().toString().toLowerCase() + "/" + order.getSymbol(), Asset.class);
             // Fill the price to the order and update the order in DB.
         }
-        order.setPrice(asset.getPrice());
-        order.setStatus(OrderStatus.FILLED);
+        try (Histogram.Timer ignored = Metrics.MARKET_ORDER_REQUEST_TIME_DURATION.labels("update_order").startTimer()) {
+
+            order.setPrice(asset.getPrice());
+            order.setStatus(OrderStatus.FILLED);
+        }
         byte[] data = mapper.writeValueAsBytes(order);
         try (Histogram.Timer ignored = Metrics.MARKET_ORDER_REQUEST_TIME_DURATION.labels("send_updated_order_to_queue").startTimer()) {
             channel.basicPublish(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, null, data);
-//            rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
         }
         // Create position and persist db + in-memory
         switch (order.getOrderSide()) {
@@ -194,11 +169,10 @@ public class OrderService {
     /**
      * Push the Position to RabbitMQ first(for consistency) and stores it in-memory.
      */
-    private void persistPosition(Position position, Orders order, Histogram histogram) throws IOException {
+    private void persistPosition(Position position, Histogram histogram) throws IOException {
         byte[] data = mapper.writeValueAsBytes(position);
         try (Histogram.Timer ignored = histogram.labels("send_position_to_queue").startTimer()) {
             channel.basicPublish(Config.EXCHANGE, Config.POSITION_ROUTING_KEY, null, data);
-//            rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.POSITION_ROUTING_KEY, position);
         }
         storeInMemoryPositions(position, histogram);
     }
@@ -245,7 +219,6 @@ public class OrderService {
         byte[] data = mapper.writeValueAsBytes(order);
         try (Histogram.Timer ignored = Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION.labels("send_updated_order_to_queue").startTimer()) {
             channel.basicPublish(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, null, data);
-//            rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, order);
         }
         try (Histogram.Timer ignored = Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION.labels("store_updated_order_in_memory").startTimer()) {
             inMemoryOrders.get(filledOrder.getAccountId()).remove(order.getId());
@@ -264,8 +237,6 @@ public class OrderService {
         position.setExitOrderId(order.getId());
         position.setPriceAtSell(order.getPrice());
         position.setSellAt(new Date());
-//        try (Histogram.Timer ignored = histogram.labels("update_position").startTimer()) {
-//        }
         byte[] data = mapper.writeValueAsBytes(position);
         try (Histogram.Timer ignored = histogram.labels("send_position_to_queue").startTimer()) {
             channel.basicPublish(Config.EXCHANGE, Config.POSITION_ROUTING_KEY, null, data);
@@ -283,7 +254,6 @@ public class OrderService {
                 if (order.getType() == OrderType.LIMIT && order.getStatus() == OrderStatus.OPEN) {
                     byte[] data = mapper.writeValueAsBytes(order);
                     channel.basicPublish(Config.EXCHANGE, Config.LIMIT_ORDER_ROUTING_KEY, null, data);
-//                    rabbitTemplate.convertAndSend(Config.EXCHANGE, Config.LIMIT_ORDER_ROUTING_KEY, order);
                 }
             }
         }
