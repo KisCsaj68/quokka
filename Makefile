@@ -70,3 +70,15 @@ last-container-logs:
 .PHONY: download-dashboards
 download-dashboards:
 	./scripts/download_dashboards.sh
+
+.PHONY: oms-loadtest
+oms-loadtest:
+	./scripts/oms.sh
+
+.PHONY: api-user-loadtest
+api-user-loadtest:
+	./scripts/api_users.sh
+
+.PHONY: api-order-loadtest
+api-order-loadtest:
+	./scripts/api_orders.sh
