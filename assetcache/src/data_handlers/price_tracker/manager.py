@@ -12,10 +12,11 @@ from src.metrics import MANAGER_PRICE_TRACKER_TOTAL, MANAGER_STORE_PRICE_TRACKER
 
 
 class PriceTrackerManager:
-    def __init__(self, conf: DotEnvConfig):
-        self.crypto_container = Container(Producer(conf, conf['QUEUE'], conf['EXCHANGE'], conf['ROUTING_KEY']),
+    def __init__(self, conf: DotEnvConfig, producer: Producer):
+        self.producer = producer
+        self.crypto_container = Container(producer,
                                           'crypto')
-        self.stock_container = Container(Producer(conf, conf['QUEUE'], conf['EXCHANGE'], conf['ROUTING_KEY']), 'stock')
+        self.stock_container = Container(producer, 'stock')
 
     def on_message_from_rabbit(self, ch, method, properties, body) -> None:
         order: Dict = json.loads(body)
@@ -40,8 +41,8 @@ class Container:
         self._container: Dict[str, Tuple[SortedList[PriceTracker], SortedList[PriceTracker]]] = {}
         self._asset_type = asset_type
 
-    def start_producer_thread(self):
-        self._producer.start()
+    # def start_producer_thread(self):
+    #     self._producer.start()
 
     def on_message_from_rabbit(self, order) -> None:
         # TODO: add FIFO buffer for non-blocking behaviour

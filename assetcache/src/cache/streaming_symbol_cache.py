@@ -25,7 +25,7 @@ class SymbolCache(ABC, Thread):
                                base_url=conf['APCA_API_BASE_URL'],
                                api_version=conf['APCA_API_VERSION'],
                                raw_data=True)
-        self.initialized = True
+        self.initialized = False
 
     async def on_trade(self, trade):
         """
@@ -66,16 +66,17 @@ class SymbolCache(ABC, Thread):
         Sets up latest known prices to the cache on creation.
         :return: None
         """
-        with CACHE_INIT_PRICE.labels(self._get_metric_label()).time():
-            symbols = self._symbols_prices.keys()
-            latest_prices = self._get_latest_price(symbols)
-            try:
-                self._rw_lock.acquire_write()
-                for k, v in latest_prices.items():
-                    self._symbols_prices[k] = v['price']
-            finally:
-                self._rw_lock.release_write()
-                self.initialized = True
+        if not self.initialized:
+            with CACHE_INIT_PRICE.labels(self._get_metric_label()).time():
+                symbols = self._symbols_prices.keys()
+                latest_prices = self._get_latest_price(symbols)
+                try:
+                    self._rw_lock.acquire_write()
+                    for k, v in latest_prices.items():
+                        self._symbols_prices[k] = v['price']
+                finally:
+                    self._rw_lock.release_write()
+                    self.initialized = True
 
     def run(self):
         self._set_initial_prices()

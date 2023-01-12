@@ -10,7 +10,8 @@ from src.cache import CryptoCache, StockCache
 class DataCollectors:
 
     def __init__(self, app_config: PrimitiveJsonDB, conf: DotEnvConfig) -> None:
-        self.manager: PriceTrackerManager = PriceTrackerManager(conf)
+        self._producer = Producer(conf, conf['QUEUE'], conf['EXCHANGE'], conf['ROUTING_KEY'])
+        self.manager: PriceTrackerManager = PriceTrackerManager(conf, self._producer)
         self.consumer: Consumer = Consumer(conf, 'limit_order_queue',
                                            self.manager.on_message_from_rabbit)
         self.crypto_cache = CryptoCache(app_config['assets']['crypto'], conf)
@@ -35,8 +36,7 @@ class DataCollectors:
         self.stock_cache.start()
         self.consumer.start()
         self._stream_client.start()
-        self.manager.start_producer_threads()
-        # self._producer.start()
+        self._producer.start()
 
     def on_message_from_streaming_client(self, *callbacks: Callable) -> Callable:
         async def outer(trade):
