@@ -36,7 +36,6 @@ class DataCollectors:
         self.stock_cache.start()
         self.consumer.start()
         self._stream_client.start()
-        # self.manager.start_producer_threads()
         self._producer.start()
 
     def on_message_from_streaming_client(self, *callbacks: Callable) -> Callable:
