@@ -20,8 +20,11 @@ scrape_configs:
       - targets: ["oms:9000"]
 
   - job_name: "persister"
-    static_configs:
-      - targets: ["persister:9001"]
+    dns_sd_configs:
+      - names:
+          - persister
+#        type: A
+#        port: 9001
 
   - job_name: "rabbitmq"
     metrics_path: /metrics

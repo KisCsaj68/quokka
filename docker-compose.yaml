@@ -63,9 +63,11 @@ services:
       rabbitmq:
         condition: service_healthy
   persister:
-    container_name: persister
+#    container_name: persister
+    deploy:
+      replicas: 4
     ports:
-      - "9001:9001"
+      - "9001"
     image: quokka/persister
     depends_on:
       rabbitmq:
