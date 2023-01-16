@@ -17,7 +17,6 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import io.prometheus.client.Histogram;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -35,14 +34,12 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @ConfigurationProperties
 public class OrderService {
 
     private static final int BATCH_SIZE = 1000;
-    private RabbitTemplate rabbitTemplate;
     private RestTemplate restTemplate;
 
     // Store open order by userId -> {orderId: order}
@@ -63,8 +60,7 @@ public class OrderService {
     private String assetCacheURL;
 
     @Autowired
-    public OrderService(RabbitTemplate template, OrderDal orderDal, PositionDal positionDal, ObjectMapper mapper, ConnectionFactory factory) {
-        this.rabbitTemplate = template;
+    public OrderService(OrderDal orderDal, PositionDal positionDal, ObjectMapper mapper, ConnectionFactory factory) {
         this.inMemoryOrders = new ConcurrentHashMap<>();
         this.inMemoryPositions = new ConcurrentHashMap<>();
         this.restTemplate = new RestTemplate();
@@ -72,12 +68,43 @@ public class OrderService {
         this.positionDal = positionDal;
         this.mapper = mapper;
         this.factory = factory;
-
     }
 
     @PostConstruct
-    public void initializeInMemoryStores() {
+    public void initializeQueues() throws IOException, TimeoutException {
+        System.out.println("from init queue");
+        factory.setHost("rabbitmq");
+        Connection connection = factory.newConnection();
+        channel = connection.createChannel();
+        channel.exchangeDeclare(Config.EXCHANGE, "topic", true);
+        boolean durable = true;
+        channel.queueDeclare(Config.ORDER_QUEUE, durable, false, false, null);
+        channel.queueBind(Config.ORDER_QUEUE, Config.EXCHANGE, Config.ORDER_ROUTING_KEY);
+        channel.queueDeclare(Config.POSITION_QUEUE, durable, false, false, null);
+        channel.queueBind(Config.POSITION_QUEUE, Config.EXCHANGE, Config.POSITION_ROUTING_KEY);
+        channel.queueDeclare(Config.LIMIT_ORDER_QUEUE, durable, false, false, null);
+        channel.queueBind(Config.LIMIT_ORDER_QUEUE, Config.EXCHANGE, Config.LIMIT_ORDER_ROUTING_KEY);
+        channel.queueDeclare(Config.FILLED_ORDER_QUEUE, durable, false, false, null);
+        channel.queueBind(Config.FILLED_ORDER_QUEUE, Config.EXCHANGE, Config.FILLED_ORDER_ROUTING_KEY);
+    }
+    @PostConstruct
+    public void initializeInMemoryStores() throws IOException, InterruptedException {
+        System.out.println("from init in memory");
+
         // get open orders from db
+        {
+            int orderMessageCount;
+            do {
+                orderMessageCount = channel.queueDeclare(Config.ORDER_QUEUE, true, false, false, null).getMessageCount();
+                System.out.println("sleeping due to orders in queue: " + orderMessageCount);
+                if (orderMessageCount != 0) {
+                    Thread.sleep(1000);
+                }
+            }
+            while (orderMessageCount != 0);
+        }
+
+
         List<Orders> orders = new ArrayList<>();
         Slice<Orders> ordersSlice = orderDal.findAllByStatus(OrderStatus.OPEN, PageRequest.of(0, BATCH_SIZE));
         orders.addAll(ordersSlice.getContent());
@@ -88,6 +115,18 @@ public class OrderService {
         }
         orders.stream().forEach(o -> storeLimitOrder(o, Metrics.INITIALIZE_MEMORY_TIME_DURATION));
 
+
+        {
+            int positionMessageCount;
+            do {
+                positionMessageCount = channel.queueDeclare(Config.POSITION_QUEUE, true, false, false, null).getMessageCount();
+                System.out.println( "sleeping due positions in queue: " + positionMessageCount);
+                if (positionMessageCount != 0) {
+                    Thread.sleep(1000);
+                }
+            }
+            while (positionMessageCount != 0);
+        }
         // get positions from db
         Slice<Position> positionSlice = positionDal.findAllByExitOrderIdIsNull(PageRequest.of(0, BATCH_SIZE));
         List<Position> positions = new ArrayList<>();
@@ -103,22 +142,7 @@ public class OrderService {
         positions.stream().forEach(p -> storeInMemoryPositions(p, Metrics.INITIALIZE_MEMORY_TIME_DURATION));
     }
 
-    @PostConstruct
-    public void initializeQueues() throws IOException, TimeoutException {
-        factory.setHost("rabbitmq");
-        Connection connection = factory.newConnection();
-        channel = connection.createChannel();
-        channel.exchangeDeclare(Config.EXCHANGE, "topic", true);
-        boolean durable = true;
-        channel.queueDeclare(Config.ORDER_QUEUE, durable, false, false, null);
-        channel.queueBind(Config.ORDER_QUEUE, Config.EXCHANGE, Config.ORDER_ROUTING_KEY);
-        channel.queueDeclare(Config.POSITION_QUEUE, durable, false, false, null);
-        channel.queueBind(Config.POSITION_QUEUE, Config.EXCHANGE, Config.POSITION_ROUTING_KEY);
-        channel.queueDeclare(Config.LIMIT_ORDER_QUEUE, durable, false, false, null);
-        channel.queueBind(Config.LIMIT_ORDER_QUEUE, Config.EXCHANGE, Config.LIMIT_ORDER_ROUTING_KEY);
-        channel.queueDeclare(Config.FILLED_ORDER_QUEUE, durable, false, false, null);
-        channel.queueBind(Config.FILLED_ORDER_QUEUE, Config.EXCHANGE, Config.FILLED_ORDER_ROUTING_KEY);
-    }
+
 
     public ResponseEntity createOrder(Orders order, Histogram histogram) throws IOException {
         Metrics.ORDER_REQUEST.labels(order.getType().toString().toLowerCase()).inc();
@@ -202,8 +226,9 @@ public class OrderService {
         }
     }
 
-    @RabbitListener(queues = Config.FILLED_ORDER_QUEUE)
+    @RabbitListener(id = "limit_orders_listen", autoStartup = "true", queues = Config.FILLED_ORDER_QUEUE)
     public void fillLimitOrder(FilledOrder filledOrder) throws IOException {
+//        System.out.println(this.rabbitListenerEndpointRegistry.getListenerContainerIds());
         Orders order = null;
         try (Histogram.Timer ignored = Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION.labels("get_order_from_in_memory").startTimer()) {
             order = inMemoryOrders.get(filledOrder.getAccountId()).get(filledOrder.getOrderId());
@@ -211,6 +236,7 @@ public class OrderService {
         if (order == null) {
             // TODO: add logger
             System.out.println("order not found in the in memory store. Order: " + filledOrder);
+            System.out.println("inmemory: " + inMemoryOrders.values().stream().flatMap(m -> m.values().stream()).count());
             return;
         }
         order.setStatus(OrderStatus.FILLED);
