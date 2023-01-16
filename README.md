@@ -72,6 +72,7 @@ It's mission critical state is handled fully in-memory, while every change of th
 - [x] Sell position
 - [ ] Cash deposit - CSD
 - [ ] Cash withdrawal - CSW
+- [ ] Accounting/balance tracking
 
 ### Asset management
 - [x] API request based connection to Alpaca
@@ -125,7 +126,8 @@ Persistence is implemented using durable RabbitMQ queues and Postgres relational
 
 Frontend:
   - React
-  - Bootstrap (???)
+  - Bootstrap
+
 Backend:
   - Springboot & spring security
   - JPA, Postgres
@@ -155,3 +157,5 @@ export QUEUE="filled_order_queue" <br>
 export PROMETHEUS_MULTIPROC_DIR="/tmp/metrics" <br>
 
 Those setup will allows you to connect to Alpaca streaming, and use the predefined RabbitMQ queues in the application.
+
+Adjust `spring.jpa.hibernate.ddl-auto = create` in one of the component's application.properties to auto create the DB schema. When schema is created, change it back to `none` or `validate`.
