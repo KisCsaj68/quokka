@@ -26,8 +26,8 @@ public class MQConfig {
         return new Jackson2JsonMessageConverter();
     }
 
-    @Bean
-    public AmqpTemplate template(ConnectionFactory connectionFactory) {
-        return Config.template(connectionFactory);
-    }
+//    @Bean
+//    public AmqpTemplate template(ConnectionFactory connectionFactory) {
+//        return Config.template(connectionFactory);
+//    }
 }
