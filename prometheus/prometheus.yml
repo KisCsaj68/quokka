@@ -23,8 +23,8 @@ scrape_configs:
     dns_sd_configs:
       - names:
           - persister
-#        type: A
-#        port: 9001
+        type: A
+        port: 9001
 
   - job_name: "rabbitmq"
     metrics_path: /metrics
