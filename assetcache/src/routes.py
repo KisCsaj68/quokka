@@ -87,6 +87,19 @@ class AssetNamesRoute:
         resp.content_type = self.DEFAULT_CONTENT_TYPE
 
 
+ class HealthCheckRoute:
+
+    def __init__(self, stock_cache: SymbolCache, crypto_cache: SymbolCache):
+        self.stock_cache = stock_cache
+        self.crypto_cache = crypto_cache
+
+    def on_get(self, _: Request, resp: Response):
+        if self.stock_cache.ready and self.crypto_cache.ready:
+            resp.status = 200
+            return
+        resp.status = 400
+
+
 class LatestAssetRoute:
     DEFAULT_CONTENT_TYPE: str = "application/json"
 

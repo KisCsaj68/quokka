@@ -1,8 +1,9 @@
 import falcon
+from falcon import Request, Response
 
 from src.data_handlers import DataCollectors
 from src.storages.primitive_json_db import PrimitiveJsonDB
-from src.routes import AssetNamesRoute, LatestAssetRoute, Metrics
+from src.routes import AssetNamesRoute, LatestAssetRoute, Metrics, HealthCheckRoute
 
 
 class AssetCacheAPI:
@@ -19,7 +20,7 @@ class AssetCacheAPI:
             self.collectors.crypto_cache, 'CRYPTO'
         )
         self.metrics = Metrics()
-
+        self.healthz = HealthCheckRoute(self.collectors.stock_cache, self.collectors.crypto_cache)
         self.add_routes()
 
     @property
@@ -28,6 +29,7 @@ class AssetCacheAPI:
 
     def add_routes(self) -> None:
         self._app.add_route("/metrics", self.metrics)
+        self._app.add_route("/healthz", self.healthz)
         self._app.add_route("/api/v1/assets", self.asset_names)
 
         self._app.add_route("/api/v1/stock", self.asset_names, suffix="stock")
