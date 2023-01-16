@@ -4,17 +4,17 @@ set -o errexit
 set -o pipefail
 
 URL="http://127.0.0.1:9000/api/v1/order"
-declare -a CRYPTO=("BTCUSD" "ETHUSD")
+declare -a CRYPTO=("BTCUSD")
 declare -a STOCK=("AAPL" "TSLA")
-
+sleep 210
 for symbol in ${CRYPTO[@]}; do
   price=$(curl -s "http://localhost:8000/api/v1/crypto/$symbol" | jq '.price')
   price=${price%.*}
-  updated_price=$((price+2))
-  hey -z 2.5m  -m POST -H "Content-Type: application/json" -d '{
+  buy_price=$((price+200))
+  hey -z 2m  -m POST -H "Content-Type: application/json" -d '{
         "symbol" : "'${symbol}'",
         "type" : "LIMIT",
-        "limit" : '${updated_price}',
+        "limit" : '${buy_price}',
         "side" : "BUY",
         "quantity" : "3",
         "account" : "15fcd9d0-c7c2-4487-bdde-b0ba7560b885",
@@ -24,12 +24,6 @@ done
 
 
 for symbol in ${STOCK[@]}; do
-    hey -z 150s  -m POST -H "Content-Type: application/json" -d '{
-          "symbol" : "'${symbol}'",
-          "type" : "MARKET",
-          "side" : "BUY",
-          "quantity" : "3",
-          "account" : "15fcd9d0-c7c2-4487-bdde-b0ba7560b885",
-          "asset_type" : "STOCK"
-          }' $URL
+      echo $symbol
+      hey -z 2m "http://localhost:8000/api/v1/stock/${symbol}"
 done
