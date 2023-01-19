@@ -153,14 +153,19 @@ public class OrderService {
             channel.basicPublish(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, null, data);
         }
         switch (order.getType()) {
-            case LIMIT -> handleLimitOrder(order);
+            case LIMIT -> {
+//                ezt itt
+                storeLimitOrder(order, Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION);
+                handleLimitOrder(order);
+            }
             case MARKET -> handleMarketOrder(order);
         }
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     private void handleLimitOrder(Orders order) throws IOException {
-        storeLimitOrder(order, Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION);
+//        ezt itt
+//        storeLimitOrder(order, Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION);
         byte[] data = mapper.writeValueAsBytes(order);
         try (Histogram.Timer ignored = Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION.labels("send_order_to_queue").startTimer()) {
             channel.basicPublish(Config.EXCHANGE, Config.LIMIT_ORDER_ROUTING_KEY, null, data);
@@ -206,12 +211,15 @@ public class OrderService {
         String symbol = position.getSymbol();
         UUID positionId = position.getId();
         try (Histogram.Timer timer = histogram.labels("persist_position_in_memory").startTimer()) {
-            if (!inMemoryPositions.containsKey(accountId)) {
-                inMemoryPositions.put(accountId, Maps.newConcurrentMap());
-            }
-            if (!inMemoryPositions.get(accountId).containsKey(symbol)) {
-                inMemoryPositions.get(accountId).put(symbol, Maps.newConcurrentMap());
-            }
+            inMemoryPositions.computeIfAbsent(accountId, k -> Maps.newConcurrentMap());
+//            if (!inMemoryPositions.containsKey(accountId)) {
+//                inMemoryPositions.put(accountId, Maps.newConcurrentMap());
+//            }
+            inMemoryPositions.get(accountId).computeIfAbsent(symbol, k -> Maps.newConcurrentMap());
+//            if (!inMemoryPositions.get(accountId).containsKey(symbol)) {
+//                inMemoryPositions.get(accountId).put(symbol, Maps.newConcurrentMap());
+//            }
+
             inMemoryPositions.get(accountId).get(symbol).put(positionId, position);
         }
     }
@@ -219,9 +227,10 @@ public class OrderService {
     private void storeLimitOrder(Orders order, Histogram histogram) {
         try (Histogram.Timer timer = histogram.labels("persist_limit_order_in_memory").startTimer()) {
             UUID accountId = order.getAccountId();
-            if (!inMemoryOrders.containsKey(accountId)) {
-                inMemoryOrders.put(accountId, Maps.newConcurrentMap());
-            }
+            inMemoryOrders.computeIfAbsent(order.getAccountId(), k -> Maps.newConcurrentMap());
+//            if (!inMemoryOrders.containsKey(accountId)) {
+//                inMemoryOrders.put(accountId, Maps.newConcurrentMap());
+//            }
             inMemoryOrders.get(accountId).put(order.getId(), order);
         }
     }
