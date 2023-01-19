@@ -16,7 +16,7 @@ class CustomTimeout(TimeoutSauce):
 
 def post_worker_init(worker):
     # Set it globally, instead of specifying ``timeout=..`` kwarg on each call.
-    requests.adapters.TimeoutSauce = CustomTimeout
+#     requests.adapters.TimeoutSauce = CustomTimeout
     worker.log.info('greetings from post worker init hook')
     res = requests.post("http://oms:9000/api/v1/internal/open-orders")
     worker.log.info(res)
