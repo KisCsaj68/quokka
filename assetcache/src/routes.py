@@ -87,7 +87,7 @@ class AssetNamesRoute:
         resp.content_type = self.DEFAULT_CONTENT_TYPE
 
 
- class HealthCheckRoute:
+class HealthCheckRoute:
 
     def __init__(self, stock_cache: SymbolCache, crypto_cache: SymbolCache):
         self.stock_cache = stock_cache
