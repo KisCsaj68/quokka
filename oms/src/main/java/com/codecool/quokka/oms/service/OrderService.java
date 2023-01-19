@@ -87,46 +87,33 @@ public class OrderService {
         channel.queueDeclare(Config.FILLED_ORDER_QUEUE, durable, false, false, null);
         channel.queueBind(Config.FILLED_ORDER_QUEUE, Config.EXCHANGE, Config.FILLED_ORDER_ROUTING_KEY);
     }
+
+    private void checkQueue(String queue) throws IOException, InterruptedException {
+        int orderMessageCount;
+        do {
+            orderMessageCount = channel.queueDeclare(queue, true, false, false, null).getMessageCount();
+            System.out.println("sleeping due to orders in queue: " + orderMessageCount);
+            if (orderMessageCount != 0) {
+                Thread.sleep(1000);
+            }
+        }
+        while (orderMessageCount != 0);
+    }
+
     @PostConstruct
     public void initializeInMemoryStores() throws IOException, InterruptedException {
         System.out.println("from init in memory");
-
         // get open orders from db
-        {
-            int orderMessageCount;
-            do {
-                orderMessageCount = channel.queueDeclare(Config.ORDER_QUEUE, true, false, false, null).getMessageCount();
-                System.out.println("sleeping due to orders in queue: " + orderMessageCount);
-                if (orderMessageCount != 0) {
-                    Thread.sleep(1000);
-                }
-            }
-            while (orderMessageCount != 0);
-        }
-
-
+        this.checkQueue(Config.ORDER_QUEUE);
         List<Orders> orders = new ArrayList<>();
         Slice<Orders> ordersSlice = orderDal.findAllByStatus(OrderStatus.OPEN, PageRequest.of(0, BATCH_SIZE));
         orders.addAll(ordersSlice.getContent());
-
         while (ordersSlice.hasNext()) {
             ordersSlice = orderDal.findAllByStatus(OrderStatus.OPEN, ordersSlice.nextPageable());
             orders.addAll(ordersSlice.getContent());
         }
         orders.stream().forEach(o -> storeLimitOrder(o, Metrics.INITIALIZE_MEMORY_TIME_DURATION));
-
-
-        {
-            int positionMessageCount;
-            do {
-                positionMessageCount = channel.queueDeclare(Config.POSITION_QUEUE, true, false, false, null).getMessageCount();
-                System.out.println( "sleeping due positions in queue: " + positionMessageCount);
-                if (positionMessageCount != 0) {
-                    Thread.sleep(1000);
-                }
-            }
-            while (positionMessageCount != 0);
-        }
+        this.checkQueue(Config.POSITION_QUEUE);
         // get positions from db
         Slice<Position> positionSlice = positionDal.findAllByExitOrderIdIsNull(PageRequest.of(0, BATCH_SIZE));
         List<Position> positions = new ArrayList<>();
@@ -138,11 +125,8 @@ public class OrderService {
             positions.addAll(positionSlice.getContent());
             orderIds.addAll(positionSlice.getContent().stream().map(Position::getEntryOrderId).collect(Collectors.toSet()));
         }
-
         positions.stream().forEach(p -> storeInMemoryPositions(p, Metrics.INITIALIZE_MEMORY_TIME_DURATION));
     }
-
-
 
     public ResponseEntity createOrder(Orders order, Histogram histogram) throws IOException {
         Metrics.ORDER_REQUEST.labels(order.getType().toString().toLowerCase()).inc();
@@ -154,7 +138,6 @@ public class OrderService {
         }
         switch (order.getType()) {
             case LIMIT -> {
-//                ezt itt
                 storeLimitOrder(order, Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION);
                 handleLimitOrder(order);
             }
@@ -164,7 +147,6 @@ public class OrderService {
     }
 
     private void handleLimitOrder(Orders order) throws IOException {
-//        ezt itt
 //        storeLimitOrder(order, Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION);
         byte[] data = mapper.writeValueAsBytes(order);
         try (Histogram.Timer ignored = Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION.labels("send_order_to_queue").startTimer()) {
@@ -180,7 +162,6 @@ public class OrderService {
             // Fill the price to the order and update the order in DB.
         }
         try (Histogram.Timer ignored = Metrics.MARKET_ORDER_REQUEST_TIME_DURATION.labels("update_order").startTimer()) {
-
             order.setPrice(asset.getPrice());
             order.setStatus(OrderStatus.FILLED);
         }
@@ -212,14 +193,7 @@ public class OrderService {
         UUID positionId = position.getId();
         try (Histogram.Timer timer = histogram.labels("persist_position_in_memory").startTimer()) {
             inMemoryPositions.computeIfAbsent(accountId, k -> Maps.newConcurrentMap());
-//            if (!inMemoryPositions.containsKey(accountId)) {
-//                inMemoryPositions.put(accountId, Maps.newConcurrentMap());
-//            }
             inMemoryPositions.get(accountId).computeIfAbsent(symbol, k -> Maps.newConcurrentMap());
-//            if (!inMemoryPositions.get(accountId).containsKey(symbol)) {
-//                inMemoryPositions.get(accountId).put(symbol, Maps.newConcurrentMap());
-//            }
-
             inMemoryPositions.get(accountId).get(symbol).put(positionId, position);
         }
     }
@@ -228,9 +202,6 @@ public class OrderService {
         try (Histogram.Timer timer = histogram.labels("persist_limit_order_in_memory").startTimer()) {
             UUID accountId = order.getAccountId();
             inMemoryOrders.computeIfAbsent(order.getAccountId(), k -> Maps.newConcurrentMap());
-//            if (!inMemoryOrders.containsKey(accountId)) {
-//                inMemoryOrders.put(accountId, Maps.newConcurrentMap());
-//            }
             inMemoryOrders.get(accountId).put(order.getId(), order);
         }
     }
@@ -250,7 +221,6 @@ public class OrderService {
         }
         order.setStatus(OrderStatus.FILLED);
         order.setPrice(BigDecimal.valueOf(filledOrder.getFilledPrice()));
-
         byte[] data = mapper.writeValueAsBytes(order);
         try (Histogram.Timer ignored = Metrics.LIMIT_ORDER_REQUEST_TIME_DURATION.labels("send_updated_order_to_queue").startTimer()) {
             channel.basicPublish(Config.EXCHANGE, Config.ORDER_ROUTING_KEY, null, data);
