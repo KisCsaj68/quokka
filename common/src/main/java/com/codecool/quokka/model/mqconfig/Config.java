@@ -47,13 +47,13 @@ public class Config {
                         .to(topicExchange).with(POSITION_ROUTING_KEY));
     }
 
-    public static MessageConverter messageConverter() {
-        return new Jackson2JsonMessageConverter();
-    }
+//    public static MessageConverter messageConverter() {
+//        return new Jackson2JsonMessageConverter();
+//    }
 
-    public static AmqpTemplate template(ConnectionFactory connectionFactory) {
-        RabbitTemplate template = new RabbitTemplate(connectionFactory);
-        template.setMessageConverter(messageConverter());
-        return template;
-    }
+//    public static AmqpTemplate template(ConnectionFactory connectionFactory) {
+//        RabbitTemplate template = new RabbitTemplate(connectionFactory);
+//        template.setMessageConverter(messageConverter());
+//        return template;
+//    }
 }

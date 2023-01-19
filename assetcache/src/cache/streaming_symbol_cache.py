@@ -26,6 +26,7 @@ class SymbolCache(ABC, Thread):
                                api_version=conf['APCA_API_VERSION'],
                                raw_data=True)
         self.initialized = False
+        self.ready = False
 
     async def on_trade(self, trade):
         """
@@ -70,9 +71,11 @@ class SymbolCache(ABC, Thread):
             with CACHE_INIT_PRICE.labels(self._get_metric_label()).time():
                 symbols = self._symbols_prices.keys()
                 latest_prices = self._get_latest_price(symbols)
+                print(latest_prices, flush=True)
                 try:
                     self._rw_lock.acquire_write()
                     for k, v in latest_prices.items():
+                        print(k + " " + str(v['price']), flush=True)
                         self._symbols_prices[k] = v['price']
                 finally:
                     self._rw_lock.release_write()
@@ -80,7 +83,7 @@ class SymbolCache(ABC, Thread):
 
     def run(self):
         self._set_initial_prices()
-
+        print(f'{self._get_metric_label()} cache initialized with prices', flush=True)
 
     @abstractmethod
     def _get_latest_price(self, symbols: List[str]) -> Dict[str, Any]:
@@ -105,9 +108,12 @@ class StockCache(SymbolCache):
     @ParseLatestV2ToReadableDict(trade_mapping_v2)
     def _get_latest_price(self, symbols: List[str]) -> Dict[str, Any]:
         try:
-            return self._trade_api.get_latest_trades(symbols, 'iex')
+            result = self._trade_api.get_latest_trades(symbols, 'iex')
+            self.ready = True
+            return result
+
         except Exception as e:
-            print("Exception")
+            self.ready = False
             print(e)
 
     def __init__(self, symbols: List[str], conf: DotEnvConfig):
@@ -122,9 +128,11 @@ class CryptoCache(SymbolCache):
     @ParseLatestV2ToReadableDict(trade_mapping_v2)
     def _get_latest_price(self, symbols: List[str]) -> Dict[str, Any]:
         try:
-            return self._trade_api.get_latest_crypto_trades(symbols, 'CBSE')
+            result = self._trade_api.get_latest_crypto_trades(symbols, 'CBSE')
+            self.ready = True
+            return result
         except Exception as e:
-            print("Exception")
+            self.ready = False
             print(e)
 
     def __init__(self, symbols: List[str], conf: DotEnvConfig):

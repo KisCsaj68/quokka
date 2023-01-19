@@ -1,6 +1,7 @@
 package com.codecool.quokka.persister.sevice;
 
 import com.codecool.quokka.model.mqconfig.Config;
+import com.codecool.quokka.model.order.OrderStatus;
 import com.codecool.quokka.model.order.Orders;
 import com.codecool.quokka.model.position.Position;
 import com.codecool.quokka.persister.dal.OrderDal;
@@ -29,8 +30,11 @@ public class OrderService {
     public void addNewOrder(Orders order) {
         Metrics.PERSIST_REQUEST.labels("order").inc();
         try (Histogram.Timer ignored = Metrics.PERSIST_TIME_DURATION.labels("order").startTimer()) {
-            if (orderDal.findById(order.getId()).isPresent()) {
+            if (orderDal.findById(order.getId()).isPresent() && order.getStatus().equals(OrderStatus.FILLED)) {
                 orderDal.updatePriceById(order.getPrice(), order.getId(), order.getStatus(), order.getSellPositionId());
+                return;
+            }
+            else if(orderDal.findById(order.getId()).isPresent() && order.getStatus().equals(OrderStatus.OPEN)){
                 return;
             }
             orderDal.save(order);

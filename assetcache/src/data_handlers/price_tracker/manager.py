@@ -100,7 +100,7 @@ class Container:
             start_index = buy_side_list.bisect_left(fake_pt)
             pop_sequence = len(buy_side_list) - start_index
             for _ in range(pop_sequence):
-                # Popping price_trackers from the end (constant time access)
+                # Popping price_trackers from the end (O(log(n) time access)
                 popped = buy_side_list.pop(-1)
                 popped.filled_price = trade_price
                 filled_price_trackers.append(popped)

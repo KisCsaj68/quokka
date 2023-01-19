@@ -40,10 +40,11 @@ services:
     ports:
       - "9000:9000"
     healthcheck:
-      test: curl -s http://localhost:9000/healthz
+      test:  ["CMD-SHELL", "curl -s --fail http://localhost:9000/healthz && exit 0 || exit 1"]
       interval: 2s
       timeout: 10s
       retries: 100
+      start_period: 30s
     image: quokka/oms
     depends_on:
       persister:
@@ -57,15 +58,23 @@ services:
     ports:
       - "8000:8000"
     image: quokka/assetcache
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s --fail http://localhost:8000/healthz && exit 0 || exit 1"]
+      interval: 2s
+      timeout: 10s
+      retries: 100
+      start_period: 30s
     depends_on:
       oms:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
   persister:
-    container_name: persister
+#    container_name: persister
+    deploy:
+      replicas: 4
     ports:
-      - "9001:9001"
+      - "9001"
     image: quokka/persister
     depends_on:
       rabbitmq:
