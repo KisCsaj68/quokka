@@ -11,7 +11,7 @@ for symbol in ${CRYPTO[@]}; do
   price=$(curl -s "http://localhost:8000/api/v1/crypto/$symbol" | jq '.price')
   price=${price%.*}
   buy_price=$((price+200))
-  hey -z 2m  -m POST -H "Content-Type: application/json" -d '{
+  hey -z 4m  -m POST -H "Content-Type: application/json" -d '{
         "symbol" : "'${symbol}'",
         "type" : "LIMIT",
         "limit" : '${buy_price}',
