@@ -6,7 +6,7 @@ set -o pipefail
 URL="http://127.0.0.1:9000/api/v1/order"
 declare -a CRYPTO=("BTCUSD")
 declare -a STOCK=("AAPL" "TSLA")
-sleep 210
+sleep 180
 for symbol in ${CRYPTO[@]}; do
   price=$(curl -s "http://localhost:8000/api/v1/crypto/$symbol" | jq '.price')
   price=${price%.*}
@@ -22,8 +22,8 @@ for symbol in ${CRYPTO[@]}; do
         }' $URL
 done
 
-
-for symbol in ${STOCK[@]}; do
-      echo $symbol
-      hey -z 2m "http://localhost:8000/api/v1/stock/${symbol}"
-done
+#
+#for symbol in ${STOCK[@]}; do
+#      echo $symbol
+#      hey -z 2m "http://localhost:8000/api/v1/stock/${symbol}"
+#done
