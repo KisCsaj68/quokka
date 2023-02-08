@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 # defining variables for the make file. Specifying default values if these values are not passed in by the caller
 docker_tag ?= latest
 java_components := oms api persister
