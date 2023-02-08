@@ -137,7 +137,7 @@ public class AccountControllerTest {
     public void testUpdateUserById() throws Exception {
         HashMap data = new HashMap<>();
         String newUserName = "User3456";
-        data.put("fullName", newUserName);
+        data.put("full_name", newUserName);
         mvc.perform(put("/api/v1/user/" + accountDto.getId().toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", jwtHeader)
@@ -149,7 +149,7 @@ public class AccountControllerTest {
     @Test
     public void testUpdateUserByIdWithoutToken() throws Exception {
         String newUserName = "User3456";
-        Map<String, String> data = Map.of("fullName", newUserName);
+        Map<String, String> data = Map.of("full_name", newUserName);
         mvc.perform(put("/api/v1/user/" + accountDto.getId().toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(data)))
@@ -159,7 +159,7 @@ public class AccountControllerTest {
     @Test
     public void testUpdateUserByIdWithWrongId() throws Exception {
         String newUserName = "User3456";
-        Map<String, String> data = Map.of("fullName", newUserName);
+        Map<String, String> data = Map.of("full_name", newUserName);
         String randomUUID = "c328a57e-9f3e-45bd-ab8d-11782a9885e0";
 
         mvc.perform(put("/api/v1/user/" + randomUUID)

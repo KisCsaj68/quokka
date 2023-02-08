@@ -25,6 +25,12 @@ mvn-build:
   		mvn clean package -DskipTests --file $$component/pom.xml ; \
   	done
 
+.PHONY: mvn-test
+mvn-test: mvn-build
+	for component in $(java_components); do \
+  		mvn test --file $$component/pom.xml ; \
+  	done
+
 .PHONY: build
 build: mvn-build docker-build
 
