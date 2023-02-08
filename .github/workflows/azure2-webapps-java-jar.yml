@@ -49,7 +49,7 @@ jobs:
 
       - name: Build with Maven
         run: |
-          make build
+          make mvn-build
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
