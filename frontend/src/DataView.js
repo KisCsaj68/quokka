@@ -9,7 +9,7 @@ const DataView = ({name, assetType}) => {
     useEffect(() => {
         const controller = new AbortController();
         fetchData(controller.signal, name, assetType, privateApi).then(r => {
-            setStockPrice(r[name])
+            setStockPrice(r["price"])
         });
         return () => controller.abort();
 
