@@ -92,5 +92,14 @@ api-order-loadtest:
 
 .PHONY: create-database
 create-database:
+	docker-compose create postgres 
 	docker-compose start postgres
+	sleep 5 
 	docker exec postgres psql -U postgres -c "CREATE DATABASE quokka;"
+
+.PHONY: deletedb
+deletedb: down
+	rm -rf volumes/postgres
+
+.PHONY: resetdb
+resetdb: deletedb create-database
