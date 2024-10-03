@@ -89,3 +89,8 @@ api-user-loadtest:
 .PHONY: api-order-loadtest
 api-order-loadtest:
 	./scripts/api_orders.sh
+
+.PHONY: create-database
+create-database:
+	docker-compose start postgres
+	docker exec postgres psql -U postgres -c "CREATE DATABASE quokka;"

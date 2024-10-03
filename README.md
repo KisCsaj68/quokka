@@ -158,4 +158,6 @@ export PROMETHEUS_MULTIPROC_DIR="/tmp/metrics" <br>
 
 Those setup will allows you to connect to Alpaca streaming, and use the predefined RabbitMQ queues in the application.
 
+<br>When you freshly clone the repository before the first start you need to create the DB. Run the `make create-database` command to start postgres container and create the needed database.<br>
+
 Adjust `spring.jpa.hibernate.ddl-auto = create` in one of the component's application.properties to auto create the DB schema. When schema is created, change it back to `none` or `validate`.

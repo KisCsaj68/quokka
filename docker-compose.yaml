@@ -23,6 +23,13 @@ services:
     image: postgres:14
     environment:
       - POSTGRES_PASSWORD=asdqwe
+    healthcheck:
+      test: ["CMD-SHELL", "psql -U postgres"]
+      interval: 2s
+      timeout: 10s
+      retries: 100
+      start_period: 10s
+
   frontend:
     container_name: frontend
     image: quokka/frontend
