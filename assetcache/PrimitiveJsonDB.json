@@ -1,10 +1,10 @@
 {
     "assets": {
         "crypto": [
-            "BTCUSD",
-            "ETHUSD",
-            "BCHUSD",
-            "LTCUSD"
+            "BTC/USD",
+            "ETH/USD",
+            "BCH/USD",
+            "LTC/USD"
         ],
         "stock": [
             "AAPL",
