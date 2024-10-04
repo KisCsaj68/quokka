@@ -128,7 +128,7 @@ class CryptoCache(SymbolCache):
     @ParseLatestV2ToReadableDict(trade_mapping_v2)
     def _get_latest_price(self, symbols: List[str]) -> Dict[str, Any]:
         try:
-            result = self._trade_api.get_latest_crypto_trades(symbols, 'CBSE')
+            result = self._trade_api.get_latest_crypto_trades(symbols, 'us')
             self.ready = True
             return result
         except Exception as e:
