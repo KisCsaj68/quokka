@@ -6,6 +6,7 @@ bind = '0.0.0.0:8000'
 workers = 1
 threads = 1
 loglevel = "info"
+pidfile = "/run/gunicorn.pid"
 
 # Server Hooks
 post_worker_init = hooks.post_worker_init
