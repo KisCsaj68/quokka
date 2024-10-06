@@ -5,17 +5,30 @@ java_components := oms api persister
 #components := $(java_components) frontend
 #components := $(java_components) assetcache
 components := $(java_components)
+docker_repository ?= quokka
 
 .PHONY: docker-build
 docker-build:
 	for component in $(components); do \
-  		docker buildx build -t quokka/$$component:$(docker_tag) . -f $$component/Dockerfile ; \
+  		docker buildx build -t $(docker_repository)/$$component:$(docker_tag) . -f $$component/Dockerfile ; \
   	done && \
   	pushd frontend  && \
-	docker buildx build -t quokka/frontend:$(docker_tag) .  && \
+	docker buildx build -t $(docker_repository)/frontend:$(docker_tag) .  && \
 	popd && \
   	pushd assetcache  && \
-	docker buildx build -t quokka/assetcache:$(docker_tag) .  && \
+	docker buildx build -t $(docker_repository)/assetcache:$(docker_tag) .  && \
+	popd
+
+.PHONY: docker-push
+docker-push:
+	for component in $(components); do \
+  		docker push $(docker_repository)/$$component:$(docker_tag) ; \
+  	done && \
+  	pushd frontend  && \
+	docker push $(docker_repository)/frontend:$(docker_tag)  && \
+	popd && \
+  	pushd assetcache  && \
+	docker push $(docker_repository)/assetcache:$(docker_tag)  && \
 	popd
 
 .PHONY: mvn-build
@@ -49,26 +62,26 @@ down:
 .PHONY: frontend-build
 frontend-build:
 	pushd frontend  && \
-	docker buildx build -t quokka/frontend:$(docker_tag) .  && \
+	docker buildx build -t $(docker_repository)/frontend:$(docker_tag) .  && \
 	popd
 
 .PHONY: assetcache-build
 assetcache-build:
 	pushd assetcache  && \
-	docker buildx build -t quokka/assetcache:$(docker_tag) .  && \
+	docker buildx build -t $(docker_repository)/assetcache:$(docker_tag) .  && \
 	popd
 
 .PHONY: oms-build
 oms-build:
-	docker buildx build -t quokka/oms:$(docker_tag) . -f oms/Dockerfile
+	docker buildx build -t $(docker_repository)/oms:$(docker_tag) . -f oms/Dockerfile
 
 .PHONY: api-build
 api-build:
-	docker buildx build -t quokka/api:$(docker_tag) . -f api/Dockerfile
+	docker buildx build -t $(docker_repository)/api:$(docker_tag) . -f api/Dockerfile
 
 .PHONY: persister-build
 persister-build:
-	docker buildx build -t quokka/persister:$(docker_tag) . -f persister/Dockerfile
+	docker buildx build -t $(docker_repository)/persister:$(docker_tag) . -f persister/Dockerfile
 
 .PHONY: last-container-logs
 last-container-logs:
