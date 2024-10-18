@@ -1,11 +1,11 @@
-# Default values for api.
+# Default values for frontend.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
 image:
-  repository: quokka/api
+  repository: quokka/frontend
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
@@ -41,7 +41,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 3000
 
 # ingress:
 #   enabled: false
@@ -58,13 +58,13 @@ service:
 #   #  - secretName: chart-example-tls
 #   #    hosts:
 #   #      - chart-example.local
+
 ingress:
-  enabled: false
+  enabled: true
   className: nginx
   tls: []
   annotations: {}
   host: localhost
-
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -80,39 +80,35 @@ resources: {}
 
 # livenessProbe:
 #   httpGet:
-#     path: /healthz
+#     path: /
 #     port: http
 # readinessProbe:
 #   httpGet:
 #     path: /
 #     port: http
 
+# autoscaling:
+#   enabled: false
+#   minReplicas: 1
+#   maxReplicas: 100
+#   targetCPUUtilizationPercentage: 80
+#   # targetMemoryUtilizationPercentage: 80
+
+# Additional volumes on the output Deployment definition.
+volumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
 nodeSelector: {}
 
 tolerations: []
 
 affinity: {}
-
-pg:
-  host: postgres
-  port: 5432
-  user: postgres
-  password: asdqwe
-
-services:
-  assetCache:
-    host: assetcache
-    port: 8000
-    endpoint: /api/v1
-  oms:
-    host: oms
-    port: 9000
-    endpoint: /api/v1/order
-
-api:
-  auth:
-    endpoint: /api/v1/login
-    jwt:
-      secretKey: securesecuresecuresecuresecuresecuresecuresecuresecuresecuresecure
-      prefix: Bearer
-      expirationDays: 14

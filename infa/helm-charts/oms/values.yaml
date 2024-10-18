@@ -59,12 +59,7 @@ service:
 #   #    hosts:
 #   #      - chart-example.local
 
-ingress:
-  enabled: true
-  className: nginx
-  tls: []
-  annotations: {}
-  host: localhost
+
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
