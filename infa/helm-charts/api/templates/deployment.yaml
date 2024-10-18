@@ -54,7 +54,6 @@ spec:
               mountPath: /api/config
             - name: app-secret-config
               mountPath: /api/secret/config
-        
       volumes:
         - name: app-config
           configMap:
@@ -62,7 +61,6 @@ spec:
         - name: app-secret-config
           secret:
             name: {{ include "api.fullname" . }}
-
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
