@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: {{ include "oms.fullname" . }}
+data:
+    application.properties: |
+      # database connection details
+      spring.datasource.driver-class-name = org.postgresql.Driver
+      spring.datasource.url = jdbc:postgresql://{{ .Values.pg.host }}.{{ .Release.Namespace }}.svc:{{ .Values.pg.port }}/quokka
+      spring.datasource.username = {{ .Values.pg.user }}
+      spring.datasource.password = {{ .Values.pg.password }}
+
+      # JPA details
+      spring.jpa.database-platform = org.hibernate.dialect.PostgreSQL94Dialect
+      #spring.jpa.show-sql = true
+      spring.jpa.hibernate.ddl-auto = none
+      spring.jpa.hibernate.naming.implicit-strategy = org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+      spring.jpa.properties.hibernate.format_sql = true
+
+      spring.rabbitmq.addresses = {{ .Values.rabbit.host }}:{{ .Values.rabbit.port }}
+
+      # asset cache address
+      quokka.service.assetcache.address = http://{{ .Values.services.assetCache.host }}.{{ .Release.Namespace }}.svc:{{ .Values.services.assetCache.port }}
+      quokka.service.assetcache.endpoint = {{ .Values.services.assetCache.endpoint }}
