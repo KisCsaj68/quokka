@@ -17,7 +17,7 @@ data:
       spring.jpa.hibernate.naming.implicit-strategy = org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
       spring.jpa.properties.hibernate.format_sql = true
 
-      spring.rabbitmq.addresses = {{ .Values.rabbit.host }}:{{ .Values.rabbit.port }}
+      spring.rabbitmq.addresses = {{ .Values.rabbit.host }}.{{ .Release.Namespace }}.svc:{{ .Values.rabbit.port }}
 
       # asset cache address
       quokka.service.assetcache.address = http://{{ .Values.services.assetCache.host }}.{{ .Release.Namespace }}.svc:{{ .Values.services.assetCache.port }}
