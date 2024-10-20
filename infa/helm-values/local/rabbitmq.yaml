@@ -1,0 +1,7 @@
+containerPorts:
+  metrics: 15692
+auth:
+  username: guest
+  password: guest
+  erlangCookie: secretcookie
+fullnameOverride: rabbitmq

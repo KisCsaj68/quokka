@@ -1,0 +1,4 @@
+auth:
+  postgresPassword: asdqwe
+  database: quokka
+fullnameOverride: postgres
