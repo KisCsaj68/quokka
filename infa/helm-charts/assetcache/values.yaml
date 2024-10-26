@@ -85,5 +85,10 @@ assetcache:
     prometheus:
       multiprocDir: /tmp/metrics
 
+prometheus:
+  enabled: true
+  additionalLabels:
+    release: kube-prometheus-stack
+
 
 
