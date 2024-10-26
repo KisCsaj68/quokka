@@ -5,7 +5,7 @@ metadata:
 data:
     application.properties: |
         ##connect to database
-        server.port=9001
+        server.port={{ .Values.service.port }}
         spring.datasource.driver-class-name=org.postgresql.Driver
         spring.datasource.url = jdbc:postgresql://{{ .Values.pg.host }}.{{ .Release.Namespace }}.svc:{{ .Values.pg.port }}/quokka
         spring.datasource.username = {{ .Values.pg.user }}

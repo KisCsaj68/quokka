@@ -34,7 +34,8 @@ spec:
           args: 
             - "-jar"
             - "./persister-0.0.1-SNAPSHOT-jar-with-dependencies.jar"
-            - "-Dspring.config.location=/persister/config/application.properties,/persister/secret/config/application.secret.properties"
+            # - "-Dspring.config.location=/persister/config/application.properties,/persister/secret/config/application.secret.properties"
+            - "--spring.config.location=file:/persister/config/application.properties,file:/persister/secret/config/application.secret.properties"
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -60,7 +61,7 @@ spec:
             name: {{ include "persister.fullname" . }}
         - name: persister-secret-config
           secret:
-            name: {{ include "persister.fullname" . }}
+            secretName: {{ include "persister.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
