@@ -110,3 +110,8 @@ services:
     host: assetcache
     port: 8000
     endpoint: /api/v1
+
+prometheus:
+  enabled: true
+  additionalLabels:
+    release: kube-prometheus-stack
