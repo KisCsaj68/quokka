@@ -1,0 +1,53 @@
+# prometheus:
+  # ingress:
+  #   enabled: true
+  #   ingressClassName: nginx
+  #   hosts:
+  #     - localhost
+  #   tsl: []
+# global:
+#   rbac:
+#     create: false
+
+kube-state-metrics:
+  metricLabelsAllowlist:
+    - pods=[app,app.kubernetes.io/component,app.kubernetes.io/instance,app.kubernetes.io/name,app.kubernetes.io/part-of,app.kubernetes.io/job-name,component,job-name,k8s-app,name]
+
+
+alertmanager:
+  enabled: false
+
+kubeApiServer:
+  enabled: false
+
+kubelet:
+  enabled: false
+
+kubeControllerManager:
+  enabled: false
+
+coreDns:
+  enabled: false
+
+kubeDns:
+  enabled: false
+
+kubeEtcd:
+  enabled: false
+
+kubeScheduler:
+  enabled: false
+
+kubeProxy:
+  enabled: false
+
+kubeStateMetrics:
+  enabled: false
+
+# relabelings:
+#   - sourceLabels:
+#       - __meta_kubernetes_namespace
+#       - __meta_kubernetes_service_name
+#       - __meta_kubernetes_endpoint_port_name
+#     action: keep
+#     regex: default;kubernetes;http
