@@ -116,3 +116,8 @@ api:
       secretKey: securesecuresecuresecuresecuresecuresecuresecuresecuresecuresecure
       prefix: Bearer
       expirationDays: 14
+
+prometheus:
+  enabled: true
+  additionalLabels:
+    release: kube-prometheus-stack
