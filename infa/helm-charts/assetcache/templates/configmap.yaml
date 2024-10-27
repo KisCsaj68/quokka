@@ -16,3 +16,4 @@ data:
     export ROUTING_KEY={{ .Values.assetcache.config.rabbit.routingKey }}
     export QUEUE={{ .Values.assetcache.config.rabbit.queue }}
     export PROMETHEUS_MULTIPROC_DIR={{ .Values.assetcache.config.prometheus.multiprocDir }}
+    export OMS_HOST={{ .Values.assetcache.config.oms.host }}.{{ .Release.Namespace }}.svc:{{ .Values.assetcache.config.oms.port }}

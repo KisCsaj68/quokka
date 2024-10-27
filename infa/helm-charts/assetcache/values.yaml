@@ -84,6 +84,9 @@ assetcache:
       queue: filled_order_queue
     prometheus:
       multiprocDir: /tmp/metrics
+    oms:
+      host: oms
+      port: 9000
 
 prometheus:
   enabled: true
