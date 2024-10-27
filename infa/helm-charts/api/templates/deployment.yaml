@@ -34,7 +34,8 @@ spec:
           args: 
             - "-jar"
             - "./api-0.0.1-SNAPSHOT-jar-with-dependencies.jar"
-            - "-Dspring.config.location=/api/config/application.properties,/api/secret/config/application.secret.properties"
+            # - "-Dspring.config.location=/api/config/application.properties,/api/secret/config/application.secret.properties"
+            - "--spring.config.location=file:/api/config/application.properties,file:/api/secret/config/application.secret.properties"
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -60,7 +61,7 @@ spec:
             name: {{ include "api.fullname" . }}
         - name: app-secret-config
           secret:
-            name: {{ include "api.fullname" . }}
+            secretName: {{ include "api.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

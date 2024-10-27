@@ -36,7 +36,8 @@ spec:
           args:
             - "-jar"
             - "./oms-0.0.1-SNAPSHOT-jar-with-dependencies.jar"
-            - "-Dspring.config.location=/oms/config/application.properties,/oms/secret/config/application.secret.properties"
+            # - "-Dspring.config.location=/oms/config/application.properties,/oms/secret/config/application.secret.properties"
+            - "--spring.config.location=file:/oms/config/application.properties,file:/oms/secret/config/application.secret.properties"
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -60,7 +61,7 @@ spec:
             name: {{ include "oms.fullname" . }}
         - name: app-secret-config
           secret:
-            name: {{ include "oms.fullname" . }}
+            secretName: {{ include "oms.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
