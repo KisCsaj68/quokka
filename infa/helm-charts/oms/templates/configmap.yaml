@@ -4,6 +4,7 @@ metadata:
     name: {{ include "oms.fullname" . }}
 data:
     application.properties: |
+      server.port={{ .Values.service.port }}
       # database connection details
       spring.datasource.driver-class-name = org.postgresql.Driver
       spring.datasource.url = jdbc:postgresql://{{ .Values.pg.host }}.{{ .Release.Namespace }}.svc:{{ .Values.pg.port }}/quokka
