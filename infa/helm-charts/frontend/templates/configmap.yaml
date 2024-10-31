@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: {{ include "frontend.fullname" . }}
+data:
+  .env: |
+    REACT_APP_HOST: {{ .Values.frontend.host }}.{{ .Release.Namespace }}.svc
+    REACT_APP_PORT: {{ .Values.service.port }}

@@ -16,13 +16,6 @@ const useAxiosPrivate = () => {
 
         );
         return () => privateApi.interceptors.request.eject(requestInterceptor);
-
-        // const responseIntercept = privateApi.interceptors.response.use(
-        //     response => response,
-        //     async (error) => {
-        //
-        //     }
-        // )
     }, [token])
     return privateApi;
 }

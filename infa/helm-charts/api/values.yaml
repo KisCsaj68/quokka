@@ -59,7 +59,7 @@ service:
 #   #    hosts:
 #   #      - chart-example.local
 ingress:
-  enabled: false
+  enabled: true
   className: nginx
   tls: []
   annotations: {}
