@@ -4,5 +4,6 @@ metadata:
     name: {{ include "frontend.fullname" . }}
 data:
   .env: |
-    REACT_APP_HOST: {{ .Values.frontend.host }}.{{ .Release.Namespace }}.svc
-    REACT_APP_PORT: {{ .Values.service.port }}
+    REACT_APP_HOST=localhost
+    # REACT_APP_HOST={{ .Values.frontend.host }}.{{ .Release.Namespace }}.svc
+    REACT_APP_PORT={{ .Values.service.port }}

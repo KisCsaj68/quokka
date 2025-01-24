@@ -11,8 +11,9 @@ spec:
       {{- include "frontend.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -34,11 +35,15 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: PORT
+              value: {{ .Values.frontend.port | quote }}
+          command: ["/bin/sh"]
           args: 
-            - start
-            - --
-            - --port
-            - {{ .Values.frontend.port | quote }}
+            - -c
+            - |
+              ln -s /frontend/config/.env /frontend/.env && \
+              npm start -- --port {{ .Values.frontend.port | quote }}
           ports:
             - name: http
               containerPort: {{ .Values.frontend.port }}
@@ -48,6 +53,7 @@ spec:
           volumeMounts:
             - name: app-config
               mountPath: /frontend/config
+              
       volumes:
         - name: app-config
           configMap:

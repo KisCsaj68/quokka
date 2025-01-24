@@ -3,7 +3,7 @@ import axios from 'axios';
 // TODO: use express app to set-up upstream proxying instead of `proxy` field in package.json
 const { REACT_APP_HOST, REACT_APP_PORT } = process.env
 
-const BASE_URL = `http://${REACT_APP_HOST}:${REACT_APP_PORT}`
+const BASE_URL = `http://${REACT_APP_HOST}`
 
 axios.defaults.headers["Accept"] = "application/json";
 axios.defaults.headers["Content-Type"] = "application/json";

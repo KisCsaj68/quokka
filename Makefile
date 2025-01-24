@@ -116,3 +116,7 @@ deletedb: down
 
 .PHONY: resetdb
 resetdb: deletedb create-database
+
+.PHONY: kube-up
+kube-up: 
+	ctlptl apply -f infa/cluster.yaml
