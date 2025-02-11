@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,23 +29,30 @@ public class AssetController {
     @GetMapping("{type}")
     @PreAuthorize("hasRole('TRADER')")
     public List<String> getAssets(@PathVariable("type") String type, HttpServletRequest req) throws JsonProcessingException {
-        String newUrl = url + type;
-        String response = restTemplate.getForObject(newUrl, String.class);
-        JsonNode jsonNode = mapper.readTree(response);
-        JsonNode jsonNode1 = jsonNode.get(type);
-        List<String> list = new ArrayList<>();
-        for (Iterator<JsonNode> it = jsonNode1.elements(); it.hasNext(); ) {
-            JsonNode item = it.next();
-            list.add(item.asText());
+        
+        String newUrl = url + "/" + type;
+        try {
+            String response = restTemplate.getForObject(newUrl, String.class);
+            JsonNode jsonNode = mapper.readTree(response);
+            JsonNode jsonNode1 = jsonNode.get(type);
+            List<String> list = new ArrayList<>();
+            for (Iterator<JsonNode> it = jsonNode1.elements(); it.hasNext(); ) {
+                JsonNode item = it.next();
+                list.add(item.asText());
+            }
+            return list;
+
+        } catch(HttpClientErrorException ex) {
+            throw ex;
         }
-        return list;
+        
     }
 
     @GetMapping("{assetType}/{assetSymbol}")
     @PreAuthorize("hasRole('TRADER')")
     public Map<String, Object> getAssetData(@PathVariable("assetType") String pathAssetType,
-                                            @PathVariable("assetSymbol") String pathAssetSymbol) {
-        String newUrl = url + pathAssetType + "/" + pathAssetSymbol;
+            @PathVariable("assetSymbol") String pathAssetSymbol) {
+        String newUrl = url + "/" + pathAssetType + "/" + pathAssetSymbol;
         Map<String, Object> response = restTemplate.getForObject(newUrl, Map.class);
         return new HashMap<>(response);
     }
