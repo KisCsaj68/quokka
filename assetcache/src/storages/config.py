@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 class DotEnvConfig:
     def __init__(self, env_vars: Tuple[str], env_path: str = None) -> None:
         if env_path is None:
-            env_path: str = join(getcwd(), '.env')
+            env_path: str = join(getcwd(), 'env/.env')
         if not isfile(env_path):
             raise FileNotFoundError()
         load_dotenv(env_path)

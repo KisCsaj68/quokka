@@ -1,0 +1,6 @@
+auth:
+  postgresPassword: asdqwe
+  database: quokka
+fullnameOverride: postgres
+image:
+  tag: 14-debian-12

@@ -9,7 +9,7 @@ WORKDIR /usr/assetcache
 COPY --chmod=755 start.sh .
 COPY gunicorn.conf.py .
 COPY wsgi.py .
-COPY .env .
+COPY .env env/
 COPY env.py .
 COPY PrimitiveJsonDB.json .
 COPY src/ src/

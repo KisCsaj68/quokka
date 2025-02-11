@@ -7,7 +7,7 @@ function propagate_signal() {
 
 trap propagate_signal SIGTERM;
 
-source .env
+source env/.env
 
 mkdir -p $PROMETHEUS_MULTIPROC_DIR
 rm -f "$PROMETHEUS_MULTIPROC_DIR/*"
