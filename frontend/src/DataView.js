@@ -8,12 +8,11 @@ const DataView = ({name, assetType}) => {
     const privateApi = useAxiosPrivate();
     useEffect(() => {
         const controller = new AbortController();
-        fetchData(controller.signal, name, assetType, privateApi).then(r => {
-            setStockPrice(r[name])
+        fetchData(controller.signal, name, assetType, privateApi).then(data => {
+            setStockPrice(data.price)
         });
         return () => controller.abort();
-
-    }, [qty])
+    })
     if (stockPrice !== undefined) {
         return (
             <tr>
@@ -32,7 +31,6 @@ const DataView = ({name, assetType}) => {
         return (
             <tr>
                 <td>Loading...</td>
-
             </tr>)
     }
 
@@ -42,10 +40,8 @@ const fetchData = async (signal, name, type, privateApi) => {
     try {
         const url = "/api/v1/asset/" + type + "/" + name;
         const response = await privateApi.get(url, {signal});
-        return response.data
-
+        return response.data;
     } catch (err) {
-        console.log(err)
         return [];
     }
 }
